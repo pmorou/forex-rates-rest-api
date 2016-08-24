@@ -14,8 +14,12 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
+import static java.util.stream.Collectors.toMap;
 import static org.mockito.Matchers.anyList;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
@@ -26,7 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class RatesControllerTestDaily {
 
     private static final List<String> AVAILABLE_CURRENCIES = new ArrayList<>(Arrays.asList("EUR", "USD", "JPY"));
-    private static final LocalDate DUMMY_LOCAL_DATE = LocalDate.of(2010, 01, 20);
+    private static final LocalDate DATE_2010_01_20 = LocalDate.of(2010, 01, 20);
 
     private @Mock AvailableCurrenciesService availableCurrenciesService;
     private @Mock DateTimeProviderService dateTimeProviderService;
@@ -42,15 +46,15 @@ public class RatesControllerTestDaily {
 
 	when(availableCurrenciesService.getList()).thenReturn(AVAILABLE_CURRENCIES);
 	when(dateTimeProviderService.getCurrentTimestamp()).thenReturn(1234L);
-	when(dateTimeProviderService.getTodaysDate()).thenReturn(DUMMY_LOCAL_DATE);
-	when(dateTimeProviderService.getTodaysDateAsString()).thenReturn(DUMMY_LOCAL_DATE.toString());
+	when(dateTimeProviderService.getTodaysDate()).thenReturn(DATE_2010_01_20);
+	when(dateTimeProviderService.getTodaysDateAsString()).thenReturn(DATE_2010_01_20.toString());
     }
 
     @Test
     public void test_getDailyRates_defaultParams() throws Exception {
 	ExchangeRates exchangeRates = createExchangeRates("USD", "2010-01-20", "EUR", "JPY");
 
-	when(exchangeRatesService.getExchangeRatesFor(eq("USD"), anyList(), eq("2010-01-20")))
+	when(exchangeRatesService.getExchangeRatesFor(eq("USD"), anyList(), eq(DATE_2010_01_20)))
 		.thenReturn(exchangeRates);
 
 	mockMvc.perform(get("/rates/daily")
@@ -66,7 +70,7 @@ public class RatesControllerTestDaily {
     public void test_getDailyRates_eurBase() throws Exception {
 	ExchangeRates exchangeRates = createExchangeRates("EUR", "2010-01-20", "USD", "JPY");
 
-	when(exchangeRatesService.getExchangeRatesFor(eq("EUR"), anyList(), eq("2010-01-20")))
+	when(exchangeRatesService.getExchangeRatesFor(eq("EUR"), anyList(), eq(DATE_2010_01_20)))
 		.thenReturn(exchangeRates);
 
 	mockMvc.perform(get("/rates/daily?base=EUR")
@@ -93,7 +97,7 @@ public class RatesControllerTestDaily {
     public void test_getDailyRates_eurCurrency() throws Exception {
 	ExchangeRates exchangeRates = createExchangeRates("USD", "2010-01-20", "EUR");
 
-	when(exchangeRatesService.getExchangeRatesFor(eq("USD"), anyList(), eq("2010-01-20")))
+	when(exchangeRatesService.getExchangeRatesFor(eq("USD"), anyList(), eq(DATE_2010_01_20)))
 		.thenReturn(exchangeRates);
 
 	mockMvc.perform(get("/rates/daily?currencies=EUR")
@@ -109,7 +113,7 @@ public class RatesControllerTestDaily {
     public void test_getDailyRates_usdJpyCurrencies() throws Exception {
 	ExchangeRates exchangeRates = createExchangeRates("USD", "2010-01-20", "USD", "JPY");
 
-	when(exchangeRatesService.getExchangeRatesFor(eq("USD"), anyList(), eq("2010-01-20")))
+	when(exchangeRatesService.getExchangeRatesFor(eq("USD"), anyList(), eq(DATE_2010_01_20)))
 		.thenReturn(exchangeRates);
 
 	mockMvc.perform(get("/rates/daily?currencies=USD,JPY")
@@ -134,46 +138,46 @@ public class RatesControllerTestDaily {
 
     @Test
     public void test_getDailyRates_validDate() throws Exception {
-	ExchangeRates exchangeRates = createExchangeRates("USD", "2001-01-20", "USD", "JPY");
+	ExchangeRates exchangeRates = createExchangeRates("USD", "2009-01-20", "USD", "JPY");
 
-	when(exchangeRatesService.getExchangeRatesFor(eq("USD"), anyList(), eq("2001-01-20")))
+	when(exchangeRatesService.getExchangeRatesFor(eq("USD"), anyList(), eq(DATE_2010_01_20.minusYears(1))))
 		.thenReturn(exchangeRates);
 
-	mockMvc.perform(get("/rates/daily?date=2001-01-20")
+	mockMvc.perform(get("/rates/daily?date=2009-01-20")
 			.accept(MediaType.APPLICATION_JSON_VALUE))
 		.andExpect(status().isOk())
 		.andExpect(content().json("{'timestamp':1234}"))
-		.andExpect(content().json("{'date':2001-01-20}"))
+		.andExpect(content().json("{'date':2009-01-20}"))
 		.andExpect(content().json("{'base':'USD'}"))
 		.andExpect(content().json("{'rates':{'USD':1.0001,'JPY':1.0001}}"));
     }
 
     @Test
     public void test_getDailyRates_invalidDate_wrongFormat() throws Exception {
-	mockMvc.perform(get("/rates/daily?date=2001-0120")
+	mockMvc.perform(get("/rates/daily?date=2010-0120")
 			.accept(MediaType.APPLICATION_JSON_VALUE))
 		.andExpect(status().isBadRequest())
 		.andExpect(content().json("{'error':true}"))
 		.andExpect(content().json("{'httpStatus':400}"))
 		.andExpect(content().json("{'message':'Bad Request'}"))
-		.andExpect(content().json("{'description':'The date you requested is invalid: 2001-0120'}"));
+		.andExpect(content().json("{'description':'The date you requested is invalid: 2010-0120'}"));
     }
 
     @Test
     public void test_getDailyRates_invalidDate_noData() throws Exception {
-	ExchangeRates exchangeRates = createExchangeRates("USD", "2001-01-20");
+	ExchangeRates exchangeRates = createExchangeRates("USD", "2010-01-20");
 	exchangeRates.setEmpty();
 
-	when(exchangeRatesService.getExchangeRatesFor(eq("USD"), anyList(), eq("2001-01-20")))
+	when(exchangeRatesService.getExchangeRatesFor(eq("USD"), anyList(), eq(DATE_2010_01_20)))
 		.thenReturn(exchangeRates);
 
-	mockMvc.perform(get("/rates/daily?date=2001-01-20")
+	mockMvc.perform(get("/rates/daily?date=2010-01-20")
 			.accept(MediaType.APPLICATION_JSON_VALUE))
 		.andExpect(status().isBadRequest())
 		.andExpect(content().json("{'error':true}"))
 		.andExpect(content().json("{'httpStatus':400}"))
 		.andExpect(content().json("{'message':'Bad Request'}"))
-		.andExpect(content().json("{'description':'Rates for the requested date are not available: 2001-01-20'}"));
+		.andExpect(content().json("{'description':'Rates for the requested date are not available: 2010-01-20'}"));
     }
 
     @Test
@@ -189,10 +193,8 @@ public class RatesControllerTestDaily {
 
     private ExchangeRates createExchangeRates(String base, String date, String... currencies) {
 	ExchangeRates exchangeRates = new ExchangeRates();
-	Map<String, BigDecimal> rates = new HashMap<>();
-	for (String currency : currencies) {
-	    rates.put(currency, new BigDecimal("1.0001"));
-	}
+	Map<String, BigDecimal> rates = Arrays.stream(currencies)
+		.collect(toMap(e -> e, e -> new BigDecimal("1.0001")));
 	exchangeRates.setRates(rates);
 	exchangeRates.setBase(base);
 	exchangeRates.setDate(date);

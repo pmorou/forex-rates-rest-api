@@ -48,21 +48,22 @@ public class RatesController {
 	    currencies = availableCurrenciesService.getList();
 	}
 
+	LocalDate parsedDate = null;
 	if (date != null) {
 	    try {
-		LocalDate.parse(date);
+		parsedDate = LocalDate.parse(date);
 	    } catch (DateTimeParseException e) {
 		throw new IllegalArgumentException("The date you requested is invalid: " + date);
 	    }
 	} else {
-	    date = dateTimeProviderService.getTodaysDateAsString();
+	    parsedDate = dateTimeProviderService.getTodaysDate();
 	}
 
-	if (LocalDate.parse(date).isAfter(dateTimeProviderService.getTodaysDate())) {
-	    throw new IllegalArgumentException("The date you requested is out of range: " + date);
+	if (parsedDate.isAfter(dateTimeProviderService.getTodaysDate())) {
+	    throw new IllegalArgumentException("The date you requested is out of range: " + parsedDate);
 	}
 
-	ExchangeRates exchangeRates = exchangeRatesService.getExchangeRatesFor(base, currencies, date);
+	ExchangeRates exchangeRates = exchangeRatesService.getExchangeRatesFor(base, currencies, parsedDate);
 
 	if (exchangeRates.isEmpty()) {
 	    throw new IllegalArgumentException("Rates for the requested date are not available: " + exchangeRates.getDate());

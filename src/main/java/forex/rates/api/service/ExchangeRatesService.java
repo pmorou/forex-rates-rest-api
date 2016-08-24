@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface ExchangeRatesService {
 
-    ExchangeRates getExchangeRatesFor(String base, List<String> currencies, String date);
+    ExchangeRates getExchangeRatesFor(String base, List<String> currencies, LocalDate date);
 
 }
