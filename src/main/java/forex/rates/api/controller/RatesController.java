@@ -29,9 +29,9 @@ public class RatesController {
 
     @GetMapping("daily")
     public DailyRatesResponse getDailyRates(
-	    @RequestParam(required = false, defaultValue = "USD") String base,
-	    @RequestParam(required = false) List<String> currencies,
-	    @RequestParam(required = false) String date
+	    List<String> currencies,
+	    String base,
+	    String date
     ) throws Exception {
 
 	if (!availableCurrenciesService.getList().contains(base)) {
