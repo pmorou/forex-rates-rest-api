@@ -1,15 +1,15 @@
 package forex.rates.api.controller;
 
 import forex.rates.api.model.DailyRatesResponse;
-import forex.rates.api.model.ErrorResponse;
 import forex.rates.api.model.ExchangeRates;
 import forex.rates.api.service.DateTimeProviderService;
 import forex.rates.api.service.ExchangeRatesService;
 import forex.rates.api.validation.annotation.Base;
 import forex.rates.api.validation.annotation.Currencies;
 import forex.rates.api.validation.annotation.Date;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -41,12 +41,6 @@ public class RatesController {
 	}
 
 	return new DailyRatesResponse(dateTimeProviderService.getCurrentTimestamp(), exchangeRates);
-    }
-
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ErrorResponse handleIllegalArgumentException(Exception e) {
-	return new ErrorResponse(dateTimeProviderService.getCurrentTimestamp(), HttpStatus.BAD_REQUEST,	e);
     }
 
 }
