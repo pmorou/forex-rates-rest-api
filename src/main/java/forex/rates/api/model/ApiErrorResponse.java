@@ -2,7 +2,7 @@ package forex.rates.api.model;
 
 import org.springframework.http.HttpStatus;
 
-public class ErrorResponse {
+public class ApiErrorResponse {
 
     private long timestamp;
     private boolean error;
@@ -10,12 +10,12 @@ public class ErrorResponse {
     private String message;
     private String description;
 
-    public ErrorResponse(long timestamp, HttpStatus httpStatus, Exception exception) {
-	this.timestamp = timestamp;
+    public ApiErrorResponse(long currentTimestamp, HttpStatus httpStatus, Exception exception) {
+	this.timestamp = currentTimestamp;
 	this.message = httpStatus.getReasonPhrase();
 	this.httpStatus = httpStatus.value();
 	this.description = exception.getMessage();
-	error = true;
+	this.error = true;
     }
 
     public long getTimestamp() {
