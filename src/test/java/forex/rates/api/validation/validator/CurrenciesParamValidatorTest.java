@@ -12,13 +12,11 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import java.lang.annotation.Annotation;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static java.util.Collections.singletonList;
 import static java.util.Optional.of;
 import static java.util.Optional.ofNullable;
 import static org.junit.Assert.*;
@@ -29,7 +27,7 @@ public class CurrenciesParamValidatorTest {
     private static final Annotation INVALID_ANNOTATION = () -> InvalidAnnotation.class;
     private static final Annotation VALID_ANNOTATION = () -> Currencies.class;
     private static final Class<?> INVALID_PARAMETER_TYPE = Integer.class;
-    private static final Class<?> VALID_PARAMETER_TYPE = ArrayList.class; // implements List interface
+    private static final Class<?> VALID_PARAMETER_TYPE = String[].class;
     private static final List<String> AVAILABLE_CURRENCIES = Arrays.asList("USD", "EUR", "JPY");
 
     private @interface InvalidAnnotation {}
@@ -48,22 +46,26 @@ public class CurrenciesParamValidatorTest {
     @Test
     @Parameters
     public void shouldSupport(Class<?> givenParameterType, Annotation[] givenAnnotations) throws Exception {
+	// When
 	boolean result = currenciesParamValidator.supports(givenParameterType, givenAnnotations);
 
+	// Then
 	assertTrue(result);
     }
 
     public Object[] parametersForShouldSupport() {
 	return new Object[]{
-		new Object[]{VALID_PARAMETER_TYPE, new Annotation[]{INVALID_ANNOTATION, VALID_ANNOTATION}}
+		new Object[]{VALID_PARAMETER_TYPE, new Annotation[]{INVALID_ANNOTATION, VALID_ANNOTATION}},
 	};
     }
 
     @Test
     @Parameters
     public void shouldNotSupport(Class<?> givenParameterType, Annotation[] givenAnnotations) throws Exception {
+	// When
 	boolean result = currenciesParamValidator.supports(givenParameterType, givenAnnotations);
 
+	// Then
 	assertFalse(result);
     }
 
@@ -79,20 +81,28 @@ public class CurrenciesParamValidatorTest {
 
     @Test
     @Parameters
-    public void shouldBeValidAndNotNull(List<String> given) throws Exception {
-	Optional<List<String>> givenOptional = ofNullable(given);
+    public void shouldBeValidAndNotNull(String[] given) throws Exception {
+	// Given
+	Optional<String[]> givenOptional = ofNullable(given);
 
-	List<String> result = currenciesParamValidator.validate(givenOptional);
+	// When
+	String[] result = currenciesParamValidator.validate(givenOptional);
 
+	// Then
 	assertNotNull(result);
     }
 
     public Object[] parametersForShouldBeValidAndNotNull() {
 	return new Object[]{
 		new Object[]{null},
-		new Object[]{AVAILABLE_CURRENCIES},
-		new Object[]{toLowerCase(AVAILABLE_CURRENCIES)},
+		new Object[]{toStringArray(AVAILABLE_CURRENCIES)},
+		new Object[]{toStringArray(toLowerCase(AVAILABLE_CURRENCIES))},
 	};
+    }
+
+    private String[] toStringArray(List<String> list) {
+	return list.stream()
+		.toArray(String[]::new);
     }
 
     private List<String> toLowerCase(List<String> list) {
@@ -103,17 +113,19 @@ public class CurrenciesParamValidatorTest {
 
     @Test(expected = IllegalArgumentException.class)
     @Parameters
-    public void shouldNotBeValidAndThrowException(List<String> given) throws Exception {
-	Optional<List<String>> givenOptional = of(given);
+    public void shouldNotBeValidAndThrowException(String[] given) throws Exception {
+	// Given
+	Optional<String[]> givenOptional = of(given);
 
+	// When
 	currenciesParamValidator.validate(givenOptional);
     }
 
     public Object[] parametersForShouldNotBeValidAndThrowException() {
 	return new Object[]{
-		new Object[]{singletonList("")},
-		new Object[]{singletonList("UNKNOWN")},
-		new Object[]{singletonList("unknown")}
+		new Object[]{new String[]{""}},
+		new Object[]{new String[]{"UNKNOWN"}},
+		new Object[]{new String[]{"unknown"}}
 	};
     }
 

@@ -6,13 +6,11 @@ import org.springframework.stereotype.Component;
 
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Component
-public class CurrenciesParamValidator implements ParamValidator<List<String>> {
+public class CurrenciesParamValidator implements ParamValidator<String[]> {
 
     private final AvailableCurrenciesService availableCurrenciesService;
 
@@ -29,7 +27,7 @@ public class CurrenciesParamValidator implements ParamValidator<List<String>> {
 
     @Override
     public boolean supports(Class<?> parameterType, Annotation... annotations) {
-	if (List.class.isAssignableFrom(parameterType)) {
+	if (String[].class.isAssignableFrom(parameterType)) {
 	    return Arrays.stream(annotations)
 		    .map(a -> a.annotationType())
 		    .anyMatch(Currencies.class::equals);
@@ -38,19 +36,19 @@ public class CurrenciesParamValidator implements ParamValidator<List<String>> {
     }
 
     @Override
-    public List<String> validate(Optional<List<String>> object) {
+    public String[] validate(Optional<String[]> object) {
 	return object.map(elementsToUpperCase())
 		.filter(this::isValidOrElseThrow)
 		.orElse(getDefaultValue());
     }
 
-    private Function<List<String>, List<String>> elementsToUpperCase() {
-	return list -> list.stream()
-		.map(String::toUpperCase)
-		.collect(Collectors.toList());
+    private Function<String[], String[]> elementsToUpperCase() {
+	return list -> Arrays.stream(list)
+		.map(a -> a.toUpperCase())
+		.toArray(String[]::new);
     }
 
-    private boolean isValidOrElseThrow(List<String> currencies) {
+    private boolean isValidOrElseThrow(String[] currencies) {
 	for (String currency : currencies) {
 	    if (!availableCurrenciesService.getList().contains(currency)) {
 		throw new IllegalArgumentException(message + currency);
@@ -59,8 +57,9 @@ public class CurrenciesParamValidator implements ParamValidator<List<String>> {
 	return true;
     }
 
-    private List<String> getDefaultValue() {
-	return availableCurrenciesService.getList();
+    private String[] getDefaultValue() {
+	return availableCurrenciesService.getList().stream()
+		.toArray(String[]::new);
     }
 
 }

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -28,13 +29,14 @@ public class RatesController {
 
     @GetMapping("daily")
     public DailyRatesResponse getDailyRates(
-	    @Currencies List<String> currencies,
+	    @Currencies String[] currencies,
 	    @Base String base,
 	    @Date String date
     ) throws Exception {
 
+	List<String> currenciesList = Arrays.asList(currencies);
 	LocalDate parsedDate = LocalDate.parse(date);
-	ExchangeRates exchangeRates = exchangeRatesService.getExchangeRatesFor(base, currencies, parsedDate);
+	ExchangeRates exchangeRates = exchangeRatesService.getExchangeRatesFor(base, currenciesList, parsedDate);
 
 	if (exchangeRates.isEmpty()) {
 	    throw new IllegalArgumentException("Rates for the requested date are not available: " + exchangeRates.getDate());
