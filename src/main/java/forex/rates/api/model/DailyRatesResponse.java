@@ -1,6 +1,7 @@
 package forex.rates.api.model;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,9 +11,6 @@ public class DailyRatesResponse {
     private String date;
     private String base;
     private Map<String, BigDecimal> rates;
-
-    public DailyRatesResponse() {
-    }
 
     public DailyRatesResponse(long currentTimestamp, ExchangeRates exchangeRates) {
 	this.timestamp = currentTimestamp;
@@ -25,31 +23,16 @@ public class DailyRatesResponse {
 	return timestamp;
     }
 
-    public void setTimestamp(long timestamp) {
-	this.timestamp = timestamp;
-    }
-
     public String getBase() {
 	return base;
     }
 
-    public void setBase(String base) {
-	this.base = base;
-    }
-
     public Map<String, BigDecimal> getRates() {
-	return rates;
-    }
-
-    public void setRates(Map<String, BigDecimal> rates) {
-	this.rates = rates;
+	return Collections.unmodifiableMap(rates);
     }
 
     public String getDate() {
 	return date;
     }
 
-    public void setDate(String date) {
-	this.date = date;
-    }
 }
