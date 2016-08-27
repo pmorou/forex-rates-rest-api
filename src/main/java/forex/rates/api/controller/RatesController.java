@@ -38,10 +38,6 @@ public class RatesController {
 	LocalDate parsedDate = LocalDate.parse(date);
 	ExchangeRates exchangeRates = exchangeRatesService.getExchangeRatesFor(base, currenciesList, parsedDate);
 
-	if (exchangeRates.isEmpty()) {
-	    throw new IllegalArgumentException("Rates for the requested date are not available: " + exchangeRates.getDate());
-	}
-
 	return new DailyRatesResponse(dateTimeProviderService.getCurrentTimestamp(), exchangeRates);
     }
 
