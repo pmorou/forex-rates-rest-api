@@ -9,4 +9,6 @@ public interface ExchangeRatesService {
 
     ExchangeRates getExchangeRatesFor(String base, List<String> currencies, LocalDate date);
 
+    ExchangeRates getExchangeRatesFor(String base, List<String> currencies, LocalDate startDate, LocalDate endDate);
+
 }

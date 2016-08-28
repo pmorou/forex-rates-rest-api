@@ -59,6 +59,29 @@ public class RatesControllerTest {
 		.andExpect(content().json("{'rates':{'EUR':1.0001,'PLN':1.0001}}"));
     }
 
+    @Test
+    public void test_getSeriesRates_returnValues() throws Exception {
+	List<String> currencies = Arrays.asList("EUR","PLN");
+	ExchangeRates result = createExchangeRates("USD", LocalDate.of(2000,1,1), LocalDate.of(2000,1,3), "EUR", "PLN");
+
+	when(dateTimeProviderService.getCurrentTimestamp()).thenReturn(1234L);
+	when(exchangeRatesService.getExchangeRatesFor(eq("USD"), eq(currencies), any(LocalDate.class), any(LocalDate.class)))
+		.thenReturn(result);
+
+	mockMvc.perform(get("/rates/series?base=USD&startDate=2000-01-01&endDate=2000-01-03&currencies=EUR,PLN")
+			.accept(MediaType.APPLICATION_JSON_VALUE))
+		.andExpect(status().isOk())
+		.andExpect(content().json("{'timestamp':1234}"))
+		.andExpect(content().json("{'startDate':2000-01-01}"))
+		.andExpect(content().json("{'endDate':2000-01-03}"))
+		.andExpect(content().json("{'base':'USD'}"))
+		.andExpect(content().json("{'rates':"
+			+ "{'2000-01-01':{'EUR':1.0001,'PLN':1.0001}"
+			+ ",'2000-01-02':{'EUR':1.0001,'PLN':1.0001}"
+			+ ",'2000-01-03':{'EUR':1.0001,'PLN':1.0001}"
+			+ "}}"));
+    }
+
     private ExchangeRates createExchangeRates(String base, LocalDate startDate, LocalDate endDate, String... currencies) {
 	Map<LocalDate, Rates> ratesByDate = new HashMap<>();
 	long daysNumber = startDate.until(endDate, ChronoUnit.DAYS);
