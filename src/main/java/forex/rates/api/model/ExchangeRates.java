@@ -1,43 +1,17 @@
 package forex.rates.api.model;
 
-import java.math.BigDecimal;
+import lombok.Data;
+
+import java.time.LocalDate;
 import java.util.Map;
 
+@Data
 public class ExchangeRates {
-    private String date;
+
+    private LocalDate startDate;
+    private LocalDate endDate;
     private String base;
-    private Map<String, BigDecimal> rates;
+    private Map<LocalDate, Rates> ratesByDate;
     private boolean empty;
 
-    public void setDate(String date) {
-	this.date = date;
-    }
-
-    public void setBase(String base) {
-	this.base = base;
-    }
-
-    public void setRates(Map<String, BigDecimal> rates) {
-	this.rates = rates;
-    }
-
-    public String getDate() {
-	return date;
-    }
-
-    public String getBase() {
-	return base;
-    }
-
-    public Map<String, BigDecimal> getRates() {
-	return rates;
-    }
-
-    public void setEmpty() {
-	empty = true;
-    }
-
-    public boolean isEmpty() {
-	return empty;
-    }
 }

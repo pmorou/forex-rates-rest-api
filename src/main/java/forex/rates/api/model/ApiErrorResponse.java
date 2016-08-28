@@ -1,14 +1,16 @@
 package forex.rates.api.model;
 
+import lombok.Data;
 import org.springframework.http.HttpStatus;
 
+@Data
 public class ApiErrorResponse {
 
-    private long timestamp;
-    private boolean error;
-    private int httpStatus;
-    private String message;
-    private String description;
+    private final long timestamp;
+    private final boolean error;
+    private final int httpStatus;
+    private final String message;
+    private final String description;
 
     public ApiErrorResponse(long currentTimestamp, HttpStatus httpStatus, Exception exception) {
 	this.timestamp = currentTimestamp;
@@ -16,26 +18,6 @@ public class ApiErrorResponse {
 	this.httpStatus = httpStatus.value();
 	this.description = exception.getMessage();
 	this.error = true;
-    }
-
-    public long getTimestamp() {
-	return timestamp;
-    }
-
-    public boolean isError() {
-	return error;
-    }
-
-    public int getHttpStatus() {
-	return httpStatus;
-    }
-
-    public String getMessage() {
-	return message;
-    }
-
-    public String getDescription() {
-	return description;
     }
 
 }

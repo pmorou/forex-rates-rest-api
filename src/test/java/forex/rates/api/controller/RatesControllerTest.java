@@ -1,6 +1,7 @@
 package forex.rates.api.controller;
 
 import forex.rates.api.model.ExchangeRates;
+import forex.rates.api.model.Rates;
 import forex.rates.api.service.DateTimeProviderService;
 import forex.rates.api.service.ExchangeRatesService;
 import org.junit.Before;
@@ -13,11 +14,12 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static java.util.stream.Collectors.toMap;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
@@ -42,7 +44,7 @@ public class RatesControllerTest {
     @Test
     public void test_getDailyRates_returnValues() throws Exception {
 	List<String> currencies = Arrays.asList("EUR","PLN");
-	ExchangeRates result = createExchangeRates("BASE", "DATE", "RATE1", "RATE2");
+	ExchangeRates result = createExchangeRates("USD", LocalDate.of(2001,1,1), LocalDate.of(2001,1,1), "EUR", "PLN");
 
 	when(dateTimeProviderService.getCurrentTimestamp()).thenReturn(1234L);
 	when(exchangeRatesService.getExchangeRatesFor(eq("USD"), eq(currencies), any(LocalDate.class)))
@@ -52,18 +54,26 @@ public class RatesControllerTest {
 			.accept(MediaType.APPLICATION_JSON_VALUE))
 		.andExpect(status().isOk())
 		.andExpect(content().json("{'timestamp':1234}"))
-		.andExpect(content().json("{'date':DATE}"))
-		.andExpect(content().json("{'base':'BASE'}"))
-		.andExpect(content().json("{'rates':{'RATE1':1.0001,'RATE2':1.0001}}"));
+		.andExpect(content().json("{'date':2001-01-01}"))
+		.andExpect(content().json("{'base':'USD'}"))
+		.andExpect(content().json("{'rates':{'EUR':1.0001,'PLN':1.0001}}"));
     }
 
-    private ExchangeRates createExchangeRates(String base, String date, String... currencies) {
+    private ExchangeRates createExchangeRates(String base, LocalDate startDate, LocalDate endDate, String... currencies) {
+	Map<LocalDate, Rates> ratesByDate = new HashMap<>();
+	long daysNumber = startDate.until(endDate, ChronoUnit.DAYS);
+	LocalDate date = startDate;
+	for (int i = 0; i <= daysNumber; i++) {
+	    Rates rate = new Rates();
+	    Arrays.stream(currencies).forEach(c -> rate.addRate(c, new BigDecimal("1.0001")));
+	    ratesByDate.put(date, rate);
+	    date = date.plusDays(1);
+	}
 	ExchangeRates exchangeRates = new ExchangeRates();
-	Map<String, BigDecimal> rates = Arrays.stream(currencies)
-		.collect(toMap(e -> e, e -> new BigDecimal("1.0001")));
-	exchangeRates.setRates(rates);
+	exchangeRates.setRatesByDate(ratesByDate);
 	exchangeRates.setBase(base);
-	exchangeRates.setDate(date);
+	exchangeRates.setStartDate(startDate);
+	exchangeRates.setEndDate(endDate);
 	return exchangeRates;
     }
 
