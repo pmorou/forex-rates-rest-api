@@ -2,22 +2,27 @@ package forex.rates.api.validation.validator;
 
 import forex.rates.api.service.DateTimeProviderService;
 import forex.rates.api.validation.annotation.Date;
+import junitparams.JUnitParamsRunner;
+import junitparams.Parameters;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import java.lang.annotation.Annotation;
 import java.time.LocalDate;
+import java.util.Optional;
 
 import static java.util.Optional.of;
 import static java.util.Optional.ofNullable;
 import static org.junit.Assert.*;
 
+@RunWith(JUnitParamsRunner.class)
 public class DateParamValidatorTest {
 
-    private static final LocalDate DATE_2000_01_01 = LocalDate.of(2000, 1, 1);
+    private static final LocalDate TODAY = LocalDate.of(2001, 1, 1);
     private static final Annotation INVALID_ANNOTATION = () -> InvalidAnnotation.class;
     private static final Annotation VALID_ANNOTATION = () -> Date.class;
     private static final Class<?> INVALID_PARAMETER_TYPE = Integer.class;
@@ -33,98 +38,83 @@ public class DateParamValidatorTest {
     public void before() {
 	MockitoAnnotations.initMocks(this);
 	dateParamValidator = new DateParamValidator(dateTimeProviderService);
-	Mockito.when(dateTimeProviderService.getTodaysDateAsString()).thenReturn(DATE_2000_01_01.toString());
-	Mockito.when(dateTimeProviderService.getTodaysDate()).thenReturn(DATE_2000_01_01);
+	Mockito.when(dateTimeProviderService.getTodaysDateAsString()).thenReturn(TODAY.toString());
+	Mockito.when(dateTimeProviderService.getTodaysDate()).thenReturn(TODAY);
     }
 
     @Test
-    public void supports_invalidType() throws Exception {
-	boolean result = dateParamValidator.supports(INVALID_PARAMETER_TYPE);
+    @Parameters
+    public void shouldSupport(Class<?> givenParameterType, Annotation[] givenAnnotations) throws Exception {
+	// When
+	boolean result = dateParamValidator.supports(givenParameterType, givenAnnotations);
 
-	assertFalse(result);
-    }
-
-    @Test
-    public void supports_invalid_noAnnotations() throws Exception {
-	boolean result = dateParamValidator.supports(VALID_PARAMETER_TYPE);
-
-	assertFalse(result);
-    }
-
-    @Test
-    public void supports_invalid_emptyAnnotations() throws Exception {
-	boolean result = dateParamValidator.supports(INVALID_PARAMETER_TYPE, new Annotation[]{});
-
-	assertFalse(result);
-    }
-
-    @Test
-    public void supports_invalid_invalidAnnotation() throws Exception {
-	boolean result = dateParamValidator.supports(INVALID_PARAMETER_TYPE, INVALID_ANNOTATION);
-
-	assertFalse(result);
-    }
-
-    @Test
-    public void supports_invalid_validType_invalidAnnotation() throws Exception {
-	boolean result = dateParamValidator.supports(VALID_PARAMETER_TYPE, INVALID_ANNOTATION);
-
-	assertFalse(result);
-    }
-
-    @Test
-    public void supports_valid() throws Exception {
-	boolean result = dateParamValidator.supports(VALID_PARAMETER_TYPE, INVALID_ANNOTATION, VALID_ANNOTATION);
-
+	// Then
 	assertTrue(result);
     }
 
-    @Test
-    public void validate_valid_null() throws Exception {
-	String given = null;
-
-	String result = dateParamValidator.validate(ofNullable(given));
-
-	assertNotNull(result);
+    public Object[] parametersForShouldSupport() {
+	return new Object[]{
+		new Object[]{VALID_PARAMETER_TYPE, new Annotation[]{INVALID_ANNOTATION, VALID_ANNOTATION}}
+	};
     }
 
     @Test
-    public void validate_valid_yesterday() throws Exception {
-	String given = DATE_2000_01_01.minusDays(1).toString();
+    @Parameters
+    public void shouldNotSupport(Class<?> givenParameterType, Annotation[] givenAnnotations) throws Exception {
+	// When
+	boolean result = dateParamValidator.supports(givenParameterType, givenAnnotations);
 
-	String result = dateParamValidator.validate(of(given));
+	// Then
+	assertFalse(result);
+    }
 
-	assertNotNull(result);
+    public Object[] parametersForShouldNotSupport() {
+	return new Object[]{
+		new Object[]{INVALID_PARAMETER_TYPE, null},
+		new Object[]{INVALID_PARAMETER_TYPE, new Annotation[]{}},
+		new Object[]{INVALID_PARAMETER_TYPE, new Annotation[]{INVALID_ANNOTATION}},
+		new Object[]{VALID_PARAMETER_TYPE, new Annotation[]{}},
+		new Object[]{VALID_PARAMETER_TYPE, new Annotation[]{INVALID_ANNOTATION}}
+	};
     }
 
     @Test
-    public void validate_valid_today() throws Exception {
-	String given = DATE_2000_01_01.toString();
+    @Parameters
+    public void shouldBeValidAndNotNull(String given) throws Exception {
+	// Given
+	Optional<String> givenOptional = ofNullable(given);
 
-	String result = dateParamValidator.validate(of(given));
+	// When
+	String result = dateParamValidator.validate(givenOptional);
 
+	// Then
 	assertNotNull(result);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void validate_invalid_empty() throws Exception {
-	String given = "";
-
-	dateParamValidator.validate(of(given));
+    public Object[] parametersForShouldBeValidAndNotNull() {
+	return new Object[]{
+		new Object[]{null},
+		new Object[]{TODAY.minusDays(1).toString()},
+		new Object[]{TODAY.toString()}
+	};
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void validate_invalid_unknownFormat() throws Exception {
-	String given = "2000-0101";
+    @Parameters
+    public void shouldNotBeValidAndThrowException(String given) throws Exception {
+	// Given
+	Optional<String> givenOptional = of(given);
 
-	dateParamValidator.validate(of(given));
+	// When
+	String result = dateParamValidator.validate(givenOptional);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void validate_invalid_fromFuture_tomorrow() throws Exception {
-	String given = DATE_2000_01_01.plusDays(1).toString();
-
-	dateParamValidator.validate(of(given));
+    public Object[] parametersForShouldNotBeValidAndThrowException() {
+	return new Object[]{
+		new Object[]{""},
+		new Object[]{"01-01-2001"},
+		new Object[]{TODAY.plusDays(1).toString()}
+	};
     }
 
 }

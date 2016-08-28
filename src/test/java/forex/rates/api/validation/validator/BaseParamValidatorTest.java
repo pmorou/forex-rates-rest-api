@@ -2,8 +2,11 @@ package forex.rates.api.validation.validator;
 
 import forex.rates.api.service.AvailableCurrenciesService;
 import forex.rates.api.validation.annotation.Base;
+import junitparams.JUnitParamsRunner;
+import junitparams.Parameters;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
@@ -11,11 +14,13 @@ import org.mockito.MockitoAnnotations;
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.Optional.of;
 import static java.util.Optional.ofNullable;
 import static org.junit.Assert.*;
 
+@RunWith(JUnitParamsRunner.class)
 public class BaseParamValidatorTest {
 
     private static final Annotation INVALID_ANNOTATION = () -> InvalidAnnotation.class;
@@ -38,86 +43,78 @@ public class BaseParamValidatorTest {
     }
 
     @Test
-    public void supports_invalidType() throws Exception {
-	boolean result = baseParamValidator.supports(INVALID_PARAMETER_TYPE);
+    @Parameters
+    public void shouldSupport(Class<?> givenParameterType, Annotation[] givenAnnotations) throws Exception {
+	// When
+	boolean result = baseParamValidator.supports(givenParameterType, givenAnnotations);
 
-	assertFalse(result);
-    }
-
-    @Test
-    public void supports_invalid_noAnnotations() throws Exception {
-	boolean result = baseParamValidator.supports(VALID_PARAMETER_TYPE);
-
-	assertFalse(result);
-    }
-
-    @Test
-    public void supports_invalid_emptyAnnotations() throws Exception {
-	boolean result = baseParamValidator.supports(VALID_PARAMETER_TYPE, new Annotation[]{});
-
-	assertFalse(result);
-    }
-
-    @Test
-    public void supports_invalid_invalidAnnotation() throws Exception {
-	boolean result = baseParamValidator.supports(VALID_PARAMETER_TYPE, INVALID_ANNOTATION);
-
-	assertFalse(result);
-    }
-
-    @Test
-    public void supports_valid() throws Exception {
-	boolean result = baseParamValidator.supports(VALID_PARAMETER_TYPE, INVALID_ANNOTATION, VALID_ANNOTATION);
-
+	// Then
 	assertTrue(result);
     }
 
-    @Test
-    public void validate_valid_null() throws Exception {
-	String given = null;
-
-	String result = baseParamValidator.validate(ofNullable(given));
-
-	assertNotNull(result);
+    public Object[] parametersForShouldSupport() {
+	return new Object[]{
+		new Object[]{VALID_PARAMETER_TYPE, new Annotation[]{INVALID_ANNOTATION, VALID_ANNOTATION}}
+	};
     }
 
     @Test
-    public void validate_valid_eurUpperCase() throws Exception {
-	String given = "EUR";
+    @Parameters
+    public void shouldNotSupport(Class<?> givenParameterType, Annotation[] givenAnnotations) throws Exception {
+	// When
+	boolean result = baseParamValidator.supports(givenParameterType, givenAnnotations);
 
-	String result = baseParamValidator.validate(of(given));
+	// Then
+	assertFalse(result);
+    }
 
-	assertNotNull(result);
+    public Object[] parametersForShouldNotSupport() {
+	return new Object[]{
+		new Object[]{INVALID_PARAMETER_TYPE, null},
+		new Object[]{INVALID_PARAMETER_TYPE, new Annotation[]{}},
+		new Object[]{INVALID_PARAMETER_TYPE, new Annotation[]{INVALID_ANNOTATION}},
+		new Object[]{VALID_PARAMETER_TYPE, new Annotation[]{}},
+		new Object[]{VALID_PARAMETER_TYPE, new Annotation[]{INVALID_ANNOTATION}}
+	};
     }
 
     @Test
-    public void validate_valid_eurLowerCase() throws Exception {
-	String given = "eur";
+    @Parameters
+    public void shouldBeValidAndNotNull(String given) throws Exception {
+	// Given
+	Optional<String> givenOptional = ofNullable(given);
 
-	String result = baseParamValidator.validate(of(given));
+	// When
+	String result = baseParamValidator.validate(givenOptional);
 
+	// Then
 	assertNotNull(result);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void validate_invalid_empty() throws Exception {
-	String given = "";
-
-	baseParamValidator.validate(of(given));
+    public Object[] parametersForShouldBeValidAndNotNull() {
+	return new Object[]{
+		new Object[]{null},
+		new Object[]{"EUR"},
+		new Object[]{"eur"}
+	};
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void validate_invalid_unknown() throws Exception {
-	String given = "INVALID";
+    @Parameters
+    public void shouldNotBeValidAndThrowException(String given) throws Exception {
+	// Given
+	Optional<String> givenOptional = of(given);
 
-	baseParamValidator.validate(of(given));
+	// When
+	String result = baseParamValidator.validate(givenOptional);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void validate_invalid_unknown_lowerCase() throws Exception {
-	String given = "invalid";
-
-	baseParamValidator.validate(of(given));
+    public Object[] parametersForShouldNotBeValidAndThrowException() {
+	return new Object[]{
+		new Object[]{""},
+		new Object[]{"UNKNOWN"},
+		new Object[]{"unknown"}
+	};
     }
 
 }
