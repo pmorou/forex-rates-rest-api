@@ -42,7 +42,7 @@ public class RatesControllerTest {
     }
 
     @Test
-    public void test_getDailyRates_returnValues() throws Exception {
+    public void shouldReturnCorrectDailyRatesResponse() throws Exception {
 	List<String> currencies = Arrays.asList("EUR","PLN");
 	ExchangeRates result = createExchangeRates("USD", LocalDate.of(2001,1,1), LocalDate.of(2001,1,1), "EUR", "PLN");
 
@@ -60,7 +60,7 @@ public class RatesControllerTest {
     }
 
     @Test
-    public void test_getSeriesRates_returnValues() throws Exception {
+    public void shouldReturnCorrectSeriesRatesResponse() throws Exception {
 	List<String> currencies = Arrays.asList("EUR","PLN");
 	ExchangeRates result = createExchangeRates("USD", LocalDate.of(2000,1,1), LocalDate.of(2000,1,3), "EUR", "PLN");
 
