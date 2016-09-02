@@ -28,24 +28,23 @@ public class ParamValidationAspect {
 	private Optional<?> value;
 	private Annotation[] annotations;
 
-	Parameter(Class<?> type, Annotation[] annotations, Object value) {
+	private Parameter(Class<?> type, Annotation[] annotations, Object value) {
 	    this.type = type;
 	    this.annotations = annotations;
 	    this.value = Optional.ofNullable(value);
 	}
 
-	Class<?> getType() {
+	private Class<?> getType() {
 	    return type;
 	}
 
-	Annotation[] getAnnotations() {
+	private Annotation[] getAnnotations() {
 	    return annotations;
 	}
 
-	Optional<?> getValue() {
+	private Optional<?> getValue() {
 	    return value;
 	}
-
     }
 
     @Pointcut("execution(* forex.rates.api.controller.*Controller.*(..))")
