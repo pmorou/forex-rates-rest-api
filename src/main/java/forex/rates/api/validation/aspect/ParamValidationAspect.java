@@ -9,10 +9,7 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 
 import java.lang.annotation.Annotation;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Aspect
 @Component
@@ -59,17 +56,15 @@ public class ParamValidationAspect {
 	List<Object> newArgs = new ArrayList<>();
 
 	for (Parameter parameter : parameters) {
-	    Optional<?> optional = parameter.getValue();
-	    Object value = optional.orElse(null);
+	    Class<?> type = parameter.getType();
+	    Annotation[] annotations = parameter.getAnnotations();
+	    Optional<?> optionalValue = parameter.getValue();
 
-	    for (ParamValidator validator : paramValidators) {
-		Class<?> parameterType = parameter.getType();
-		Annotation[] annotations = parameter.getAnnotations();
-		if (validator.supports(parameterType, annotations)) {
-		    value = validator.validate(optional);
-		    break;
-		}
-	    }
+	    Object value = paramValidators.stream()
+		    .filter(pV -> pV.supports(type, annotations))
+		    .findFirst()
+		    .map(pV -> pV.validate(optionalValue))
+		    .orElse(null);
 	    newArgs.add(value);
 	}
 	return proceedingJoinPoint.proceed(newArgs.toArray());
