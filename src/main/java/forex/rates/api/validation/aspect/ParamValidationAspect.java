@@ -1,6 +1,7 @@
 package forex.rates.api.validation.aspect;
 
 import forex.rates.api.validation.validator.ParamValidator;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -13,6 +14,7 @@ import java.util.*;
 
 @Aspect
 @Component
+@Slf4j
 public class ParamValidationAspect {
 
     private List<ParamValidator> paramValidators;
@@ -67,7 +69,12 @@ public class ParamValidationAspect {
 		    .orElse(null);
 	    newArgs.add(value);
 	}
-	return proceedingJoinPoint.proceed(newArgs.toArray());
+	Object[] newArgsArray = newArgs.toArray();
+
+	log.info("Passing request to handler: {}, parameters after validation: {}",
+		proceedingJoinPoint.getSignature().getName(), Arrays.deepToString(newArgsArray));
+
+	return proceedingJoinPoint.proceed(newArgsArray);
     }
 
     private List<Parameter> collectParameters(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
@@ -75,6 +82,9 @@ public class ParamValidationAspect {
 	Class[] parameterTypes = methodSignature.getParameterTypes();
 	Object[] parameterValues = proceedingJoinPoint.getArgs();
 	Annotation[][] parameterAnnotations = methodSignature.getMethod().getParameterAnnotations();
+
+	log.info("Passing request to handler: {}, parameters before validation: {}",
+		proceedingJoinPoint.getSignature().getName(), Arrays.deepToString(parameterValues));
 
 	List<Parameter> parameters = new ArrayList<>();
 	for (int i = 0; i < parameterValues.length; i++) {
