@@ -2,6 +2,7 @@ package forex.rates.api.controller;
 
 import forex.rates.api.model.DailyRatesResponse;
 import forex.rates.api.model.ExchangeRates;
+import forex.rates.api.model.ExchangeRatesRequest;
 import forex.rates.api.model.SeriesRatesResponse;
 import forex.rates.api.service.DateTimeProviderService;
 import forex.rates.api.service.ExchangeRatesService;
@@ -12,10 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.List;
 
 @RestController
 @RequestMapping("rates")
@@ -36,9 +33,7 @@ public class RatesController {
 	    @Date String date
     ) throws Exception {
 
-	List<String> currenciesList = Arrays.asList(currencies);
-	LocalDate parsedDate = LocalDate.parse(date);
-	ExchangeRates exchangeRates = exchangeRatesService.getExchangeRatesFor(base, currenciesList, parsedDate);
+	ExchangeRates exchangeRates = exchangeRatesService.perform(new ExchangeRatesRequest(base, date, currencies));
 
 	return new DailyRatesResponse(dateTimeProviderService.getCurrentTimestamp(), exchangeRates);
     }
@@ -51,10 +46,7 @@ public class RatesController {
 	    @Date @RequestParam String endDate
     ) throws Exception {
 
-	List<String> currenciesList = Arrays.asList(currencies);
-	LocalDate parsedStartDate = LocalDate.parse(startDate);
-	LocalDate parsedEndDate = LocalDate.parse(endDate);
-	ExchangeRates exchangeRates = exchangeRatesService.getExchangeRatesFor(base, currenciesList, parsedStartDate, parsedEndDate);
+	ExchangeRates exchangeRates = exchangeRatesService.perform(new ExchangeRatesRequest(base, startDate, endDate, currencies));
 
 	return new SeriesRatesResponse(dateTimeProviderService.getCurrentTimestamp(), exchangeRates);
     }

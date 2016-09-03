@@ -1,14 +1,10 @@
 package forex.rates.api.service;
 
 import forex.rates.api.model.ExchangeRates;
-
-import java.time.LocalDate;
-import java.util.List;
+import forex.rates.api.model.ExchangeRatesRequest;
 
 public interface ExchangeRatesService {
 
-    ExchangeRates getExchangeRatesFor(String base, List<String> currencies, LocalDate date);
-
-    ExchangeRates getExchangeRatesFor(String base, List<String> currencies, LocalDate startDate, LocalDate endDate);
+    ExchangeRates perform(ExchangeRatesRequest exchangeRatesRequest);
 
 }
