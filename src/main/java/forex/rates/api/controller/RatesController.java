@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("rates")
 public class RatesController {
 
-    private DateTimeProviderService dateTimeProviderService;
-    private ExchangeRatesService exchangeRatesService;
+    private final DateTimeProviderService dateTimeProviderService;
+    private final ExchangeRatesService exchangeRatesService;
 
     public RatesController(DateTimeProviderService dateTimeProviderService, ExchangeRatesService exchangeRatesService) {
 	this.dateTimeProviderService = dateTimeProviderService;

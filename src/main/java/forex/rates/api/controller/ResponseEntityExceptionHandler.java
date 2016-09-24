@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class ResponseEntityExceptionHandler {
 
-    private DateTimeProviderService dateTimeProviderService;
+    private final DateTimeProviderService dateTimeProviderService;
 
     public ResponseEntityExceptionHandler(DateTimeProviderService dateTimeProviderService) {
 	this.dateTimeProviderService = dateTimeProviderService;
