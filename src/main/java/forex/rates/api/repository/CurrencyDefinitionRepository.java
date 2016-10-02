@@ -4,6 +4,6 @@ import forex.rates.api.model.entity.CurrencyDefinition;
 
 public interface CurrencyDefinitionRepository {
 
-    void save(CurrencyDefinition currencyDefinition);
+    CurrencyDefinition save(CurrencyDefinition currencyDefinition);
 
 }

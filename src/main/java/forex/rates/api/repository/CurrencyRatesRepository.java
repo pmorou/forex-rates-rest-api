@@ -11,6 +11,6 @@ public interface CurrencyRatesRepository {
 
     CurrencyRate findOneByDateAndCurrenciesIn(String currency, LocalDate startDate);
 
-    void save(CurrencyRate currencyRate);
+    CurrencyRate save(CurrencyRate currencyRate);
 
 }
