@@ -8,4 +8,10 @@ public interface DataSetContext {
 
     String getSourceUrl();
 
+    String getSourceLocalCopyPath();
+
+    String getSourceLocalCopyPrefix();
+
+    String getSourceLocalCopyExtension();
+
 }

@@ -30,18 +30,22 @@ public class DataSetSourceLocalCopyImplTest {
     private File actualFile;
 
     @Before
-    public void before() {
+    public void setUpMocks() throws Exception {
 	MockitoAnnotations.initMocks(this);
+	InputStream expectedInputStream = IOUtils.toInputStream(EXPECTED_STRING, "UTF-8");
+	when(httpClient.getInputStream(anyString())).thenReturn(expectedInputStream);
+	when(dateTimeProviderService.getCurrentTimestamp()).thenReturn(1L);
+	when(dataSetContext.getSourceLocalCopyPath()).thenReturn("src/test/resources");
+	when(dataSetContext.getSourceLocalCopyPrefix()).thenReturn("testDataSetSource");
+	when(dataSetContext.getSourceLocalCopyExtension()).thenReturn("xml");
     }
 
     @Test
-    public void shouldSaveExpectedStringToTheFile() throws Exception {
+    public void shouldSaveExpectedInputStreamToTheFile() throws Exception {
 	// Given
 	DataSetSourceLocalCopyImpl dataSetSourceLocalCopy =
 		new DataSetSourceLocalCopyImpl(dataSetContext, httpClient, dateTimeProviderService);
 	InputStream expectedInputStream = IOUtils.toInputStream(EXPECTED_STRING, "UTF-8");
-	when(httpClient.getInputStream(anyString())).thenReturn(expectedInputStream);
-	when(dateTimeProviderService.getCurrentTimestamp()).thenReturn(1L);
 
 	// When
 	actualFile = dataSetSourceLocalCopy.getFile();

@@ -2,5 +2,9 @@ dataSet:
   baseCurrency: EUR
   source:
     url: https://sdw-wsrest.ecb.europa.eu/service/data/EXR/D..EUR.SP00.A
+    localCopy:
+      path: src/main/resources
+      prefix: dataSetSource
+      extension: xml
   update:
     url: https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml

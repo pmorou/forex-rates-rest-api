@@ -17,4 +17,13 @@ public class DataSetContextImpl implements DataSetContext {
     @Value("${dataSet.update.url}")
     private String updateUrl;
 
+    @Value("${dataSet.source.localCopy.path}")
+    private String sourceLocalCopyPath;
+
+    @Value("${dataSet.source.localCopy.prefix}")
+    private String sourceLocalCopyPrefix;
+
+    @Value("${dataSet.source.localCopy.extension}")
+    private String sourceLocalCopyExtension;
+
 }

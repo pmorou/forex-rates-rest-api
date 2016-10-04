@@ -29,10 +29,14 @@ public class DataSetSourceLocalCopyImpl implements DataSetSourceLocalCopy {
 
     private File copyFromRemoteSource() throws IOException {
 	InputStream is = httpClient.getInputStream(dataSetContext.getSourceUrl());
-	String fileName = "src/main/resources/dataSetSource_" + dateTimeProviderService.getCurrentTimestamp() + ".xml";
-	File file = new File(fileName);
+	File file = new File(getPathWithFileName());
 	IOUtils.copy(is, FileUtils.openOutputStream(file));
 	return this.dataSetSourceCopy = file;
+    }
+
+    private String getPathWithFileName() {
+	return dataSetContext.getSourceLocalCopyPath() + "/" + dataSetContext.getSourceLocalCopyPrefix() + "_"
+		+ dateTimeProviderService.getCurrentTimestamp() + "." + dataSetContext.getSourceLocalCopyExtension();
     }
 
     @Override
