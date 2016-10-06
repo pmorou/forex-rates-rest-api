@@ -1,4 +1,4 @@
-package forex.rates.api;
+package forex.rates.api.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
