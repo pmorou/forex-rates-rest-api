@@ -1,5 +1,6 @@
 package forex.rates.api.service.impl;
 
+import forex.rates.api.autostart.DataSetContext;
 import forex.rates.api.model.entity.CurrencyDefinition;
 import forex.rates.api.repository.CurrencyDefinitionRepository;
 import org.junit.Before;
@@ -19,25 +20,27 @@ public class AvailableCurrenciesServiceImplTest {
     private final CurrencyDefinition PLN_DEFINITION = createCurrencyDefinition("PLN", 4);
 
     private @Mock CurrencyDefinitionRepository currencyDefinitionRepository;
+    private @Mock DataSetContext dataSetContext;
 
     private AvailableCurrenciesServiceImpl availableCurrenciesService;
 
     @Before
     public void before() throws Exception {
 	MockitoAnnotations.initMocks(this);
-	availableCurrenciesService = new AvailableCurrenciesServiceImpl(currencyDefinitionRepository);
+	availableCurrenciesService = new AvailableCurrenciesServiceImpl(currencyDefinitionRepository, dataSetContext);
     }
 
     @Test
     public void shouldReturnListOfUsdAndPln() throws Exception {
 	// Given
 	when(currencyDefinitionRepository.findAll()).thenReturn(Arrays.asList(USD_DEFINITION, PLN_DEFINITION));
+	when(dataSetContext.getBaseCurrency()).thenReturn("EUR");
 
 	// When
 	List<String> actualAvailableCurrencies = availableCurrenciesService.getList();
 
 	// Then
-	assertThat(actualAvailableCurrencies).containsOnlyOnce("USD", "PLN");
+	assertThat(actualAvailableCurrencies).containsOnly("USD", "PLN", "EUR");
     }
 
     private CurrencyDefinition createCurrencyDefinition(String codeName, int precision) {
