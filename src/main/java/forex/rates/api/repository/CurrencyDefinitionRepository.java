@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface CurrencyDefinitionRepository {
 
+    List<CurrencyDefinition> findAll();
+
     List<CurrencyDefinition> findAllByCodeNameIn(List<String> codeName);
 
     CurrencyDefinition findOneByCodeName(String codeName);
