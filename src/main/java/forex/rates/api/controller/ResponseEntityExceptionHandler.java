@@ -1,6 +1,6 @@
 package forex.rates.api.controller;
 
-import forex.rates.api.model.ApiErrorResponse;
+import forex.rates.api.model.response.ApiErrorResponse;
 import forex.rates.api.service.DateTimeProviderService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;

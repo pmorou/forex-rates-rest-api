@@ -1,4 +1,4 @@
-package forex.rates.api.model;
+package forex.rates.api.model.response;
 
 import lombok.Data;
 import org.springframework.http.HttpStatus;

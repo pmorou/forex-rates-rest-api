@@ -1,5 +1,7 @@
-package forex.rates.api.model;
+package forex.rates.api.model.response;
 
+import forex.rates.api.model.ExchangeRates;
+import forex.rates.api.model.Rates;
 import lombok.Data;
 
 import java.time.LocalDate;

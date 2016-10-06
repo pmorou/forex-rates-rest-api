@@ -1,5 +1,6 @@
-package forex.rates.api.model;
+package forex.rates.api.model.response;
 
+import forex.rates.api.model.ExchangeRates;
 import lombok.Data;
 
 import java.math.BigDecimal;
