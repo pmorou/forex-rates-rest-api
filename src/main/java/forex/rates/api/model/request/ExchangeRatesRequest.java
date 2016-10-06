@@ -18,9 +18,7 @@ public class ExchangeRatesRequest {
 
     public ExchangeRatesRequest(String base, String date, String[] currencies) {
         this.base = base;
-        LocalDate startDate = LocalDate.parse(date);
-        this.startDate = startDate;
-        this.endDate = startDate;
+        this.startDate = this.endDate = LocalDate.parse(date);
         this.currencies = Arrays.asList(currencies);
     }
 
