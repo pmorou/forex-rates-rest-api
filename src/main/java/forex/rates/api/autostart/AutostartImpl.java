@@ -4,6 +4,7 @@ import forex.rates.api.autostart.dataset.CompleteDataSet;
 import forex.rates.api.autostart.dataset.DataSetSource;
 import forex.rates.api.model.entity.CurrencyDefinition;
 import forex.rates.api.model.entity.CurrencyRate;
+import forex.rates.api.schedule.NewRatesSchedule;
 import forex.rates.api.service.CurrencyDefinitionService;
 import forex.rates.api.service.CurrencyRateService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,18 +18,21 @@ public class AutostartImpl implements Autostart {
     private final DataSetSource dataSetSource;
     private final CurrencyDefinitionService currencyDefinitionService;
     private final CurrencyRateService currencyRateService;
+    private final NewRatesSchedule newRatesSchedule;
 
     @Autowired
-    public AutostartImpl(DataSetSource dataSetSource, CurrencyDefinitionService currencyDefinitionService, CurrencyRateService currencyRateService) {
+    public AutostartImpl(DataSetSource dataSetSource, CurrencyDefinitionService currencyDefinitionService, CurrencyRateService currencyRateService, NewRatesSchedule newRatesSchedule) {
         this.dataSetSource = dataSetSource;
         this.currencyDefinitionService = currencyDefinitionService;
         this.currencyRateService = currencyRateService;
+        this.newRatesSchedule = newRatesSchedule;
     }
 
     @Override
     @PostConstruct
     public void start() {
         persistDataSet();
+        scheduleRatesUpdate();
     }
 
     private void persistDataSet() {
@@ -51,6 +55,10 @@ public class AutostartImpl implements Autostart {
 
         System.out.println("Inserting currency rates took " + (System.currentTimeMillis() - start) + " milliseconds");
         System.out.println(dataSet.getCurrencyRates().size() + " items");
+    }
+
+    private void scheduleRatesUpdate() {
+        newRatesSchedule.scheduleUpdate();
     }
 
 }
