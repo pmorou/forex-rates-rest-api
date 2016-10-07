@@ -8,3 +8,7 @@ dataSet:
       extension: xml
   update:
     url: https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml
+  schedule:
+    newRates:
+      timeZone: GMT
+      cronPatternTrigger: 0 0 16 * * MON-FRI
