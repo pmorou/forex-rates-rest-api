@@ -40,33 +40,36 @@ public class ExchangeRatesServiceImpl implements ExchangeRatesService {
 	// If TRUE is returned, rate for this currency should be calculated out of actual base requested by user.
 	boolean baseCurrencyRemoved = requestedCurrencies.remove(BASE_CURRENCY);
 	List<CurrencyDefinition> currencyDefinitions = currencyDefinitionRepository.findAllByCodeNameIn(requestedCurrencies);
-	List<CurrencyRate> requestedCurrencyRates = currencyRatesRepository.findAllByDateAndCurrencyIn(request.getStartDate(), currencyDefinitions);
 
-	Rates rates = new Rates();
 	BigDecimal baseExchangeRate = null;
 
-	if (isNotDataSetsBaseCurrency(request)) {
-	    CurrencyDefinition baseCurrencyDefinition = currencyDefinitionRepository.findOneByCodeName(request.getBase());
-	    CurrencyRate baseCurrencyRate = currencyRatesRepository.findOneByDateAndCurrency(request.getStartDate(), baseCurrencyDefinition);
-	    baseExchangeRate = inverse(baseCurrencyRate.getExchangeRate(), baseCurrencyRate.getCurrency().getPrecision());
+	for (LocalDate date : request.getDateRange()) {
+	    List<CurrencyRate> requestedCurrencyRates = currencyRatesRepository.findAllByDateAndCurrencyIn(date, currencyDefinitions);
+	    Rates rates = new Rates();
 
-	    if (baseCurrencyRemoved) {
-		rates.addRate(BASE_CURRENCY, baseExchangeRate);
-	    }
-	}
+	    if (isNotDataSetsBaseCurrency(request)) {
+		CurrencyDefinition baseCurrencyDefinition = currencyDefinitionRepository.findOneByCodeName(request.getBase());
+		CurrencyRate baseCurrencyRate = currencyRatesRepository.findOneByDateAndCurrency(date, baseCurrencyDefinition);
+		baseExchangeRate = inverse(baseCurrencyRate.getExchangeRate(), baseCurrencyRate.getCurrency().getPrecision());
 
-	for (CurrencyRate currencyRate : requestedCurrencyRates) {
-	    CurrencyDefinition currencyDefinition = currencyRate.getCurrency();
-	    BigDecimal exchangeRate = currencyRate.getExchangeRate();
-
-	    if (baseExchangeRate != null) {
-		exchangeRate = multiply(exchangeRate, baseExchangeRate, currencyDefinition.getPrecision());
+		if (baseCurrencyRemoved) {
+		    rates.addRate(BASE_CURRENCY, baseExchangeRate);
+		}
 	    }
 
-	    rates.addRate(currencyDefinition.getCodeName(), exchangeRate);
-	}
+	    for (CurrencyRate currencyRate : requestedCurrencyRates) {
+		CurrencyDefinition currencyDefinition = currencyRate.getCurrency();
+		BigDecimal exchangeRate = currencyRate.getExchangeRate();
 
-	ratesByDate.put(request.getStartDate(), rates);
+		if (baseExchangeRate != null) {
+		    exchangeRate = multiply(exchangeRate, baseExchangeRate, currencyDefinition.getPrecision());
+		}
+
+		rates.addRate(currencyDefinition.getCodeName(), exchangeRate);
+	    }
+
+	    ratesByDate.put(date, rates);
+	}
 
 	ExchangeRates result = new ExchangeRates();
 	result.setStartDate(request.getStartDate());

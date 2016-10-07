@@ -24,11 +24,14 @@ import static org.mockito.Mockito.when;
 public class ExchangeRatesServiceImplTest {
 
     private final LocalDate DATE_2001_01_01 = LocalDate.of(2001, 1, 1);
+    private final LocalDate DATE_2001_01_02 = LocalDate.of(2001, 1, 2);
     private final CurrencyDefinition USD_DEFINITION = createCurrencyDefinition("USD", 4);
     private final CurrencyDefinition PLN_DEFINITION = createCurrencyDefinition("PLN", 4);
     private final CurrencyDefinition EUR_DEFINITION = createCurrencyDefinition("EUR", 4);
     private final CurrencyRate USD_RATE = createCurrencyRate(USD_DEFINITION, new BigDecimal("1.4902"), DATE_2001_01_01);
     private final CurrencyRate PLN_RATE = createCurrencyRate(PLN_DEFINITION, new BigDecimal("1.1002"), DATE_2001_01_01);
+    private final CurrencyRate USD_RATE_NEXT_DAY = createCurrencyRate(USD_DEFINITION, new BigDecimal("1.4815"), DATE_2001_01_02);
+    private final CurrencyRate PLN_RATE_NEXT_DAY = createCurrencyRate(PLN_DEFINITION, new BigDecimal("1.1000"), DATE_2001_01_02);
 
     private @Mock CurrencyRatesRepository currencyRatesRepository;
     private @Mock CurrencyDefinitionRepository currencyDefinitionRepository;
@@ -49,10 +52,9 @@ public class ExchangeRatesServiceImplTest {
 	when(currencyRatesRepository.findAllByDateAndCurrencyIn(DATE_2001_01_01, Arrays.asList(USD_DEFINITION))).thenReturn(currencyRates);
 	when(currencyDefinitionRepository.findOneByCodeName("EUR")).thenReturn(EUR_DEFINITION);
 	when(currencyDefinitionRepository.findAllByCodeNameIn(Arrays.asList("USD"))).thenReturn(Arrays.asList(USD_DEFINITION));
-	ExchangeRatesRequest request = new ExchangeRatesRequest("EUR", "2001-01-01", new String[]{"USD"});
 
 	// When
-	ExchangeRates result = service.perform(request);
+	ExchangeRates result = service.perform(new ExchangeRatesRequest("EUR", "2001-01-01", new String[]{"USD"}));
 
 	// Then
 	assertThat(result.getBase()).isEqualTo("EUR");
@@ -68,10 +70,9 @@ public class ExchangeRatesServiceImplTest {
 	when(currencyRatesRepository.findOneByDateAndCurrency(DATE_2001_01_01, USD_DEFINITION)).thenReturn(USD_RATE);
 	when(currencyDefinitionRepository.findOneByCodeName("USD")).thenReturn(USD_DEFINITION);
 	when(currencyDefinitionRepository.findAllByCodeNameIn(Arrays.asList("EUR"))).thenReturn(Arrays.asList(EUR_DEFINITION));
-	ExchangeRatesRequest request = new ExchangeRatesRequest("USD", "2001-01-01", new String[]{"EUR"});
 
 	// When
-	ExchangeRates result = service.perform(request);
+	ExchangeRates result = service.perform(new ExchangeRatesRequest("USD", "2001-01-01", new String[]{"EUR"}));
 
 	// Then
 	assertThat(result.getBase()).isEqualTo("USD");
@@ -89,10 +90,9 @@ public class ExchangeRatesServiceImplTest {
 	when(currencyRatesRepository.findOneByDateAndCurrency(DATE_2001_01_01, PLN_DEFINITION)).thenReturn(PLN_RATE);
 	when(currencyDefinitionRepository.findOneByCodeName("PLN")).thenReturn(PLN_DEFINITION);
 	when(currencyDefinitionRepository.findAllByCodeNameIn(Arrays.asList("USD"))).thenReturn(Arrays.asList(USD_DEFINITION));
-	ExchangeRatesRequest request = new ExchangeRatesRequest("PLN", "2001-01-01", new String[]{"USD"});
 
 	// When
-	ExchangeRates result = service.perform(request);
+	ExchangeRates result = service.perform(new ExchangeRatesRequest("PLN", "2001-01-01", new String[]{"USD"}));
 
 	// Then
 	assertThat(result.getBase()).isEqualTo("PLN");
@@ -108,10 +108,9 @@ public class ExchangeRatesServiceImplTest {
 	when(currencyRatesRepository.findAllByDateAndCurrencyIn(DATE_2001_01_01, Arrays.asList(USD_DEFINITION, PLN_DEFINITION))).thenReturn(currencyRates);
 	when(currencyDefinitionRepository.findOneByCodeName("EUR")).thenReturn(EUR_DEFINITION);
 	when(currencyDefinitionRepository.findAllByCodeNameIn(Arrays.asList("USD", "PLN"))).thenReturn(Arrays.asList(USD_DEFINITION, PLN_DEFINITION));
-	ExchangeRatesRequest request = new ExchangeRatesRequest("EUR", "2001-01-01", new String[]{"USD", "PLN"});
 
 	// When
-	ExchangeRates result = service.perform(request);
+	ExchangeRates result = service.perform(new ExchangeRatesRequest("EUR", "2001-01-01", new String[]{"USD", "PLN"}));
 
 	// Then
 	assertThat(result.getBase()).isEqualTo("EUR");
@@ -128,16 +127,57 @@ public class ExchangeRatesServiceImplTest {
 	when(currencyRatesRepository.findAllByDateAndCurrencyIn(DATE_2001_01_01, Arrays.asList(USD_DEFINITION))).thenReturn(currencyRates);
 	when(currencyDefinitionRepository.findOneByCodeName("PLN")).thenReturn(PLN_DEFINITION);
 	when(currencyDefinitionRepository.findAllByCodeNameIn(Arrays.asList("USD"))).thenReturn(Arrays.asList(USD_DEFINITION));
-	ExchangeRatesRequest request = new ExchangeRatesRequest("PLN", "2001-01-01", new String[]{"EUR", "USD"});
 
 	// When
-	ExchangeRates result = service.perform(request);
+	ExchangeRates result = service.perform(new ExchangeRatesRequest("PLN", "2001-01-01", new String[]{"EUR", "USD"}));
 
 	// Then
 	assertThat(result.getBase()).isEqualTo("PLN");
 	assertThat(result.getStartDate()).isEqualTo(DATE_2001_01_01);
 	assertThat(result.getEndDate()).isEqualTo(DATE_2001_01_01);
 	assertThat(result.getRatesByDate().get(DATE_2001_01_01)).isEqualTo(createRates("EUR", "0.9089", "USD", "1.3544"));
+    }
+
+    @Test
+    public void shouldGetRatesForUsdWithBaseEurBetweenTwoDates() throws Exception {
+	// Given
+	when(currencyDefinitionRepository.findAllByCodeNameIn(Arrays.asList("USD"))).thenReturn(Arrays.asList(USD_DEFINITION));
+	when(currencyRatesRepository.findAllByDateAndCurrencyIn(DATE_2001_01_01, Arrays.asList(USD_DEFINITION))).thenReturn(Arrays.asList(USD_RATE));
+	when(currencyRatesRepository.findAllByDateAndCurrencyIn(DATE_2001_01_02, Arrays.asList(USD_DEFINITION))).thenReturn(Arrays.asList(USD_RATE_NEXT_DAY));
+
+	// When
+	ExchangeRates result = service.perform(new ExchangeRatesRequest("EUR", "2001-01-01", "2001-01-02", new String[]{"USD"}));
+
+	// Then
+	assertThat(result.getBase()).isEqualTo("EUR");
+	assertThat(result.getStartDate()).isEqualTo(DATE_2001_01_01);
+	assertThat(result.getEndDate()).isEqualTo(DATE_2001_01_02);
+	assertThat(result.getRatesByDate().get(DATE_2001_01_01)).isEqualTo(createRates("USD", "1.4902"));
+	assertThat(result.getRatesByDate().get(DATE_2001_01_02)).isEqualTo(createRates("USD", "1.4815"));
+
+    }
+
+    @Test
+    public void shouldGetRatesForUsdWithBasePlnBetweenTwoDates() throws Exception {
+	// Given
+	when(currencyDefinitionRepository.findAllByCodeNameIn(Arrays.asList("USD"))).thenReturn(Arrays.asList(USD_DEFINITION));
+	when(currencyRatesRepository.findAllByDateAndCurrencyIn(DATE_2001_01_01, Arrays.asList(USD_DEFINITION))).thenReturn(Arrays.asList(USD_RATE));
+	when(currencyRatesRepository.findAllByDateAndCurrencyIn(DATE_2001_01_02, Arrays.asList(USD_DEFINITION))).thenReturn(Arrays.asList(USD_RATE_NEXT_DAY));
+	when(currencyDefinitionRepository.findOneByCodeName("PLN")).thenReturn(PLN_DEFINITION);
+	when(currencyRatesRepository.findOneByDateAndCurrency(DATE_2001_01_01, PLN_DEFINITION)).thenReturn(PLN_RATE);
+	when(currencyRatesRepository.findOneByDateAndCurrency(DATE_2001_01_02, PLN_DEFINITION)).thenReturn(PLN_RATE_NEXT_DAY);
+
+	// When
+	ExchangeRates result = service.perform(new ExchangeRatesRequest("PLN", "2001-01-01", "2001-01-02", new String[]{"USD"}));
+
+	// Then
+	assertThat(result.getBase()).isEqualTo("PLN");
+	assertThat(result.getStartDate()).isEqualTo(DATE_2001_01_01);
+	assertThat(result.getEndDate()).isEqualTo(DATE_2001_01_02);
+	assertThat(result.getRatesByDate()).hasSize(2);
+	assertThat(result.getRatesByDate().get(DATE_2001_01_01)).isEqualTo(createRates("USD", "1.3544"));
+	assertThat(result.getRatesByDate().get(DATE_2001_01_02)).isEqualTo(createRates("USD", "1.3468"));
+
     }
 
     private CurrencyRate createCurrencyRate(CurrencyDefinition currencyDefinition, BigDecimal exchangeRate, LocalDate date) {
