@@ -27,7 +27,7 @@ public class AutostartImpl implements Autostart {
 
     @Override
     @PostConstruct
-    public void persistDataSet() {
+    public void start() {
         CompleteDataSet dataSet = dataSetSource.getCompleteDataSet();
 
         long start = System.currentTimeMillis();

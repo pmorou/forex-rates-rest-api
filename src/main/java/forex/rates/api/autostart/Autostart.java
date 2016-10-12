@@ -2,6 +2,6 @@ package forex.rates.api.autostart;
 
 public interface Autostart {
 
-    void persistDataSet();
+    void start();
 
 }
