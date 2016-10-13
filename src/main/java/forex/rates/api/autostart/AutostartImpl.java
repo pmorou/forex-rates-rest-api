@@ -28,6 +28,10 @@ public class AutostartImpl implements Autostart {
     @Override
     @PostConstruct
     public void start() {
+        persistDataSet();
+    }
+
+    private void persistDataSet() {
         CompleteDataSet dataSet = dataSetSource.getCompleteDataSet();
 
         long start = System.currentTimeMillis();
