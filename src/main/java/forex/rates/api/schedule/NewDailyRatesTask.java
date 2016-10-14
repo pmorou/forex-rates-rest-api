@@ -1,5 +1,6 @@
 package forex.rates.api.schedule;
 
+import forex.rates.api.dataset.DataSetUpdate;
 import forex.rates.api.model.entity.CurrencyRate;
 import forex.rates.api.repository.CurrencyRatesRepository;
 import lombok.extern.slf4j.Slf4j;

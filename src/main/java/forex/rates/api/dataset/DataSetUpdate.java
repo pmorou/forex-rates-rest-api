@@ -1,4 +1,4 @@
-package forex.rates.api.schedule;
+package forex.rates.api.dataset;
 
 import forex.rates.api.model.entity.CurrencyRate;
 
