@@ -1,6 +1,6 @@
 package forex.rates.api.service.impl;
 
-import forex.rates.api.autostart.DataSetContext;
+import forex.rates.api.configuration.DataSetContext;
 import forex.rates.api.repository.CurrencyDefinitionRepository;
 import forex.rates.api.service.AvailableCurrenciesService;
 import org.springframework.stereotype.Service;

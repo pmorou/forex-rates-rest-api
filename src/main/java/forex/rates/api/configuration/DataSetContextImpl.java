@@ -1,4 +1,4 @@
-package forex.rates.api.autostart;
+package forex.rates.api.configuration;
 
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;

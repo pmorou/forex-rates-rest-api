@@ -1,4 +1,4 @@
-package forex.rates.api.autostart;
+package forex.rates.api.configuration;
 
 public interface DataSetContext {
 
