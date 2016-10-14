@@ -1,6 +1,6 @@
-package forex.rates.api.autostart.dataset.impl.ecb;
+package forex.rates.api.dataset.impl.ecb;
 
-import forex.rates.api.autostart.dataset.ExtractedCurrencyDefinition;
+import forex.rates.api.dataset.ExtractedCurrencyDefinition;
 import forex.rates.api.model.entity.CurrencyDefinition;
 import org.springframework.stereotype.Component;
 

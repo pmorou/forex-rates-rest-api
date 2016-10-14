@@ -1,4 +1,4 @@
-package forex.rates.api.autostart.dataset.impl.ecb;
+package forex.rates.api.dataset.impl.ecb;
 
 import forex.rates.api.model.entity.CurrencyDefinition;
 import forex.rates.api.model.entity.CurrencyRate;

@@ -1,6 +1,5 @@
-package forex.rates.api.autostart.dataset.impl.ecb;
+package forex.rates.api.dataset.impl.ecb;
 
-import forex.rates.api.autostart.dataset.impl.ecb.ExtractedCurrencyDefinitionEcbImpl;
 import forex.rates.api.model.entity.CurrencyDefinition;
 import org.junit.Test;
 

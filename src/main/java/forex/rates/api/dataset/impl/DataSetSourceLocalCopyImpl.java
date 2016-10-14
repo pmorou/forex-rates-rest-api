@@ -1,7 +1,7 @@
-package forex.rates.api.autostart.dataset.impl;
+package forex.rates.api.dataset.impl;
 
 import forex.rates.api.autostart.DataSetContext;
-import forex.rates.api.autostart.dataset.DataSetSourceLocalCopy;
+import forex.rates.api.dataset.DataSetSourceLocalCopy;
 import forex.rates.api.http.client.HttpClient;
 import forex.rates.api.service.DateTimeProviderService;
 import org.apache.commons.io.FileUtils;

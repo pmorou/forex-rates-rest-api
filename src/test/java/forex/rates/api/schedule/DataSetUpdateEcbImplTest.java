@@ -1,7 +1,7 @@
 package forex.rates.api.schedule;
 
-import forex.rates.api.autostart.SourceSettings;
-import forex.rates.api.autostart.dataset.ExtractedCurrencyRate;
+import forex.rates.api.autostart.DataSetContext;
+import forex.rates.api.dataset.ExtractedCurrencyRate;
 import forex.rates.api.http.client.HttpClient;
 import forex.rates.api.model.entity.CurrencyDefinition;
 import forex.rates.api.model.entity.CurrencyRate;
@@ -36,7 +36,7 @@ public class DataSetUpdateEcbImplTest {
     private final CurrencyRate USD_CURRENCY_RATE = createCurrencyRate(USD_DEFINITION, USD_ENTRY);
 
     private @Mock HttpClient httpClient;
-    private @Mock SourceSettings sourceSettings;
+    private @Mock DataSetContext dataSetContext;
     private @Mock ExtractedCurrencyRate extractedCurrencyRate;
     private @Mock CurrencyDefinitionRepository currencyDefinitionRepository;
     private @Mock DateTimeProviderService dateTimeProviderService;
@@ -46,7 +46,7 @@ public class DataSetUpdateEcbImplTest {
     @Before
     public void setUp() throws Exception {
 	MockitoAnnotations.initMocks(this);
-	dataSetUpdateEcb = new DataSetUpdateEcbImpl(httpClient, sourceSettings, extractedCurrencyRate,
+	dataSetUpdateEcb = new DataSetUpdateEcbImpl(httpClient, dataSetContext, extractedCurrencyRate,
 		currencyDefinitionRepository, dateTimeProviderService);
     }
 

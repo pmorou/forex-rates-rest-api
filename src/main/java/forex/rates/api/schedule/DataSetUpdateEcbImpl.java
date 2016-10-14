@@ -1,7 +1,7 @@
 package forex.rates.api.schedule;
 
-import forex.rates.api.autostart.SourceSettings;
-import forex.rates.api.autostart.dataset.ExtractedCurrencyRate;
+import forex.rates.api.autostart.DataSetContext;
+import forex.rates.api.dataset.ExtractedCurrencyRate;
 import forex.rates.api.http.client.HttpClient;
 import forex.rates.api.model.entity.CurrencyDefinition;
 import forex.rates.api.model.entity.CurrencyRate;
@@ -25,15 +25,15 @@ import java.util.*;
 public class DataSetUpdateEcbImpl implements DataSetUpdate {
 
     private final HttpClient httpClient;
-    private final SourceSettings sourceSettings;
+    private final DataSetContext dataSetContext;
     private final ExtractedCurrencyRate extractedCurrencyRate;
     private final CurrencyDefinitionRepository currencyDefinitionRepository;
     private final DateTimeProviderService dateTimeProviderService;
 
-    public DataSetUpdateEcbImpl(HttpClient httpClient, SourceSettings sourceSettings, ExtractedCurrencyRate extractedCurrencyRate,
+    public DataSetUpdateEcbImpl(HttpClient httpClient, DataSetContext dataSetContext, ExtractedCurrencyRate extractedCurrencyRate,
 				CurrencyDefinitionRepository currencyDefinitionRepository, DateTimeProviderService dateTimeProviderService) {
 	this.httpClient = httpClient;
-	this.sourceSettings = sourceSettings;
+	this.dataSetContext = dataSetContext;
 	this.extractedCurrencyRate = extractedCurrencyRate;
 	this.currencyDefinitionRepository = currencyDefinitionRepository;
 	this.dateTimeProviderService = dateTimeProviderService;
@@ -98,7 +98,7 @@ public class DataSetUpdateEcbImpl implements DataSetUpdate {
     }
 
     private InputStream getInputStream() throws IOException {
-	return httpClient.getInputStream(sourceSettings.getDailyDataSetUpdateUrl());
+	return httpClient.getInputStream(dataSetContext.getUpdateUrl());
     }
 
 }

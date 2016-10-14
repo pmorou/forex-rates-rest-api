@@ -1,9 +1,9 @@
-package forex.rates.api.autostart.dataset.impl.ecb;
+package forex.rates.api.dataset.impl.ecb;
 
-import forex.rates.api.autostart.dataset.CompleteDataSet;
-import forex.rates.api.autostart.dataset.DataSetEntry;
-import forex.rates.api.autostart.dataset.DataSetSource;
-import forex.rates.api.autostart.dataset.DataSetSourceLocalCopy;
+import forex.rates.api.dataset.CompleteDataSet;
+import forex.rates.api.dataset.DataSetEntry;
+import forex.rates.api.dataset.DataSetSource;
+import forex.rates.api.dataset.DataSetSourceLocalCopy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.xml.sax.Attributes;

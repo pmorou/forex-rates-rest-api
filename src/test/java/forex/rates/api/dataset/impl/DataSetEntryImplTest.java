@@ -1,8 +1,8 @@
-package forex.rates.api.autostart.dataset.impl;
+package forex.rates.api.dataset.impl;
 
-import forex.rates.api.autostart.dataset.DataSetEntry;
-import forex.rates.api.autostart.dataset.ExtractedCurrencyDefinition;
-import forex.rates.api.autostart.dataset.ExtractedCurrencyRate;
+import forex.rates.api.dataset.DataSetEntry;
+import forex.rates.api.dataset.ExtractedCurrencyDefinition;
+import forex.rates.api.dataset.ExtractedCurrencyRate;
 import forex.rates.api.model.entity.CurrencyDefinition;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;

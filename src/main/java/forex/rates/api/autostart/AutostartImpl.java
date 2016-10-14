@@ -1,7 +1,7 @@
 package forex.rates.api.autostart;
 
-import forex.rates.api.autostart.dataset.CompleteDataSet;
-import forex.rates.api.autostart.dataset.DataSetSource;
+import forex.rates.api.dataset.CompleteDataSet;
+import forex.rates.api.dataset.DataSetSource;
 import forex.rates.api.model.entity.CurrencyDefinition;
 import forex.rates.api.model.entity.CurrencyRate;
 import forex.rates.api.schedule.NewRatesSchedule;

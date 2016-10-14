@@ -1,9 +1,8 @@
-package forex.rates.api.autostart.dataset.impl.ecb;
+package forex.rates.api.dataset.impl.ecb;
 
-import forex.rates.api.autostart.dataset.CompleteDataSet;
-import forex.rates.api.autostart.dataset.DataSetEntry;
-import forex.rates.api.autostart.dataset.DataSetSourceLocalCopy;
-import forex.rates.api.autostart.dataset.impl.ecb.DataSetSourceEcbImpl;
+import forex.rates.api.dataset.CompleteDataSet;
+import forex.rates.api.dataset.DataSetEntry;
+import forex.rates.api.dataset.DataSetSourceLocalCopy;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;

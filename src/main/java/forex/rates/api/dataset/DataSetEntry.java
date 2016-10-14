@@ -1,4 +1,4 @@
-package forex.rates.api.autostart.dataset;
+package forex.rates.api.dataset;
 
 public interface DataSetEntry {
 

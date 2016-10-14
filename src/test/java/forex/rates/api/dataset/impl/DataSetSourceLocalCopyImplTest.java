@@ -1,4 +1,4 @@
-package forex.rates.api.autostart.dataset.impl;
+package forex.rates.api.dataset.impl;
 
 import forex.rates.api.autostart.DataSetContext;
 import forex.rates.api.http.client.HttpClient;
@@ -45,7 +45,6 @@ public class DataSetSourceLocalCopyImplTest {
 	// Given
 	DataSetSourceLocalCopyImpl dataSetSourceLocalCopy =
 		new DataSetSourceLocalCopyImpl(dataSetContext, httpClient, dateTimeProviderService);
-	InputStream expectedInputStream = IOUtils.toInputStream(EXPECTED_STRING, "UTF-8");
 
 	// When
 	actualFile = dataSetSourceLocalCopy.getFile();

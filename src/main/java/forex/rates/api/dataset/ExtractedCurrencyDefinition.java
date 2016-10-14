@@ -1,4 +1,4 @@
-package forex.rates.api.autostart.dataset;
+package forex.rates.api.dataset;
 
 import forex.rates.api.model.entity.CurrencyDefinition;
 
