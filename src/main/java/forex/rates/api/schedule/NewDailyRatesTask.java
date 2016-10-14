@@ -10,7 +10,7 @@ import java.util.List;
 
 @Component
 @Slf4j
-public class NewDailyRatesTask implements Runnable {
+public class NewDailyRatesTask implements RunnableTask {
 
     private final DataSetUpdate dataSetUpdate;
     private final CurrencyRatesRepository currencyRatesRepository;
