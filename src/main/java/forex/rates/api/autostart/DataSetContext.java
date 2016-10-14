@@ -14,4 +14,8 @@ public interface DataSetContext {
 
     String getSourceLocalCopyExtension();
 
+    String getScheduleNewRatesTimeZone();
+
+    String getScheduleNewRatesCronPatternTrigger();
+
 }

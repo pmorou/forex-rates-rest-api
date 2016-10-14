@@ -26,4 +26,10 @@ public class DataSetContextImpl implements DataSetContext {
     @Value("${dataSet.source.localCopy.extension}")
     private String sourceLocalCopyExtension;
 
+    @Value("${dataSet.schedule.newRates.timeZone}")
+    private String scheduleNewRatesTimeZone;
+
+    @Value("${dataSet.schedule.newRates.cronPatternTrigger}")
+    private String scheduleNewRatesCronPatternTrigger;
+
 }
