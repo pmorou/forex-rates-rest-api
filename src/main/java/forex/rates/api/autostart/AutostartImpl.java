@@ -5,13 +5,17 @@ import forex.rates.api.dataset.DataSetSource;
 import forex.rates.api.schedule.NewRatesSchedule;
 import forex.rates.api.service.CurrencyDefinitionService;
 import forex.rates.api.service.CurrencyRateService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 
 @Component
+@Slf4j
 public class AutostartImpl implements Autostart {
+
+    private final String OPERATION_SUMMARY_MSG = "Operation took {} milliseconds for total of {} items.";
 
     private final DataSetSource dataSetSource;
     private final CurrencyDefinitionService currencyDefinitionService;
@@ -37,18 +41,14 @@ public class AutostartImpl implements Autostart {
         CompleteDataSet dataSet = dataSetSource.getCompleteDataSet();
 
         long start = System.currentTimeMillis();
-
+        log.info("Inserting currency definitions...");
         currencyDefinitionService.save(dataSet.getCurrencyDefinitions());
-
-        System.out.println("Inserting currency definitions took " + (System.currentTimeMillis() - start) + " milliseconds");
-        System.out.println(dataSet.getCurrencyDefinitions().size() + " items");
+        log.info(OPERATION_SUMMARY_MSG, System.currentTimeMillis() - start, dataSet.getCurrencyDefinitions().size());
 
         start = System.currentTimeMillis();
-
+        log.info("Inserting currency rates...");
         currencyRateService.save(dataSet.getCurrencyRates());
-
-        System.out.println("Inserting currency rates took " + (System.currentTimeMillis() - start) + " milliseconds");
-        System.out.println(dataSet.getCurrencyRates().size() + " items");
+        log.info(OPERATION_SUMMARY_MSG, System.currentTimeMillis() - start, dataSet.getCurrencyRates().size());
     }
 
     private void scheduleRatesUpdate() {

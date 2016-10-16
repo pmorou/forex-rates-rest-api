@@ -20,7 +20,7 @@ public class AvailableCurrenciesServiceImpl implements AvailableCurrenciesServic
     }
 
     @Override
-    public List<String> getList() {
+    public List<String> getCodeList() {
 	List<String> availableCurrencies = getAvailableCurrenciesCodeNames();
 	availableCurrencies.add(dataSetContext.getBaseCurrency());
 	return availableCurrencies;

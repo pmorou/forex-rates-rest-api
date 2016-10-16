@@ -50,7 +50,7 @@ public class CurrenciesParamValidator implements ParamValidator<String[]> {
 
     private boolean isValidOrElseThrow(String[] currencies) {
 	for (String currency : currencies) {
-	    if (!availableCurrenciesService.getList().contains(currency)) {
+	    if (!availableCurrenciesService.getCodeList().contains(currency)) {
 		throw new IllegalArgumentException(message + currency);
 	    }
 	}
@@ -58,7 +58,7 @@ public class CurrenciesParamValidator implements ParamValidator<String[]> {
     }
 
     private String[] getDefaultValue() {
-	return availableCurrenciesService.getList().stream()
+	return availableCurrenciesService.getCodeList().stream()
 		.toArray(String[]::new);
     }
 

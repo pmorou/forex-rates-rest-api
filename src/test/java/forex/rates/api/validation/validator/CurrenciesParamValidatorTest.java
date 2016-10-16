@@ -40,7 +40,7 @@ public class CurrenciesParamValidatorTest {
     public void before() {
 	MockitoAnnotations.initMocks(this);
 	currenciesParamValidator = new CurrenciesParamValidator(availableCurrenciesService);
-	Mockito.when(availableCurrenciesService.getList()).thenReturn(AVAILABLE_CURRENCIES);
+	Mockito.when(availableCurrenciesService.getCodeList()).thenReturn(AVAILABLE_CURRENCIES);
     }
 
     @Test

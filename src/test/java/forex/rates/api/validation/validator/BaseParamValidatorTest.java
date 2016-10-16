@@ -39,7 +39,7 @@ public class BaseParamValidatorTest {
     public void before() {
 	MockitoAnnotations.initMocks(this);
 	baseParamValidator = new BaseParamValidator(availableCurrenciesService);
-	Mockito.when(availableCurrenciesService.getList()).thenReturn(AVAILABLE_CURRENCIES);
+	Mockito.when(availableCurrenciesService.getCodeList()).thenReturn(AVAILABLE_CURRENCIES);
     }
 
     @Test

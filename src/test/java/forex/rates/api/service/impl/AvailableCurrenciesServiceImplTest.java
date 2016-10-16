@@ -37,7 +37,7 @@ public class AvailableCurrenciesServiceImplTest {
 	when(dataSetContext.getBaseCurrency()).thenReturn("EUR");
 
 	// When
-	List<String> actualAvailableCurrencies = availableCurrenciesService.getList();
+	List<String> actualAvailableCurrencies = availableCurrenciesService.getCodeList();
 
 	// Then
 	assertThat(actualAvailableCurrencies).containsOnly("USD", "PLN", "EUR");

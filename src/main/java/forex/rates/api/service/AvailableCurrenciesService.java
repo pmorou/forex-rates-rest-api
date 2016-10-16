@@ -4,6 +4,6 @@ import java.util.List;
 
 public interface AvailableCurrenciesService {
 
-    List<String> getList();
+    List<String> getCodeList();
 
 }

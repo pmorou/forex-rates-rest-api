@@ -42,7 +42,7 @@ public class BaseParamValidator implements ParamValidator<String> {
     }
 
     private boolean isValidOrElseThrow(String base) {
-	if (!availableCurrenciesService.getList().contains(base)) {
+	if (!availableCurrenciesService.getCodeList().contains(base)) {
 	    throw new IllegalArgumentException(message + base);
 	}
 	return true;
