@@ -27,9 +27,7 @@ public class NewDailyRatesTask implements RunnableTask {
 	log.info("Scheduled task has started: adding new rates");
 
 	List<CurrencyRate> currencyRates = dataSetUpdate.getNewCurrencyRates();
-	for (CurrencyRate currencyRate : currencyRates) {
-	    currencyRatesRepository.save(currencyRate);
-	}
+	currencyRatesRepository.save(currencyRates);
 
 	log.info("New rates has been added");
     }

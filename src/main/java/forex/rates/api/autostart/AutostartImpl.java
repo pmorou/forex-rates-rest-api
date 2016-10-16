@@ -2,8 +2,6 @@ package forex.rates.api.autostart;
 
 import forex.rates.api.dataset.CompleteDataSet;
 import forex.rates.api.dataset.DataSetSource;
-import forex.rates.api.model.entity.CurrencyDefinition;
-import forex.rates.api.model.entity.CurrencyRate;
 import forex.rates.api.schedule.NewRatesSchedule;
 import forex.rates.api.service.CurrencyDefinitionService;
 import forex.rates.api.service.CurrencyRateService;
@@ -40,18 +38,14 @@ public class AutostartImpl implements Autostart {
 
         long start = System.currentTimeMillis();
 
-        for (CurrencyDefinition currencyDefinition : dataSet.getCurrencyDefinitions()) {
-            currencyDefinitionService.save(currencyDefinition);
-        }
+        currencyDefinitionService.save(dataSet.getCurrencyDefinitions());
 
         System.out.println("Inserting currency definitions took " + (System.currentTimeMillis() - start) + " milliseconds");
         System.out.println(dataSet.getCurrencyDefinitions().size() + " items");
 
         start = System.currentTimeMillis();
 
-        for (CurrencyRate currencyRate : dataSet.getCurrencyRates()) {
-            currencyRateService.save(currencyRate);
-        }
+        currencyRateService.save(dataSet.getCurrencyRates());
 
         System.out.println("Inserting currency rates took " + (System.currentTimeMillis() - start) + " milliseconds");
         System.out.println(dataSet.getCurrencyRates().size() + " items");
