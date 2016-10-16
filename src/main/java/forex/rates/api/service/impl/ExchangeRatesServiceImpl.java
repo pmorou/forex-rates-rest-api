@@ -6,7 +6,7 @@ import forex.rates.api.model.Rates;
 import forex.rates.api.model.entity.CurrencyDefinition;
 import forex.rates.api.model.entity.CurrencyRate;
 import forex.rates.api.repository.CurrencyDefinitionRepository;
-import forex.rates.api.repository.CurrencyRatesRepository;
+import forex.rates.api.repository.CurrencyRateRepository;
 import forex.rates.api.service.ExchangeRatesService;
 import org.springframework.stereotype.Service;
 
@@ -23,11 +23,11 @@ import java.util.Map;
 public class ExchangeRatesServiceImpl implements ExchangeRatesService {
 
     private final String BASE_CURRENCY = "EUR";
-    private final CurrencyRatesRepository currencyRatesRepository;
+    private final CurrencyRateRepository currencyRateRepository;
     private final CurrencyDefinitionRepository currencyDefinitionRepository;
 
-    public ExchangeRatesServiceImpl(CurrencyRatesRepository currencyRatesRepository, CurrencyDefinitionRepository currencyDefinitionRepository) {
-	this.currencyRatesRepository = currencyRatesRepository;
+    public ExchangeRatesServiceImpl(CurrencyRateRepository currencyRateRepository, CurrencyDefinitionRepository currencyDefinitionRepository) {
+	this.currencyRateRepository = currencyRateRepository;
 	this.currencyDefinitionRepository = currencyDefinitionRepository;
     }
 
@@ -44,12 +44,12 @@ public class ExchangeRatesServiceImpl implements ExchangeRatesService {
 	BigDecimal baseExchangeRate = null;
 
 	for (LocalDate date : request.getDateRange()) {
-	    List<CurrencyRate> requestedCurrencyRates = currencyRatesRepository.findAllByDateAndCurrencyIn(date, currencyDefinitions);
+	    List<CurrencyRate> requestedCurrencyRates = currencyRateRepository.findAllByDateAndCurrencyIn(date, currencyDefinitions);
 	    Rates rates = new Rates();
 
 	    if (isNotDataSetsBaseCurrency(request)) {
 		CurrencyDefinition baseCurrencyDefinition = currencyDefinitionRepository.findOneByCodeName(request.getBase());
-		CurrencyRate baseCurrencyRate = currencyRatesRepository.findOneByDateAndCurrency(date, baseCurrencyDefinition);
+		CurrencyRate baseCurrencyRate = currencyRateRepository.findOneByDateAndCurrency(date, baseCurrencyDefinition);
 		baseExchangeRate = inverse(baseCurrencyRate.getExchangeRate(), baseCurrencyRate.getCurrency().getPrecision());
 
 		if (baseCurrencyRemoved) {

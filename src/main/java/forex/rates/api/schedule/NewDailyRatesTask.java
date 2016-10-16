@@ -2,7 +2,7 @@ package forex.rates.api.schedule;
 
 import forex.rates.api.dataset.DataSetUpdate;
 import forex.rates.api.model.entity.CurrencyRate;
-import forex.rates.api.repository.CurrencyRatesRepository;
+import forex.rates.api.repository.CurrencyRateRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -14,12 +14,12 @@ import java.util.List;
 public class NewDailyRatesTask implements RunnableTask {
 
     private final DataSetUpdate dataSetUpdate;
-    private final CurrencyRatesRepository currencyRatesRepository;
+    private final CurrencyRateRepository currencyRateRepository;
 
     @Autowired
-    public NewDailyRatesTask(DataSetUpdate dataSetUpdate, CurrencyRatesRepository currencyRatesRepository) {
+    public NewDailyRatesTask(DataSetUpdate dataSetUpdate, CurrencyRateRepository currencyRateRepository) {
 	this.dataSetUpdate = dataSetUpdate;
-	this.currencyRatesRepository = currencyRatesRepository;
+	this.currencyRateRepository = currencyRateRepository;
     }
 
     @Override
@@ -27,7 +27,7 @@ public class NewDailyRatesTask implements RunnableTask {
 	log.info("Scheduled task has started: adding new rates");
 
 	List<CurrencyRate> currencyRates = dataSetUpdate.getNewCurrencyRates();
-	currencyRatesRepository.save(currencyRates);
+	currencyRateRepository.save(currencyRates);
 
 	log.info("New rates has been added");
     }

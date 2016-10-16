@@ -6,7 +6,7 @@ import forex.rates.api.model.entity.CurrencyRate;
 import java.time.LocalDate;
 import java.util.List;
 
-public interface CurrencyRatesRepository {
+public interface CurrencyRateRepository {
 
     List<CurrencyRate> findAllByDateAndCurrencyIn(LocalDate date, List<CurrencyDefinition> currencies);
 
