@@ -14,4 +14,6 @@ public interface CurrencyRatesRepository {
 
     CurrencyRate save(CurrencyRate currencyRate);
 
+    List<CurrencyRate> save(Iterable<CurrencyRate> currencyRates);
+
 }

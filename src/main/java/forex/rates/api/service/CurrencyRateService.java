@@ -6,4 +6,6 @@ public interface CurrencyRateService {
 
     void save(CurrencyRate currencyRate);
 
+    void save(Iterable<CurrencyRate> currencyRates);
+
 }

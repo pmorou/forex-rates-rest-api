@@ -24,4 +24,10 @@ public class CurrencyRateServiceImpl implements CurrencyRateService {
 	currencyRatesRepository.save(currencyRate);
     }
 
+    @Transactional
+    @Override
+    public void save(Iterable<CurrencyRate> currencyRates) {
+	currencyRatesRepository.save(currencyRates);
+    }
+
 }

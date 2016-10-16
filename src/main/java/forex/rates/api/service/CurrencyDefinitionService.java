@@ -6,4 +6,6 @@ public interface CurrencyDefinitionService {
 
     void save(CurrencyDefinition currencyDefinition);
 
+    void save(Iterable<CurrencyDefinition> currencyDefinitions);
+
 }

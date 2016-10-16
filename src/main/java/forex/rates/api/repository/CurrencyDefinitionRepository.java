@@ -14,4 +14,6 @@ public interface CurrencyDefinitionRepository {
 
     CurrencyDefinition save(CurrencyDefinition currencyDefinition);
 
+    List<CurrencyDefinition> save(Iterable<CurrencyDefinition> currencyDefinitions);
+
 }

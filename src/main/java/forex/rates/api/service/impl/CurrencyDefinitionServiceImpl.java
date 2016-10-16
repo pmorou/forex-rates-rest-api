@@ -24,4 +24,10 @@ public class CurrencyDefinitionServiceImpl implements CurrencyDefinitionService 
 	currencyDefinitionRepository.save(currencyDefinition);
     }
 
+    @Transactional
+    @Override
+    public void save(Iterable<CurrencyDefinition> currencyDefinitions) {
+	currencyDefinitionRepository.save(currencyDefinitions);
+    }
+
 }
