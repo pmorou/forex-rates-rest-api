@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Transactional(readOnly = true)
 @Service
 public class CurrencyDefinitionServiceImpl implements CurrencyDefinitionService {
@@ -16,6 +18,21 @@ public class CurrencyDefinitionServiceImpl implements CurrencyDefinitionService 
     @Autowired
     public CurrencyDefinitionServiceImpl(CurrencyDefinitionRepository currencyDefinitionRepository) {
 	this.currencyDefinitionRepository = currencyDefinitionRepository;
+    }
+
+    @Override
+    public List<CurrencyDefinition> getAll() {
+	return currencyDefinitionRepository.findAll();
+    }
+
+    @Override
+    public List<CurrencyDefinition> getAllByCodeNameIn(List<String> codeName) {
+	return currencyDefinitionRepository.findAllByCodeNameIn(codeName);
+    }
+
+    @Override
+    public CurrencyDefinition getOneByCodeName(String codeName) {
+	return currencyDefinitionRepository.findOneByCodeName(codeName);
     }
 
     @Transactional
