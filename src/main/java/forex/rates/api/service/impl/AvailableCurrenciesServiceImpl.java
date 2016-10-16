@@ -21,11 +21,15 @@ public class AvailableCurrenciesServiceImpl implements AvailableCurrenciesServic
 
     @Override
     public List<String> getList() {
-	List<String> availableCurrencies = currencyDefinitionService.getAll().stream()
-		.map(cD -> cD.getCodeName())
-		.collect(Collectors.toList());
+	List<String> availableCurrencies = getAvailableCurrenciesCodeNames();
 	availableCurrencies.add(dataSetContext.getBaseCurrency());
 	return availableCurrencies;
+    }
+
+    private List<String> getAvailableCurrenciesCodeNames() {
+	return currencyDefinitionService.getAll().stream()
+		    .map(cD -> cD.getCodeName())
+		    .collect(Collectors.toList());
     }
 
 }
