@@ -6,7 +6,7 @@ import forex.rates.api.dataset.ExtractedCurrencyRate;
 import forex.rates.api.http.client.HttpClient;
 import forex.rates.api.model.entity.CurrencyDefinition;
 import forex.rates.api.model.entity.CurrencyRate;
-import forex.rates.api.repository.CurrencyDefinitionRepository;
+import forex.rates.api.service.CurrencyDefinitionService;
 import forex.rates.api.service.DateTimeProviderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -28,15 +28,15 @@ public class DataSetUpdateEcbImpl implements DataSetUpdate {
     private final HttpClient httpClient;
     private final DataSetContext dataSetContext;
     private final ExtractedCurrencyRate extractedCurrencyRate;
-    private final CurrencyDefinitionRepository currencyDefinitionRepository;
+    private final CurrencyDefinitionService currencyDefinitionService;
     private final DateTimeProviderService dateTimeProviderService;
 
     public DataSetUpdateEcbImpl(HttpClient httpClient, DataSetContext dataSetContext, ExtractedCurrencyRate extractedCurrencyRate,
-				CurrencyDefinitionRepository currencyDefinitionRepository, DateTimeProviderService dateTimeProviderService) {
+				CurrencyDefinitionService currencyDefinitionService, DateTimeProviderService dateTimeProviderService) {
 	this.httpClient = httpClient;
 	this.dataSetContext = dataSetContext;
 	this.extractedCurrencyRate = extractedCurrencyRate;
-	this.currencyDefinitionRepository = currencyDefinitionRepository;
+	this.currencyDefinitionService = currencyDefinitionService;
 	this.dateTimeProviderService = dateTimeProviderService;
     }
 
@@ -57,7 +57,7 @@ public class DataSetUpdateEcbImpl implements DataSetUpdate {
 			Map<String, String> attributesMap = mapAttributes(attributes);
 			String currency = attributesMap.get("currency");
 			if (currency != null) {
-			    CurrencyDefinition currencyDefinition = currencyDefinitionRepository.findOneByCodeName(currency);
+			    CurrencyDefinition currencyDefinition = currencyDefinitionService.getOneByCodeName(currency);
 			    Map.Entry<String, String> entry = createEntry(attributesMap, ratesDate);
 			    CurrencyRate currencyRate = extractedCurrencyRate.getCurrencyRate(currencyDefinition, entry);
 			    currencyRates.add(currencyRate);

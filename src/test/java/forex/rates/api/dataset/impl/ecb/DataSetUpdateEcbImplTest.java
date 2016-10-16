@@ -6,7 +6,7 @@ import forex.rates.api.dataset.ExtractedCurrencyRate;
 import forex.rates.api.http.client.HttpClient;
 import forex.rates.api.model.entity.CurrencyDefinition;
 import forex.rates.api.model.entity.CurrencyRate;
-import forex.rates.api.repository.CurrencyDefinitionRepository;
+import forex.rates.api.service.CurrencyDefinitionService;
 import forex.rates.api.service.DateTimeProviderService;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
@@ -39,7 +39,7 @@ public class DataSetUpdateEcbImplTest {
     private @Mock HttpClient httpClient;
     private @Mock DataSetContext dataSetContext;
     private @Mock ExtractedCurrencyRate extractedCurrencyRate;
-    private @Mock CurrencyDefinitionRepository currencyDefinitionRepository;
+    private @Mock CurrencyDefinitionService currencyDefinitionService;
     private @Mock DateTimeProviderService dateTimeProviderService;
 
     private DataSetUpdate dataSetUpdateEcb;
@@ -48,7 +48,7 @@ public class DataSetUpdateEcbImplTest {
     public void setUp() throws Exception {
 	MockitoAnnotations.initMocks(this);
 	dataSetUpdateEcb = new DataSetUpdateEcbImpl(httpClient, dataSetContext, extractedCurrencyRate,
-		currencyDefinitionRepository, dateTimeProviderService);
+		currencyDefinitionService, dateTimeProviderService);
     }
 
     @Test
@@ -56,8 +56,8 @@ public class DataSetUpdateEcbImplTest {
 	// Given
 	when(httpClient.getInputStream(any())).thenReturn(getTestInputStream());
 	when(dateTimeProviderService.getTodaysDate()).thenReturn(LocalDate.of(2001,1,1));
-	when(currencyDefinitionRepository.findOneByCodeName("USD")).thenReturn(USD_DEFINITION);
-	when(currencyDefinitionRepository.findOneByCodeName("JPY")).thenReturn(JPY_DEFINITION);
+	when(currencyDefinitionService.getOneByCodeName("USD")).thenReturn(USD_DEFINITION);
+	when(currencyDefinitionService.getOneByCodeName("JPY")).thenReturn(JPY_DEFINITION);
 	when(extractedCurrencyRate.getCurrencyRate(USD_DEFINITION, USD_ENTRY)).thenReturn(USD_CURRENCY_RATE);
 	when(extractedCurrencyRate.getCurrencyRate(JPY_DEFINITION, JPY_ENTRY)).thenReturn(JPY_CURRENCY_RATE);
 

@@ -2,7 +2,7 @@ package forex.rates.api.service.impl;
 
 import forex.rates.api.configuration.DataSetContext;
 import forex.rates.api.model.entity.CurrencyDefinition;
-import forex.rates.api.repository.CurrencyDefinitionRepository;
+import forex.rates.api.service.CurrencyDefinitionService;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -19,7 +19,7 @@ public class AvailableCurrenciesServiceImplTest {
     private final CurrencyDefinition USD_DEFINITION = createCurrencyDefinition("USD", 4);
     private final CurrencyDefinition PLN_DEFINITION = createCurrencyDefinition("PLN", 4);
 
-    private @Mock CurrencyDefinitionRepository currencyDefinitionRepository;
+    private @Mock CurrencyDefinitionService currencyDefinitionService;
     private @Mock DataSetContext dataSetContext;
 
     private AvailableCurrenciesServiceImpl availableCurrenciesService;
@@ -27,13 +27,13 @@ public class AvailableCurrenciesServiceImplTest {
     @Before
     public void before() throws Exception {
 	MockitoAnnotations.initMocks(this);
-	availableCurrenciesService = new AvailableCurrenciesServiceImpl(currencyDefinitionRepository, dataSetContext);
+	availableCurrenciesService = new AvailableCurrenciesServiceImpl(currencyDefinitionService, dataSetContext);
     }
 
     @Test
     public void shouldReturnListOfUsdAndPln() throws Exception {
 	// Given
-	when(currencyDefinitionRepository.findAll()).thenReturn(Arrays.asList(USD_DEFINITION, PLN_DEFINITION));
+	when(currencyDefinitionService.getAll()).thenReturn(Arrays.asList(USD_DEFINITION, PLN_DEFINITION));
 	when(dataSetContext.getBaseCurrency()).thenReturn("EUR");
 
 	// When

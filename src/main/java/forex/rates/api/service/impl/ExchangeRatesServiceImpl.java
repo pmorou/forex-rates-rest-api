@@ -1,12 +1,12 @@
 package forex.rates.api.service.impl;
 
 import forex.rates.api.model.ExchangeRates;
-import forex.rates.api.model.request.ExchangeRatesRequest;
 import forex.rates.api.model.Rates;
 import forex.rates.api.model.entity.CurrencyDefinition;
 import forex.rates.api.model.entity.CurrencyRate;
-import forex.rates.api.repository.CurrencyDefinitionRepository;
-import forex.rates.api.repository.CurrencyRateRepository;
+import forex.rates.api.model.request.ExchangeRatesRequest;
+import forex.rates.api.service.CurrencyDefinitionService;
+import forex.rates.api.service.CurrencyRateService;
 import forex.rates.api.service.ExchangeRatesService;
 import org.springframework.stereotype.Service;
 
@@ -23,12 +23,12 @@ import java.util.Map;
 public class ExchangeRatesServiceImpl implements ExchangeRatesService {
 
     private final String BASE_CURRENCY = "EUR";
-    private final CurrencyRateRepository currencyRateRepository;
-    private final CurrencyDefinitionRepository currencyDefinitionRepository;
+    private final CurrencyRateService currencyRateService;
+    private final CurrencyDefinitionService currencyDefinitionService;
 
-    public ExchangeRatesServiceImpl(CurrencyRateRepository currencyRateRepository, CurrencyDefinitionRepository currencyDefinitionRepository) {
-	this.currencyRateRepository = currencyRateRepository;
-	this.currencyDefinitionRepository = currencyDefinitionRepository;
+    public ExchangeRatesServiceImpl(CurrencyRateService currencyRateService, CurrencyDefinitionService currencyDefinitionService) {
+	this.currencyRateService = currencyRateService;
+	this.currencyDefinitionService = currencyDefinitionService;
     }
 
     @Override
@@ -39,17 +39,17 @@ public class ExchangeRatesServiceImpl implements ExchangeRatesService {
 	// Remove data set's reference currency (if exists) as there is no such value in db.
 	// If TRUE is returned, rate for this currency should be calculated out of actual base requested by user.
 	boolean baseCurrencyRemoved = requestedCurrencies.remove(BASE_CURRENCY);
-	List<CurrencyDefinition> currencyDefinitions = currencyDefinitionRepository.findAllByCodeNameIn(requestedCurrencies);
+	List<CurrencyDefinition> currencyDefinitions = currencyDefinitionService.getAllByCodeNameIn(requestedCurrencies);
 
 	BigDecimal baseExchangeRate = null;
 
 	for (LocalDate date : request.getDateRange()) {
-	    List<CurrencyRate> requestedCurrencyRates = currencyRateRepository.findAllByDateAndCurrencyIn(date, currencyDefinitions);
+	    List<CurrencyRate> requestedCurrencyRates = currencyRateService.getAllByDateAndCurrencyIn(date, currencyDefinitions);
 	    Rates rates = new Rates();
 
 	    if (isNotDataSetsBaseCurrency(request)) {
-		CurrencyDefinition baseCurrencyDefinition = currencyDefinitionRepository.findOneByCodeName(request.getBase());
-		CurrencyRate baseCurrencyRate = currencyRateRepository.findOneByDateAndCurrency(date, baseCurrencyDefinition);
+		CurrencyDefinition baseCurrencyDefinition = currencyDefinitionService.getOneByCodeName(request.getBase());
+		CurrencyRate baseCurrencyRate = currencyRateService.getOneByDateAndCurrency(date, baseCurrencyDefinition);
 		baseExchangeRate = inverse(baseCurrencyRate.getExchangeRate(), baseCurrencyRate.getCurrency().getPrecision());
 
 		if (baseCurrencyRemoved) {
