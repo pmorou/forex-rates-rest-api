@@ -43,12 +43,16 @@ public class AutostartImpl implements Autostart {
         long start = System.currentTimeMillis();
         log.info("Inserting currency definitions...");
         currencyDefinitionService.save(dataSet.getCurrencyDefinitions());
-        log.info(OPERATION_SUMMARY_MSG, System.currentTimeMillis() - start, dataSet.getCurrencyDefinitions().size());
+        log.info(OPERATION_SUMMARY_MSG, getElapsedTime(start), dataSet.getCurrencyDefinitions().size());
 
         start = System.currentTimeMillis();
         log.info("Inserting currency rates...");
         currencyRateService.save(dataSet.getCurrencyRates());
-        log.info(OPERATION_SUMMARY_MSG, System.currentTimeMillis() - start, dataSet.getCurrencyRates().size());
+        log.info(OPERATION_SUMMARY_MSG, getElapsedTime(start), dataSet.getCurrencyRates().size());
+    }
+
+    private long getElapsedTime(long start) {
+        return System.currentTimeMillis() - start;
     }
 
     private void scheduleRatesUpdate() {
