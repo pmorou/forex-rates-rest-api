@@ -30,7 +30,7 @@ public class DataSetSourceEcbImplTest {
     @Test
     public void shouldCallMethodsWithUsdAttributesAndRates() throws Exception {
        // Given
-       File testDataSetFile = new File("src/test/resources/testDataSetSource_ecb.xml");
+       File testDataSetFile = new File("src/test/resources/dataset/testDataSetSource_ecb.xml");
        when(dataSetSourceLocaLCopy.getFile()).thenReturn(testDataSetFile);
        DataSetSourceEcbImpl dataSetSourceEcb = new DataSetSourceEcbImpl(dataSetEntry, dataSetSourceLocaLCopy);
 

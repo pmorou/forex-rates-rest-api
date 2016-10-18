@@ -70,7 +70,7 @@ public class DataSetUpdateEcbImplTest {
     }
 
     private InputStream getTestInputStream() throws IOException {
-	return FileUtils.openInputStream(new File("src/test/resources/testDataSetUpdate_ecb.xml"));
+	return FileUtils.openInputStream(new File("src/test/resources/dataset/testDataSetUpdate_ecb.xml"));
     }
 
     private Map.Entry<String, String> createEntry(String date, String rate) {
