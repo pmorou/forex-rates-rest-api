@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.TimeZone;
 import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 @Component
 @Slf4j
@@ -31,6 +32,7 @@ public class NewRatesSchedule {
 	TimeZone timeZone = TimeZone.getTimeZone(dataSetContext.getScheduleNewRatesTimeZone());
 	String cronPattern = dataSetContext.getScheduleNewRatesCronPatternTrigger();
 	ScheduledFuture<?> schedule = scheduler.schedule(newDailyRatesTask, new CronTrigger(cronPattern, timeZone));
+	log.info("Time until next new rates update: {} seconds", schedule.getDelay(TimeUnit.SECONDS));
     }
 
 }
