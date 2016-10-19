@@ -45,7 +45,7 @@ public class ExchangeRatesServiceImplTest {
     }
 
     @Test
-    public void shouldGetRatesForUSD_withBaseEUR() throws Exception {
+    public void shouldReturnRatesForUsdWithBaseEur() throws Exception {
 	// Given
 	List<CurrencyRate> currencyRates = new ArrayList<>();
 	currencyRates.add(createCurrencyRate(USD_DEFINITION, new BigDecimal("1.4902"), DATE_2001_01_01));
@@ -64,7 +64,7 @@ public class ExchangeRatesServiceImplTest {
     }
 
     @Test
-    public void shouldGetRatesForEUR_withBaseUSD() throws Exception {
+    public void shouldReturnRatesForEurWithBaseUsd() throws Exception {
 	// Given
 	when(currencyRateService.getAllByDateAndCurrencyIn(DATE_2001_01_01, Collections.emptyList())).thenReturn(Collections.emptyList());
 	when(currencyRateService.getOneByDateAndCurrency(DATE_2001_01_01, USD_DEFINITION)).thenReturn(USD_RATE);
@@ -82,7 +82,7 @@ public class ExchangeRatesServiceImplTest {
     }
 
     @Test
-    public void shouldGetRatesForUSD_withBasePLN() throws Exception {
+    public void shouldReturnRatesForUsdWithBasePln() throws Exception {
 	// Given
 	List<CurrencyRate> currencyRates = new ArrayList<>();
 	currencyRates.add(createCurrencyRate(USD_DEFINITION, new BigDecimal("1.4902"), DATE_2001_01_01));
@@ -102,7 +102,7 @@ public class ExchangeRatesServiceImplTest {
     }
 
     @Test
-    public void shouldGetRatesForUSDPLN_withBaseEUR() throws Exception {
+    public void shouldReturnRatesForUsdAndPlnWithBaseEur() throws Exception {
 	// Given
 	List<CurrencyRate> currencyRates = new ArrayList<>(Arrays.asList(USD_RATE, PLN_RATE));
 	when(currencyRateService.getAllByDateAndCurrencyIn(DATE_2001_01_01, Arrays.asList(USD_DEFINITION, PLN_DEFINITION))).thenReturn(currencyRates);
@@ -120,7 +120,7 @@ public class ExchangeRatesServiceImplTest {
     }
 
     @Test
-    public void shouldGetRatesForEURUSD_withBasePLN() throws Exception {
+    public void shouldReturnRatesForEurAndUsdWithBasePln() throws Exception {
 	// Given
 	List<CurrencyRate> currencyRates = new ArrayList<>(Arrays.asList(USD_RATE));
 	when(currencyRateService.getOneByDateAndCurrency(DATE_2001_01_01, PLN_DEFINITION)).thenReturn(PLN_RATE);
@@ -139,7 +139,7 @@ public class ExchangeRatesServiceImplTest {
     }
 
     @Test
-    public void shouldGetRatesForUsdWithBaseEurBetweenTwoDates() throws Exception {
+    public void shouldReturnRatesForUsdWithBaseEurBetweenTwoDates() throws Exception {
 	// Given
 	when(currencyDefinitionService.getAllByCodeNameIn(Arrays.asList("USD"))).thenReturn(Arrays.asList(USD_DEFINITION));
 	when(currencyRateService.getAllByDateAndCurrencyIn(DATE_2001_01_01, Arrays.asList(USD_DEFINITION))).thenReturn(Arrays.asList(USD_RATE));
@@ -158,7 +158,7 @@ public class ExchangeRatesServiceImplTest {
     }
 
     @Test
-    public void shouldGetRatesForUsdWithBasePlnBetweenTwoDates() throws Exception {
+    public void shouldReturnRatesForUsdWithBasePlnBetweenTwoDates() throws Exception {
 	// Given
 	when(currencyDefinitionService.getAllByCodeNameIn(Arrays.asList("USD"))).thenReturn(Arrays.asList(USD_DEFINITION));
 	when(currencyRateService.getAllByDateAndCurrencyIn(DATE_2001_01_01, Arrays.asList(USD_DEFINITION))).thenReturn(Arrays.asList(USD_RATE));
