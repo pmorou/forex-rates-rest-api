@@ -1,5 +1,6 @@
 package forex.rates.api.service.impl;
 
+import forex.rates.api.configuration.DataSetContext;
 import forex.rates.api.model.ExchangeRates;
 import forex.rates.api.model.Rates;
 import forex.rates.api.model.entity.CurrencyDefinition;
@@ -35,13 +36,15 @@ public class ExchangeRatesServiceImplTest {
 
     private @Mock CurrencyRateService currencyRateService;
     private @Mock CurrencyDefinitionService currencyDefinitionService;
+    private @Mock DataSetContext dataSetContext;
 
     private ExchangeRatesService service;
 
     @Before
     public void before() {
 	MockitoAnnotations.initMocks(this);
-	service = new ExchangeRatesServiceImpl(currencyRateService, currencyDefinitionService);
+	when(dataSetContext.getBaseCurrency()).thenReturn("EUR");
+	service = new ExchangeRatesServiceImpl(currencyRateService, currencyDefinitionService, dataSetContext);
     }
 
     @Test

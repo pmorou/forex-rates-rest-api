@@ -1,5 +1,6 @@
 package forex.rates.api.service.impl;
 
+import forex.rates.api.configuration.DataSetContext;
 import forex.rates.api.model.ExchangeRates;
 import forex.rates.api.model.Rates;
 import forex.rates.api.model.entity.CurrencyDefinition;
@@ -22,13 +23,14 @@ import java.util.Map;
 @Service
 public class ExchangeRatesServiceImpl implements ExchangeRatesService {
 
-    private final String BASE_CURRENCY = "EUR";
+    private final String BASE_CURRENCY;
     private final CurrencyRateService currencyRateService;
     private final CurrencyDefinitionService currencyDefinitionService;
 
-    public ExchangeRatesServiceImpl(CurrencyRateService currencyRateService, CurrencyDefinitionService currencyDefinitionService) {
+    public ExchangeRatesServiceImpl(CurrencyRateService currencyRateService, CurrencyDefinitionService currencyDefinitionService, DataSetContext dataSetContext) {
 	this.currencyRateService = currencyRateService;
 	this.currencyDefinitionService = currencyDefinitionService;
+	this.BASE_CURRENCY = dataSetContext.getBaseCurrency();
     }
 
     @Override
