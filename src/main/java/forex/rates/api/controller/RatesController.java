@@ -4,7 +4,6 @@ import forex.rates.api.model.response.DailyRatesResponse;
 import forex.rates.api.model.ExchangeRates;
 import forex.rates.api.model.request.ExchangeRatesRequest;
 import forex.rates.api.model.response.SeriesRatesResponse;
-import forex.rates.api.service.DateTimeProviderService;
 import forex.rates.api.service.ExchangeRatesService;
 import forex.rates.api.validation.annotation.Base;
 import forex.rates.api.validation.annotation.Currencies;
@@ -18,11 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("rates")
 public class RatesController {
 
-    private final DateTimeProviderService dateTimeProviderService;
     private final ExchangeRatesService exchangeRatesService;
 
-    public RatesController(DateTimeProviderService dateTimeProviderService, ExchangeRatesService exchangeRatesService) {
-	this.dateTimeProviderService = dateTimeProviderService;
+    public RatesController(ExchangeRatesService exchangeRatesService) {
 	this.exchangeRatesService = exchangeRatesService;
     }
 
@@ -32,10 +29,8 @@ public class RatesController {
 	    @Base String base,
 	    @Date String date
     ) throws Exception {
-
 	ExchangeRates exchangeRates = exchangeRatesService.perform(new ExchangeRatesRequest(base, date, currencies));
-
-	return new DailyRatesResponse(dateTimeProviderService.getCurrentTimestamp(), exchangeRates);
+	return new DailyRatesResponse(exchangeRates);
     }
 
     @GetMapping("series")
@@ -45,10 +40,8 @@ public class RatesController {
 	    @Date @RequestParam String startDate,
 	    @Date @RequestParam String endDate
     ) throws Exception {
-
 	ExchangeRates exchangeRates = exchangeRatesService.perform(new ExchangeRatesRequest(base, startDate, endDate, currencies));
-
-	return new SeriesRatesResponse(dateTimeProviderService.getCurrentTimestamp(), exchangeRates);
+	return new SeriesRatesResponse(exchangeRates);
     }
 
 }

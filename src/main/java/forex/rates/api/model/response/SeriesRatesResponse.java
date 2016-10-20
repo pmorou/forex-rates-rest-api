@@ -11,14 +11,12 @@ import java.util.Map;
 @Data
 public class SeriesRatesResponse {
 
-    private final long timestamp;
     private final String startDate;
     private final String endDate;
     private final String base;
     private final Map<LocalDate, Rates> rates;
 
-    public SeriesRatesResponse(long currentTimestamp, ExchangeRates exchangeRates) {
-	this.timestamp = currentTimestamp;
+    public SeriesRatesResponse(ExchangeRates exchangeRates) {
 	this.startDate = exchangeRates.getStartDate().toString();
 	this.endDate = exchangeRates.getEndDate().toString();
 	this.base = exchangeRates.getBase();

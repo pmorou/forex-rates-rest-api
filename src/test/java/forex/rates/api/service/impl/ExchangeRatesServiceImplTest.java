@@ -16,10 +16,11 @@ import org.mockito.MockitoAnnotations;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Iterator;
 
 import static java.util.Arrays.asList;
-import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
@@ -51,9 +52,7 @@ public class ExchangeRatesServiceImplTest {
     @Test
     public void shouldReturnRatesForUsdWithBaseEur() throws Exception {
 	// Given
-	List<CurrencyRate> currencyRates = new ArrayList<>();
-	currencyRates.add(createCurrencyRate(USD_DEFINITION, new BigDecimal("1.4902"), DATE_2001_01_01));
-	when(currencyRateService.getAllByDateAndCurrencyIn(DATE_2001_01_01, asList(USD_DEFINITION))).thenReturn(currencyRates);
+	when(currencyRateService.getAllByDateAndCurrencyIn(DATE_2001_01_01, asList(USD_DEFINITION))).thenReturn(asList(USD_RATE));
 	when(currencyDefinitionService.getOneByCodeName("EUR")).thenReturn(EUR_DEFINITION);
 	when(currencyDefinitionService.getAllByCodeNameIn(asList("USD"))).thenReturn(asList(USD_DEFINITION));
 
@@ -88,9 +87,7 @@ public class ExchangeRatesServiceImplTest {
     @Test
     public void shouldReturnRatesForUsdWithBasePln() throws Exception {
 	// Given
-	List<CurrencyRate> currencyRates = new ArrayList<>();
-	currencyRates.add(createCurrencyRate(USD_DEFINITION, new BigDecimal("1.4902"), DATE_2001_01_01));
-	when(currencyRateService.getAllByDateAndCurrencyIn(DATE_2001_01_01, singletonList(USD_DEFINITION))).thenReturn(currencyRates);
+	when(currencyRateService.getAllByDateAndCurrencyIn(DATE_2001_01_01, asList(USD_DEFINITION))).thenReturn(asList(USD_RATE));
 	when(currencyRateService.getOneByDateAndCurrency(DATE_2001_01_01, PLN_DEFINITION)).thenReturn(PLN_RATE);
 	when(currencyDefinitionService.getOneByCodeName("PLN")).thenReturn(PLN_DEFINITION);
 	when(currencyDefinitionService.getAllByCodeNameIn(asList("USD"))).thenReturn(asList(USD_DEFINITION));
@@ -108,8 +105,7 @@ public class ExchangeRatesServiceImplTest {
     @Test
     public void shouldReturnRatesForUsdAndPlnWithBaseEur() throws Exception {
 	// Given
-	List<CurrencyRate> currencyRates = new ArrayList<>(asList(USD_RATE, PLN_RATE));
-	when(currencyRateService.getAllByDateAndCurrencyIn(DATE_2001_01_01, asList(USD_DEFINITION, PLN_DEFINITION))).thenReturn(currencyRates);
+	when(currencyRateService.getAllByDateAndCurrencyIn(DATE_2001_01_01, asList(USD_DEFINITION, PLN_DEFINITION))).thenReturn(asList(USD_RATE, PLN_RATE));
 	when(currencyDefinitionService.getOneByCodeName("EUR")).thenReturn(EUR_DEFINITION);
 	when(currencyDefinitionService.getAllByCodeNameIn(asList("USD", "PLN"))).thenReturn(asList(USD_DEFINITION, PLN_DEFINITION));
 
@@ -126,9 +122,8 @@ public class ExchangeRatesServiceImplTest {
     @Test
     public void shouldReturnRatesForEurAndUsdWithBasePln() throws Exception {
 	// Given
-	List<CurrencyRate> currencyRates = new ArrayList<>(asList(USD_RATE));
 	when(currencyRateService.getOneByDateAndCurrency(DATE_2001_01_01, PLN_DEFINITION)).thenReturn(PLN_RATE);
-	when(currencyRateService.getAllByDateAndCurrencyIn(DATE_2001_01_01, asList(USD_DEFINITION))).thenReturn(currencyRates);
+	when(currencyRateService.getAllByDateAndCurrencyIn(DATE_2001_01_01, asList(USD_DEFINITION))).thenReturn(asList(USD_RATE));
 	when(currencyDefinitionService.getOneByCodeName("PLN")).thenReturn(PLN_DEFINITION);
 	when(currencyDefinitionService.getAllByCodeNameIn(asList("USD"))).thenReturn(asList(USD_DEFINITION));
 

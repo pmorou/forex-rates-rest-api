@@ -37,7 +37,6 @@ GET /rates/daily?base=USD&currencies=EUR,GBP&date=2016-08-30
 Example response:
 ```javascript
 {
-    "timestamp": 1472542619,
     "date": "2016-08-30",
     "base": "USD",
     "rates": {
@@ -66,7 +65,6 @@ GET /rates/series?base=USD&currencies=EUR,GBP&startDate=2016-08-29&endDate=2016-
 Example response:
 ```javascript
 {
-    "timestamp": 1472549572,
     "startDate": "2016-08-29",
     "endDate": "2016-08-30",
     "base": "USD",

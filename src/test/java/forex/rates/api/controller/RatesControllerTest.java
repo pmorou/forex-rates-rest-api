@@ -1,9 +1,8 @@
 package forex.rates.api.controller;
 
 import forex.rates.api.model.ExchangeRates;
-import forex.rates.api.model.request.ExchangeRatesRequest;
 import forex.rates.api.model.Rates;
-import forex.rates.api.service.DateTimeProviderService;
+import forex.rates.api.model.request.ExchangeRatesRequest;
 import forex.rates.api.service.ExchangeRatesService;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,7 +26,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class RatesControllerTest {
 
-    private @Mock DateTimeProviderService dateTimeProviderService;
     private @Mock ExchangeRatesService exchangeRatesService;
 
     private MockMvc mockMvc;
@@ -35,7 +33,7 @@ public class RatesControllerTest {
     @Before
     public void before() {
 	MockitoAnnotations.initMocks(this);
-	RatesController ratesController = new RatesController(dateTimeProviderService, exchangeRatesService);
+	RatesController ratesController = new RatesController(exchangeRatesService);
 	mockMvc = MockMvcBuilders.standaloneSetup(ratesController).build();
     }
 
@@ -44,13 +42,11 @@ public class RatesControllerTest {
 	ExchangeRatesRequest request = new ExchangeRatesRequest("USD", "2001-01-01", new String[]{"EUR","PLN"});
 	ExchangeRates result = createExchangeRates("USD", LocalDate.of(2001,1,1), LocalDate.of(2001,1,1), "EUR", "PLN");
 
-	when(dateTimeProviderService.getCurrentTimestamp()).thenReturn(1234L);
 	when(exchangeRatesService.perform(request)).thenReturn(result);
 
 	mockMvc.perform(get("/rates/daily?base=USD&date=2001-01-01&currencies=EUR,PLN")
 			.accept(MediaType.APPLICATION_JSON_VALUE))
 		.andExpect(status().isOk())
-		.andExpect(content().json("{'timestamp':1234}"))
 		.andExpect(content().json("{'date':2001-01-01}"))
 		.andExpect(content().json("{'base':'USD'}"))
 		.andExpect(content().json("{'rates':{'EUR':1.0001,'PLN':1.0001}}"));
@@ -61,13 +57,11 @@ public class RatesControllerTest {
 	ExchangeRatesRequest request = new ExchangeRatesRequest("USD", "2001-01-01", "2001-01-03", new String[]{"EUR","PLN"});
 	ExchangeRates result = createExchangeRates("USD", LocalDate.of(2001,1,1), LocalDate.of(2001,1,3), "EUR", "PLN");
 
-	when(dateTimeProviderService.getCurrentTimestamp()).thenReturn(1234L);
 	when(exchangeRatesService.perform(request)).thenReturn(result);
 
 	mockMvc.perform(get("/rates/series?base=USD&startDate=2001-01-01&endDate=2001-01-03&currencies=EUR,PLN")
 			.accept(MediaType.APPLICATION_JSON_VALUE))
 		.andExpect(status().isOk())
-		.andExpect(content().json("{'timestamp':1234}"))
 		.andExpect(content().json("{'startDate':2001-01-01}"))
 		.andExpect(content().json("{'endDate':2001-01-03}"))
 		.andExpect(content().json("{'base':'USD'}"))
