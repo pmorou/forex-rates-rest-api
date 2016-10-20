@@ -1,5 +1,6 @@
 package forex.rates.api.model.response;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import forex.rates.api.model.ExchangeRates;
 import forex.rates.api.model.Rates;
 import lombok.Data;
@@ -9,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Data
+@JsonPropertyOrder({ "startDate", "endDate", "base", "rates" })
 public class SeriesRatesResponse {
 
     private final String startDate;

@@ -1,5 +1,6 @@
 package forex.rates.api.model.response;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import forex.rates.api.model.ExchangeRates;
 import lombok.Data;
 
@@ -7,6 +8,7 @@ import java.math.BigDecimal;
 import java.util.Map;
 
 @Data
+@JsonPropertyOrder({ "date", "base", "rates" })
 public class DailyRatesResponse {
 
     private final String date;

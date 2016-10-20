@@ -1,9 +1,11 @@
 package forex.rates.api.model.response;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
 
 @Data
+@JsonPropertyOrder({ "error", "httpStatus", "message", "description" })
 public class ApiErrorResponse {
 
     private final boolean error;
