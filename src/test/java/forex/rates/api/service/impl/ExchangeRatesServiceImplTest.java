@@ -18,6 +18,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
 
+import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -52,9 +53,9 @@ public class ExchangeRatesServiceImplTest {
 	// Given
 	List<CurrencyRate> currencyRates = new ArrayList<>();
 	currencyRates.add(createCurrencyRate(USD_DEFINITION, new BigDecimal("1.4902"), DATE_2001_01_01));
-	when(currencyRateService.getAllByDateAndCurrencyIn(DATE_2001_01_01, Arrays.asList(USD_DEFINITION))).thenReturn(currencyRates);
+	when(currencyRateService.getAllByDateAndCurrencyIn(DATE_2001_01_01, asList(USD_DEFINITION))).thenReturn(currencyRates);
 	when(currencyDefinitionService.getOneByCodeName("EUR")).thenReturn(EUR_DEFINITION);
-	when(currencyDefinitionService.getAllByCodeNameIn(Arrays.asList("USD"))).thenReturn(Arrays.asList(USD_DEFINITION));
+	when(currencyDefinitionService.getAllByCodeNameIn(asList("USD"))).thenReturn(asList(USD_DEFINITION));
 
 	// When
 	ExchangeRates result = service.perform(new ExchangeRatesRequest("EUR", "2001-01-01", new String[]{"USD"}));
@@ -72,7 +73,7 @@ public class ExchangeRatesServiceImplTest {
 	when(currencyRateService.getAllByDateAndCurrencyIn(DATE_2001_01_01, Collections.emptyList())).thenReturn(Collections.emptyList());
 	when(currencyRateService.getOneByDateAndCurrency(DATE_2001_01_01, USD_DEFINITION)).thenReturn(USD_RATE);
 	when(currencyDefinitionService.getOneByCodeName("USD")).thenReturn(USD_DEFINITION);
-	when(currencyDefinitionService.getAllByCodeNameIn(Arrays.asList("EUR"))).thenReturn(Arrays.asList(EUR_DEFINITION));
+	when(currencyDefinitionService.getAllByCodeNameIn(asList("EUR"))).thenReturn(asList(EUR_DEFINITION));
 
 	// When
 	ExchangeRates result = service.perform(new ExchangeRatesRequest("USD", "2001-01-01", new String[]{"EUR"}));
@@ -92,7 +93,7 @@ public class ExchangeRatesServiceImplTest {
 	when(currencyRateService.getAllByDateAndCurrencyIn(DATE_2001_01_01, singletonList(USD_DEFINITION))).thenReturn(currencyRates);
 	when(currencyRateService.getOneByDateAndCurrency(DATE_2001_01_01, PLN_DEFINITION)).thenReturn(PLN_RATE);
 	when(currencyDefinitionService.getOneByCodeName("PLN")).thenReturn(PLN_DEFINITION);
-	when(currencyDefinitionService.getAllByCodeNameIn(Arrays.asList("USD"))).thenReturn(Arrays.asList(USD_DEFINITION));
+	when(currencyDefinitionService.getAllByCodeNameIn(asList("USD"))).thenReturn(asList(USD_DEFINITION));
 
 	// When
 	ExchangeRates result = service.perform(new ExchangeRatesRequest("PLN", "2001-01-01", new String[]{"USD"}));
@@ -107,10 +108,10 @@ public class ExchangeRatesServiceImplTest {
     @Test
     public void shouldReturnRatesForUsdAndPlnWithBaseEur() throws Exception {
 	// Given
-	List<CurrencyRate> currencyRates = new ArrayList<>(Arrays.asList(USD_RATE, PLN_RATE));
-	when(currencyRateService.getAllByDateAndCurrencyIn(DATE_2001_01_01, Arrays.asList(USD_DEFINITION, PLN_DEFINITION))).thenReturn(currencyRates);
+	List<CurrencyRate> currencyRates = new ArrayList<>(asList(USD_RATE, PLN_RATE));
+	when(currencyRateService.getAllByDateAndCurrencyIn(DATE_2001_01_01, asList(USD_DEFINITION, PLN_DEFINITION))).thenReturn(currencyRates);
 	when(currencyDefinitionService.getOneByCodeName("EUR")).thenReturn(EUR_DEFINITION);
-	when(currencyDefinitionService.getAllByCodeNameIn(Arrays.asList("USD", "PLN"))).thenReturn(Arrays.asList(USD_DEFINITION, PLN_DEFINITION));
+	when(currencyDefinitionService.getAllByCodeNameIn(asList("USD", "PLN"))).thenReturn(asList(USD_DEFINITION, PLN_DEFINITION));
 
 	// When
 	ExchangeRates result = service.perform(new ExchangeRatesRequest("EUR", "2001-01-01", new String[]{"USD", "PLN"}));
@@ -125,11 +126,11 @@ public class ExchangeRatesServiceImplTest {
     @Test
     public void shouldReturnRatesForEurAndUsdWithBasePln() throws Exception {
 	// Given
-	List<CurrencyRate> currencyRates = new ArrayList<>(Arrays.asList(USD_RATE));
+	List<CurrencyRate> currencyRates = new ArrayList<>(asList(USD_RATE));
 	when(currencyRateService.getOneByDateAndCurrency(DATE_2001_01_01, PLN_DEFINITION)).thenReturn(PLN_RATE);
-	when(currencyRateService.getAllByDateAndCurrencyIn(DATE_2001_01_01, Arrays.asList(USD_DEFINITION))).thenReturn(currencyRates);
+	when(currencyRateService.getAllByDateAndCurrencyIn(DATE_2001_01_01, asList(USD_DEFINITION))).thenReturn(currencyRates);
 	when(currencyDefinitionService.getOneByCodeName("PLN")).thenReturn(PLN_DEFINITION);
-	when(currencyDefinitionService.getAllByCodeNameIn(Arrays.asList("USD"))).thenReturn(Arrays.asList(USD_DEFINITION));
+	when(currencyDefinitionService.getAllByCodeNameIn(asList("USD"))).thenReturn(asList(USD_DEFINITION));
 
 	// When
 	ExchangeRates result = service.perform(new ExchangeRatesRequest("PLN", "2001-01-01", new String[]{"EUR", "USD"}));
@@ -144,9 +145,9 @@ public class ExchangeRatesServiceImplTest {
     @Test
     public void shouldReturnRatesForUsdWithBaseEurBetweenTwoDates() throws Exception {
 	// Given
-	when(currencyDefinitionService.getAllByCodeNameIn(Arrays.asList("USD"))).thenReturn(Arrays.asList(USD_DEFINITION));
-	when(currencyRateService.getAllByDateAndCurrencyIn(DATE_2001_01_01, Arrays.asList(USD_DEFINITION))).thenReturn(Arrays.asList(USD_RATE));
-	when(currencyRateService.getAllByDateAndCurrencyIn(DATE_2001_01_02, Arrays.asList(USD_DEFINITION))).thenReturn(Arrays.asList(USD_RATE_NEXT_DAY));
+	when(currencyDefinitionService.getAllByCodeNameIn(asList("USD"))).thenReturn(asList(USD_DEFINITION));
+	when(currencyRateService.getAllByDateAndCurrencyIn(DATE_2001_01_01, asList(USD_DEFINITION))).thenReturn(asList(USD_RATE));
+	when(currencyRateService.getAllByDateAndCurrencyIn(DATE_2001_01_02, asList(USD_DEFINITION))).thenReturn(asList(USD_RATE_NEXT_DAY));
 
 	// When
 	ExchangeRates result = service.perform(new ExchangeRatesRequest("EUR", "2001-01-01", "2001-01-02", new String[]{"USD"}));
@@ -163,9 +164,9 @@ public class ExchangeRatesServiceImplTest {
     @Test
     public void shouldReturnRatesForUsdWithBasePlnBetweenTwoDates() throws Exception {
 	// Given
-	when(currencyDefinitionService.getAllByCodeNameIn(Arrays.asList("USD"))).thenReturn(Arrays.asList(USD_DEFINITION));
-	when(currencyRateService.getAllByDateAndCurrencyIn(DATE_2001_01_01, Arrays.asList(USD_DEFINITION))).thenReturn(Arrays.asList(USD_RATE));
-	when(currencyRateService.getAllByDateAndCurrencyIn(DATE_2001_01_02, Arrays.asList(USD_DEFINITION))).thenReturn(Arrays.asList(USD_RATE_NEXT_DAY));
+	when(currencyDefinitionService.getAllByCodeNameIn(asList("USD"))).thenReturn(asList(USD_DEFINITION));
+	when(currencyRateService.getAllByDateAndCurrencyIn(DATE_2001_01_01, asList(USD_DEFINITION))).thenReturn(asList(USD_RATE));
+	when(currencyRateService.getAllByDateAndCurrencyIn(DATE_2001_01_02, asList(USD_DEFINITION))).thenReturn(asList(USD_RATE_NEXT_DAY));
 	when(currencyDefinitionService.getOneByCodeName("PLN")).thenReturn(PLN_DEFINITION);
 	when(currencyRateService.getOneByDateAndCurrency(DATE_2001_01_01, PLN_DEFINITION)).thenReturn(PLN_RATE);
 	when(currencyRateService.getOneByDateAndCurrency(DATE_2001_01_02, PLN_DEFINITION)).thenReturn(PLN_RATE_NEXT_DAY);
