@@ -22,6 +22,11 @@ public class ResponseEntityExceptionHandlerTest {
 	void throwIllegalArgumentException() {
 	    throw new IllegalArgumentException("Some description");
 	}
+
+	@GetMapping("throwException")
+	void throwAnyOtherException() throws Exception {
+	    throw new Exception("Some description");
+	}
     }
 
     @Before
@@ -39,6 +44,17 @@ public class ResponseEntityExceptionHandlerTest {
 		.andExpect(content().json("{'error':true}"))
 		.andExpect(content().json("{'httpStatus':400}"))
 		.andExpect(content().json("{'message':'Bad Request'}"))
+		.andExpect(content().json("{'description':'Some description'}"));
+    }
+
+    @Test
+    public void shouldHandleAnyOtherExceptionAndReturnCustomJsonResponse() throws Exception {
+	mockMvc.perform(get("/throwException")
+		.accept(MediaType.APPLICATION_JSON_VALUE))
+		.andExpect(status().isInternalServerError())
+		.andExpect(content().json("{'error':true}"))
+		.andExpect(content().json("{'httpStatus':500}"))
+		.andExpect(content().json("{'message':'Internal Server Error'}"))
 		.andExpect(content().json("{'description':'Some description'}"));
     }
 
