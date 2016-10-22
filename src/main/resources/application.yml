@@ -1,3 +1,9 @@
+dataSet:
+  source:
+    localCopy:
+      path: src/main/resources/temp
+      prefix: dataSetSource
+---
 spring:
   profiles: european-central-bank
 dataSet:
@@ -5,8 +11,6 @@ dataSet:
   source:
     url: http://www.ecb.europa.eu/stats/eurofxref/eurofxref-sdmx.xml
     localCopy:
-      path: src/main/resources/temp
-      prefix: dataSetSource
       extension: xml
   update:
     url: https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml
