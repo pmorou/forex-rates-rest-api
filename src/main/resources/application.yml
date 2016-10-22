@@ -3,7 +3,7 @@ spring:
 dataSet:
   baseCurrency: EUR
   source:
-    url: https://sdw-wsrest.ecb.europa.eu/service/data/EXR/D..EUR.SP00.A
+    url: http://www.ecb.europa.eu/stats/eurofxref/eurofxref-sdmx.xml
     localCopy:
       path: src/main/resources/temp
       prefix: dataSetSource
