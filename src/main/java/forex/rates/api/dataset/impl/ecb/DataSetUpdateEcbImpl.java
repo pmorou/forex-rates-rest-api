@@ -9,6 +9,7 @@ import forex.rates.api.model.entity.CurrencyRate;
 import forex.rates.api.service.CurrencyDefinitionService;
 import forex.rates.api.service.DateTimeProviderService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -21,6 +22,7 @@ import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.*;
 
+@Profile("european-central-bank")
 @Component
 @Slf4j
 public class DataSetUpdateEcbImpl implements DataSetUpdate {

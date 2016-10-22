@@ -5,6 +5,7 @@ import forex.rates.api.dataset.DataSetEntry;
 import forex.rates.api.dataset.DataSetSource;
 import forex.rates.api.dataset.DataSetSourceLocalCopy;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -13,6 +14,7 @@ import org.xml.sax.helpers.DefaultHandler;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+@Profile("european-central-bank")
 @Component
 public class DataSetSourceEcbImpl implements DataSetSource {
 
