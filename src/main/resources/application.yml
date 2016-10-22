@@ -1,3 +1,5 @@
+spring:
+  profiles: european-central-bank
 dataSet:
   baseCurrency: EUR
   source:
