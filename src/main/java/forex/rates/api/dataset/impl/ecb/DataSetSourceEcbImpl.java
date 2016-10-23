@@ -13,6 +13,9 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Consumer;
 
 @Profile("european-central-bank")
 @Component
@@ -34,89 +37,27 @@ public class DataSetSourceEcbImpl implements DataSetSource {
            SAXParser saxParser = factory.newSAXParser();
 
            DefaultHandler handler = new DefaultHandler() {
-               private static final String GENERIC_SERIES_TAG = "generic:Series";
-               private static final String GENERIC_ATTRIBUTES_TAG = "generic:Attributes";
-               private static final String GENERIC_VALUE_TAG = "generic:Value";
-               private static final String GENERIC_OBS_TAG = "generic:Obs";
-               private static final String GENERIC_OBS_DIMENSION_TAG = "generic:ObsDimension";
-               private static final String GENERIC_OBS_VALUE_TAG = "generic:ObsValue";
-
-               private Attributes attributesHolder;
-               private boolean insideSeries;
-               private boolean insideAttributes;
-               private boolean insideValue;
-               private boolean insideObs;
-               private boolean insideObsDimension;
-               private boolean insideObsValue;
-               private String dateHolder;
+               private static final String GROUP_TAG = "Group";
+               private static final String SERIES_TAG = "Series";
+               private static final String OBS_TAG = "Obs";
 
                public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-                   attributesHolder = attributes;
-
-                   if (GENERIC_SERIES_TAG.equalsIgnoreCase(qName)) {
+                   if (GROUP_TAG.equalsIgnoreCase(qName)) {
                        dataSetEntry.newCurrency();
-                       insideSeries = true;
+                       Map<String, String> attributesMap = mapAttributes(attributes);
+                       attributesMap.entrySet().forEach(addAsDataSetEntryAttribute());
                    }
 
-                   if (GENERIC_ATTRIBUTES_TAG.equalsIgnoreCase(qName)) {
-                       insideAttributes = true;
-                   }
-
-                   if (GENERIC_VALUE_TAG.equalsIgnoreCase(qName)) {
-                       insideValue = true;
-                   }
-
-                   if (GENERIC_OBS_TAG.equalsIgnoreCase(qName)) {
-                       insideObs = true;
-                   }
-
-                   if (GENERIC_OBS_DIMENSION_TAG.equalsIgnoreCase(qName)) {
-                       insideObsDimension = true;
-                   }
-
-                   if (GENERIC_OBS_VALUE_TAG.equalsIgnoreCase(qName)) {
-                       insideObsValue = true;
+                   if (OBS_TAG.equalsIgnoreCase(qName)) {
+                       Map<String, String> attributesMap = mapAttributes(attributes);
+                       dataSetEntry.addRate(attributesMap.get("TIME_PERIOD"), attributesMap.get("OBS_VALUE"));
                    }
                }
 
                public void endElement(String uri, String localName, String qName) throws SAXException {
-                   if (GENERIC_ATTRIBUTES_TAG.equalsIgnoreCase(qName) & !insideObs) {
-                       insideAttributes = false;
-                   }
-
-                   if (GENERIC_OBS_TAG.equalsIgnoreCase(qName)) {
-                       insideObs = false;
-                   }
-
-                   if (GENERIC_SERIES_TAG.equalsIgnoreCase(qName)) {
+                   if (SERIES_TAG.equalsIgnoreCase(qName)) {
                        dataSetEntry.saveCurrency();
-                       insideSeries = false;
                    }
-               }
-
-               public void characters(char ch[], int start, int length) throws SAXException {
-                   if (isInsideSeriesAttributesValuesTree()) {
-                       dataSetEntry.addAttribute(
-                               attributesHolder.getValue(0), attributesHolder.getValue(1));
-                   }
-
-                   if (insideObs && insideObsDimension) {
-                       dateHolder = attributesHolder.getValue(0);
-                       insideObsDimension = false;
-                   }
-
-                   if (insideObs && insideObsValue) {
-                       dataSetEntry.addRate(dateHolder, attributesHolder.getValue(0));
-                       insideObsValue = false;
-                   }
-
-                   if (insideValue) {
-                       insideValue = false;
-                   }
-               }
-
-               private boolean isInsideSeriesAttributesValuesTree() {
-                   return insideSeries && insideAttributes && insideValue && !insideObs;
                }
            };
 
@@ -127,6 +68,19 @@ public class DataSetSourceEcbImpl implements DataSetSource {
        }
 
        return (CompleteDataSet) dataSetEntry;
+    }
+
+    private Consumer<Map.Entry<String, String>> addAsDataSetEntryAttribute() {
+        return entry -> dataSetEntry.addAttribute(entry.getKey(), entry.getValue());
+    }
+
+    private Map<String, String> mapAttributes(Attributes attributes) {
+        int numberOfAttributes = attributes.getLength();
+        Map<String, String> attributesMap = new HashMap<>(numberOfAttributes);
+        for (int i = 0; i < numberOfAttributes; i++) {
+            attributesMap.put(attributes.getLocalName(i), attributes.getValue(i));
+        }
+        return attributesMap;
     }
 
 }

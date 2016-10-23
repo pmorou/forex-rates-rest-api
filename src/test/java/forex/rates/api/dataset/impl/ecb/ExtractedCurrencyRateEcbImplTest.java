@@ -45,22 +45,6 @@ public class ExtractedCurrencyRateEcbImplTest {
 	assertThat(currencyRate.getCurrency()).isEqualTo(currencyDefinition);
     }
 
-    @Test
-    public void shouldSet0WhenNotANumber() throws Exception {
-	// Given
-	CurrencyDefinition currencyDefinition = createCurrencyDefinition("JPY", 2);
-	Map.Entry<String, String> entry = createRateEntry("2001-01-01", "NaN");
-
-	// When
-	CurrencyRate currencyRate =
-		new ExtractedCurrencyRateEcbImpl().getCurrencyRate(currencyDefinition, entry);
-
-	// Then
-	assertThat(currencyRate.getDate()).isEqualTo(LocalDate.of(2001, 1, 1));
-	assertThat(currencyRate.getExchangeRate()).isEqualTo(new BigDecimal("0"));
-	assertThat(currencyRate.getCurrency()).isEqualTo(currencyDefinition);
-    }
-
     @Test(expected = IllegalArgumentException.class)
     public void shouldThrowIllegalArgumentWhenInvalidDate() throws Exception {
 	// Given

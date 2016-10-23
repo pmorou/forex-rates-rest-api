@@ -20,10 +20,6 @@ public class ExtractedCurrencyRateEcbImpl implements ExtractedCurrencyRate {
 	CurrencyRate currencyRate = new CurrencyRate();
 	currencyRate.setCurrency(currencyDefinition);
 
-	if ("NaN".equals(rate.getValue())) {
-	    rate.setValue("0");
-	}
-
 	LocalDate date = null;
 	BigDecimal exchangeRate = null;
 

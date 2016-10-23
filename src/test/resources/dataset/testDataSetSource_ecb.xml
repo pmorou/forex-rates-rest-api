@@ -5,39 +5,12 @@
     range: 2 days
     source: ECB
 -->
-<message:GenericData xmlns:message="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message" xmlns:common="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:generic="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/generic" xsi:schemaLocation="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message https://sdw-wsrest.ecb.europa.eu:443/vocabulary/sdmx/2_1/SDMXMessage.xsd http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common https://sdw-wsrest.ecb.europa.eu:443/vocabulary/sdmx/2_1/SDMXCommon.xsd http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/generic https://sdw-wsrest.ecb.europa.eu:443/vocabulary/sdmx/2_1/SDMXDataGeneric.xsd">
-<message:DataSet>
-<generic:Series>
-<generic:SeriesKey>
-<generic:Value id="FREQ" value="D"/>
-<generic:Value id="CURRENCY" value="USD"/>
-<generic:Value id="CURRENCY_DENOM" value="EUR"/>
-<generic:Value id="EXR_TYPE" value="SP00"/>
-<generic:Value id="EXR_SUFFIX" value="A"/>
-</generic:SeriesKey>
-<generic:Attributes>
-<generic:Value id="UNIT" value="USD"/>
-<generic:Value id="TITLE" value="US dollar/Euro"/>
-<generic:Value id="SOURCE_AGENCY" value="4F0"/>
-<generic:Value id="COLLECTION" value="A"/>
-<generic:Value id="UNIT_MULT" value="0"/>
-<generic:Value id="TITLE_COMPL" value="ECB reference exchange rate, US dollar/Euro, 2:15 pm (C.E.T.)"/>
-<generic:Value id="DECIMALS" value="4"/>
-</generic:Attributes>
-<generic:Obs>
-<generic:ObsDimension value="2016-05-02"/>
-<generic:ObsValue value="1.1493"/>
-<generic:Attributes>
-<generic:Value id="OBS_STATUS" value="A"/>
-</generic:Attributes>
-</generic:Obs>
-<generic:Obs>
-<generic:ObsDimension value="2016-05-03"/>
-<generic:ObsValue value="1.1569"/>
-<generic:Attributes>
-<generic:Value id="OBS_STATUS" value="A"/>
-</generic:Attributes>
-</generic:Obs>
-</generic:Series>
-</message:DataSet>
-</message:GenericData>
+<CompactData>
+    <DataSet>
+        <Group CURRENCY="USD" CURRENCY_DENOM="EUR" EXR_TYPE="SP00" EXR_SUFFIX="A" DECIMALS="4" UNIT="USD" UNIT_MULT="0" TITLE_COMPL="ECB reference exchange rate, US dollar/Euro, 2:15 pm (C.E.T.)" />
+        <Series FREQ="D" CURRENCY="USD" CURRENCY_DENOM="EUR" EXR_TYPE="SP00" EXR_SUFFIX="A" TIME_FORMAT="P1D" COLLECTION="A">
+            <Obs TIME_PERIOD="2016-05-02" OBS_VALUE="1.1493" OBS_STATUS="A" OBS_CONF="F" />
+            <Obs TIME_PERIOD="2016-05-03" OBS_VALUE="1.1569" OBS_STATUS="A" OBS_CONF="F" />
+        </Series>
+    </DataSet>
+</CompactData>
