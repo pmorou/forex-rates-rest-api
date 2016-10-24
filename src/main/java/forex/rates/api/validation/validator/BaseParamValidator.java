@@ -1,5 +1,6 @@
 package forex.rates.api.validation.validator;
 
+import forex.rates.api.configuration.DataSetContext;
 import forex.rates.api.service.AvailableCurrenciesService;
 import forex.rates.api.validation.annotation.Base;
 import org.springframework.stereotype.Component;
@@ -11,11 +12,13 @@ import java.util.Optional;
 @Component
 public class BaseParamValidator implements ParamValidator<String> {
 
+    private final DataSetContext dataSetContext;
+    private final AvailableCurrenciesService availableCurrenciesService;
+
     private String message = "The base you requested is invalid: ";
 
-    private AvailableCurrenciesService availableCurrenciesService;
-
-    public BaseParamValidator(AvailableCurrenciesService availableCurrenciesService) {
+    public BaseParamValidator(DataSetContext dataSetContext, AvailableCurrenciesService availableCurrenciesService) {
+	this.dataSetContext = dataSetContext;
 	this.availableCurrenciesService = availableCurrenciesService;
     }
 
@@ -49,7 +52,7 @@ public class BaseParamValidator implements ParamValidator<String> {
     }
 
     private String getDefaultValue() {
-	return "USD";
+	return dataSetContext.getBaseCurrency();
     }
 
 }

@@ -1,5 +1,6 @@
 package forex.rates.api.validation.validator;
 
+import forex.rates.api.configuration.DataSetContext;
 import forex.rates.api.service.AvailableCurrenciesService;
 import forex.rates.api.validation.annotation.Base;
 import junitparams.JUnitParamsRunner;
@@ -32,14 +33,16 @@ public class BaseParamValidatorTest {
     private @interface InvalidAnnotation {}
 
     private @Mock AvailableCurrenciesService availableCurrenciesService;
+    private @Mock DataSetContext dataSetContext;
 
     private BaseParamValidator baseParamValidator;
 
     @Before
     public void before() {
 	MockitoAnnotations.initMocks(this);
-	baseParamValidator = new BaseParamValidator(availableCurrenciesService);
+	baseParamValidator = new BaseParamValidator(dataSetContext, availableCurrenciesService);
 	Mockito.when(availableCurrenciesService.getCodeList()).thenReturn(AVAILABLE_CURRENCIES);
+	Mockito.when(dataSetContext.getBaseCurrency()).thenReturn("USD");
     }
 
     @Test
