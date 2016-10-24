@@ -31,7 +31,7 @@ public class BaseParamValidator implements ParamValidator<String> {
     public boolean supports(Class<?> parameterType, Annotation... annotations) {
 	if (String.class.isAssignableFrom(parameterType)) {
 	    return Arrays.stream(annotations)
-		    .map(a -> a.annotationType())
+		    .map(Annotation::annotationType)
 		    .anyMatch(Base.class::equals);
 	}
 	return false;

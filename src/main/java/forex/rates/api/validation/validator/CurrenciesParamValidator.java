@@ -29,7 +29,7 @@ public class CurrenciesParamValidator implements ParamValidator<String[]> {
     public boolean supports(Class<?> parameterType, Annotation... annotations) {
 	if (String[].class.isAssignableFrom(parameterType)) {
 	    return Arrays.stream(annotations)
-		    .map(a -> a.annotationType())
+		    .map(Annotation::annotationType)
 		    .anyMatch(Currencies.class::equals);
 	}
 	return false;
@@ -44,7 +44,7 @@ public class CurrenciesParamValidator implements ParamValidator<String[]> {
 
     private Function<String[], String[]> elementsToUpperCase() {
 	return list -> Arrays.stream(list)
-		.map(a -> a.toUpperCase())
+		.map(String::toUpperCase)
 		.toArray(String[]::new);
     }
 
