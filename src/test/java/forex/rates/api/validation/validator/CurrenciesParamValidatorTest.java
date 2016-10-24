@@ -19,7 +19,9 @@ import java.util.stream.Collectors;
 
 import static java.util.Optional.of;
 import static java.util.Optional.ofNullable;
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(JUnitParamsRunner.class)
 public class CurrenciesParamValidatorTest {
@@ -81,7 +83,7 @@ public class CurrenciesParamValidatorTest {
 
     @Test
     @Parameters
-    public void shouldBeValidAndNotNull(String[] given) throws Exception {
+    public void shouldBeValidAndReturnUpperCase(String[] given, String[] expected) throws Exception {
 	// Given
 	Optional<String[]> givenOptional = ofNullable(given);
 
@@ -89,14 +91,13 @@ public class CurrenciesParamValidatorTest {
 	String[] result = currenciesParamValidator.validate(givenOptional);
 
 	// Then
-	assertNotNull(result);
+	assertThat(result).isEqualTo(expected);
     }
 
-    public Object[] parametersForShouldBeValidAndNotNull() {
+    public Object[] parametersForShouldBeValidAndReturnUpperCase() {
 	return new Object[]{
-		new Object[]{null},
-		new Object[]{toStringArray(AVAILABLE_CURRENCIES)},
-		new Object[]{toStringArray(toLowerCase(AVAILABLE_CURRENCIES))},
+		new Object[]{toStringArray(AVAILABLE_CURRENCIES), toStringArray(AVAILABLE_CURRENCIES)},
+		new Object[]{toStringArray(toLowerCase(AVAILABLE_CURRENCIES)), toStringArray(AVAILABLE_CURRENCIES)},
 	};
     }
 
@@ -109,6 +110,18 @@ public class CurrenciesParamValidatorTest {
 	return list.stream()
 		.map(String::toLowerCase)
 		.collect(Collectors.toList());
+    }
+
+    @Test
+    public void shouldBeNotValidAndReturnDefaultValue() {
+	// Given
+	Optional<String[]> givenNull = Optional.ofNullable(null);
+
+	// When
+	String[] result = currenciesParamValidator.validate(givenNull);
+
+	// Then
+	assertThat(result).isEqualTo(AVAILABLE_CURRENCIES.toArray());
     }
 
     @Test(expected = IllegalArgumentException.class)

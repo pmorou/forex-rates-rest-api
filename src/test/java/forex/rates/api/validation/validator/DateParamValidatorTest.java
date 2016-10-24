@@ -17,7 +17,9 @@ import java.util.Optional;
 
 import static java.util.Optional.of;
 import static java.util.Optional.ofNullable;
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(JUnitParamsRunner.class)
 public class DateParamValidatorTest {
@@ -80,7 +82,7 @@ public class DateParamValidatorTest {
 
     @Test
     @Parameters
-    public void shouldBeValidAndNotNull(String given) throws Exception {
+    public void shouldBeValidAndReturnUpperCase(String given, String expected) throws Exception {
 	// Given
 	Optional<String> givenOptional = ofNullable(given);
 
@@ -88,15 +90,26 @@ public class DateParamValidatorTest {
 	String result = dateParamValidator.validate(givenOptional);
 
 	// Then
-	assertNotNull(result);
+	assertThat(result).isEqualTo(expected);
     }
 
-    public Object[] parametersForShouldBeValidAndNotNull() {
+    public Object[] parametersForShouldBeValidAndReturnUpperCase() {
 	return new Object[]{
-		new Object[]{null},
-		new Object[]{TODAY.minusDays(1).toString()},
-		new Object[]{TODAY.toString()}
+		new Object[]{TODAY.minusDays(1).toString(), TODAY.minusDays(1).toString()},
+		new Object[]{TODAY.toString(), TODAY.toString()}
 	};
+    }
+
+    @Test
+    public void shouldBeNotValidAndReturnDefaultValue() {
+	// Given
+	Optional<String> givenNull = Optional.ofNullable(null);
+
+	// When
+	String result = dateParamValidator.validate(givenNull);
+
+	// Then
+	assertThat(result).isEqualTo(TODAY.toString());
     }
 
     @Test(expected = IllegalArgumentException.class)

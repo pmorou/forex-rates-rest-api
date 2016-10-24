@@ -19,7 +19,9 @@ import java.util.Optional;
 
 import static java.util.Optional.of;
 import static java.util.Optional.ofNullable;
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(JUnitParamsRunner.class)
 public class BaseParamValidatorTest {
@@ -42,7 +44,6 @@ public class BaseParamValidatorTest {
 	MockitoAnnotations.initMocks(this);
 	baseParamValidator = new BaseParamValidator(dataSetContext, availableCurrenciesService);
 	Mockito.when(availableCurrenciesService.getCodeList()).thenReturn(AVAILABLE_CURRENCIES);
-	Mockito.when(dataSetContext.getBaseCurrency()).thenReturn("USD");
     }
 
     @Test
@@ -83,7 +84,7 @@ public class BaseParamValidatorTest {
 
     @Test
     @Parameters
-    public void shouldBeValidAndNotNull(String given) throws Exception {
+    public void shouldBeValidAndReturnUpperCase(String given, String expected) throws Exception {
 	// Given
 	Optional<String> givenOptional = ofNullable(given);
 
@@ -91,15 +92,27 @@ public class BaseParamValidatorTest {
 	String result = baseParamValidator.validate(givenOptional);
 
 	// Then
-	assertNotNull(result);
+	assertThat(result).isEqualTo(expected);
     }
 
-    public Object[] parametersForShouldBeValidAndNotNull() {
+    public Object[] parametersForShouldBeValidAndReturnUpperCase() {
 	return new Object[]{
-		new Object[]{null},
-		new Object[]{"EUR"},
-		new Object[]{"eur"}
+		new Object[]{"EUR", "EUR"},
+		new Object[]{"eur", "EUR"}
 	};
+    }
+
+    @Test
+    public void shouldBeNotValidAndReturnDefaultValue() {
+	// Given
+	Optional<String> givenNull = Optional.ofNullable(null);
+	Mockito.when(dataSetContext.getBaseCurrency()).thenReturn("USD");
+
+	// When
+	String result = baseParamValidator.validate(givenNull);
+
+	// Then
+	assertThat(result).isEqualTo("USD");
     }
 
     @Test(expected = IllegalArgumentException.class)
