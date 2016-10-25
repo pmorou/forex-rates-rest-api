@@ -45,13 +45,21 @@ public class DateParamValidator implements ParamValidator<String> {
     private boolean isValidOrElseThrow(String date) {
 	try {
 	    LocalDate parsedDate = LocalDate.parse(date);
-	    if (parsedDate.isAfter(dateTimeProviderService.getTodaysDate())) {
-		throw new IllegalArgumentException(message + date);
+	    if (isFromFuture(parsedDate)) {
+		throwIllegalArgumentException(date);
 	    }
 	} catch (DateTimeParseException e) {
-	    throw new IllegalArgumentException(message + date);
+	    throwIllegalArgumentException(date);
 	}
 	return true;
+    }
+
+    private boolean isFromFuture(LocalDate date) {
+	return date.isAfter(dateTimeProviderService.getTodaysDate());
+    }
+
+    private boolean throwIllegalArgumentException(String date) {
+	throw new IllegalArgumentException(message + date);
     }
 
     private String getDefaultValue() {

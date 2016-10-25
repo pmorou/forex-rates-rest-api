@@ -44,11 +44,15 @@ public class BaseParamValidator implements ParamValidator<String> {
 		.orElse(getDefaultValue());
     }
 
-    private boolean isValidOrElseThrow(String base) {
-	if (!availableCurrenciesService.getCodeList().contains(base)) {
-	    throw new IllegalArgumentException(message + base);
+    private boolean isValidOrElseThrow(String currency) {
+	if (isNotInAvailableCurrencies(currency)) {
+	    throw new IllegalArgumentException(message + currency);
 	}
 	return true;
+    }
+
+    private boolean isNotInAvailableCurrencies(String currency) {
+	return !availableCurrenciesService.getCodeList().contains(currency);
     }
 
     private String getDefaultValue() {

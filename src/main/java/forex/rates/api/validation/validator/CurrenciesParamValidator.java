@@ -50,11 +50,15 @@ public class CurrenciesParamValidator implements ParamValidator<String[]> {
 
     private boolean isValidOrElseThrow(String[] currencies) {
 	for (String currency : currencies) {
-	    if (!availableCurrenciesService.getCodeList().contains(currency)) {
+	    if (isNotInAvailableCurrencies(currency)) {
 		throw new IllegalArgumentException(message + currency);
 	    }
 	}
 	return true;
+    }
+
+    private boolean isNotInAvailableCurrencies(String currency) {
+	return !availableCurrenciesService.getCodeList().contains(currency);
     }
 
     private String[] getDefaultValue() {
