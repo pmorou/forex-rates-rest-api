@@ -41,9 +41,8 @@ public class ExchangeRatesServiceImpl implements ExchangeRatesService {
 	// Remove data set's reference currency (if exists) as there is no such value in db.
 	// If TRUE is returned, rate for this currency should be calculated out of actual base requested by user.
 	boolean baseCurrencyRemoved = requestedCurrencies.remove(BASE_CURRENCY);
+	BigDecimal baseExchangeRate = BigDecimal.ONE;
 	List<CurrencyDefinition> currencyDefinitions = currencyDefinitionService.getAllByCodeNameIn(requestedCurrencies);
-
-	BigDecimal baseExchangeRate = null;
 
 	for (LocalDate date : request.getDateRange()) {
 	    List<CurrencyRate> requestedCurrencyRates = currencyRateService.getAllByDateAndCurrencyIn(date, currencyDefinitions);
@@ -62,11 +61,7 @@ public class ExchangeRatesServiceImpl implements ExchangeRatesService {
 	    for (CurrencyRate currencyRate : requestedCurrencyRates) {
 		CurrencyDefinition currencyDefinition = currencyRate.getCurrency();
 		BigDecimal exchangeRate = currencyRate.getExchangeRate();
-
-		if (baseExchangeRate != null) {
-		    exchangeRate = multiply(exchangeRate, baseExchangeRate, currencyDefinition.getPrecision());
-		}
-
+		exchangeRate = multiply(exchangeRate, baseExchangeRate, currencyDefinition.getPrecision());
 		rates.addRate(currencyDefinition.getCodeName(), exchangeRate);
 	    }
 
