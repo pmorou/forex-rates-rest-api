@@ -17,22 +17,14 @@ public class ExtractedCurrencyRateEcbImpl implements ExtractedCurrencyRate {
 
     @Override
     public CurrencyRate getCurrencyRate(CurrencyDefinition currencyDefinition, Map.Entry<String, String> rate) {
-	CurrencyRate currencyRate = new CurrencyRate();
-	currencyRate.setCurrency(currencyDefinition);
-
-	LocalDate date = null;
-	BigDecimal exchangeRate = null;
-
 	try {
-	    date = LocalDate.parse(rate.getKey());
-	    exchangeRate = new BigDecimal(rate.getValue());
+	    return new CurrencyRate(
+		    new BigDecimal(rate.getValue()),
+		    LocalDate.parse(rate.getKey()),
+		    currencyDefinition);
 	} catch (NumberFormatException | DateTimeParseException e) {
 	    throw new IllegalArgumentException("Couldn't parse given value");
 	}
-
-	currencyRate.setDate(date);
-	currencyRate.setExchangeRate(exchangeRate);
-	return currencyRate;
     }
 
 }

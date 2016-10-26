@@ -79,9 +79,7 @@ public class DataSetEntryImplTest {
     }
 
     private CurrencyDefinition createCurrencyDefinition(String codeName) {
-	CurrencyDefinition currencyDefinition = new CurrencyDefinition();
-	currencyDefinition.setCodeName(codeName);
-	return currencyDefinition;
+	return new CurrencyDefinition(codeName, 0);
     }
 
     private Map.Entry<String, String> createEntry(String key, String value) {

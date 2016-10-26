@@ -13,10 +13,7 @@ public class ExtractedCurrencyDefinitionEcbImpl implements ExtractedCurrencyDefi
 
     @Override
     public CurrencyDefinition getCurrencyDefinition(Map<String, String> attributes) {
-	CurrencyDefinition currencyDefinition = new CurrencyDefinition();
-	currencyDefinition.setCodeName(attributes.get("UNIT"));
-	currencyDefinition.setPrecision(new Integer(attributes.get("DECIMALS")));
-	return currencyDefinition;
+	return new CurrencyDefinition(attributes.get("UNIT"), new Integer(attributes.get("DECIMALS")));
     }
 
 }

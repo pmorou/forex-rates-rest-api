@@ -78,20 +78,14 @@ public class DataSetUpdateEcbImplTest {
     }
 
     private CurrencyDefinition createCurrencyDefinition(String codeName, int precision) {
-	CurrencyDefinition currencyDefinition = new CurrencyDefinition();
-	currencyDefinition.setCodeName(codeName);
-	currencyDefinition.setPrecision(precision);
-	return currencyDefinition;
+	return new CurrencyDefinition(codeName, precision);
     }
 
     private CurrencyRate createCurrencyRate(CurrencyDefinition currencyDefinition, Map.Entry<String, String> entry) {
-	CurrencyRate currencyRate = new CurrencyRate();
-	String date = entry.getKey();
-	String rate = entry.getValue();
-	currencyRate.setExchangeRate(new BigDecimal(rate));
-	currencyRate.setCurrency(currencyDefinition);
-	currencyRate.setDate(LocalDate.parse(date));
-	return currencyRate;
+	return new CurrencyRate(
+		new BigDecimal(entry.getValue()),
+		LocalDate.parse(entry.getKey()),
+		currencyDefinition);
     }
 
 }

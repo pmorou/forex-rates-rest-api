@@ -1,12 +1,13 @@
 package forex.rates.api.model.entity;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Data
 @EqualsAndHashCode(exclude = "id")
+@RequiredArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "currencies")
 public class CurrencyDefinition {
@@ -15,8 +16,10 @@ public class CurrencyDefinition {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NonNull
     private String codeName;
 
-    private int precision;
+    @NonNull
+    private Integer precision;
 
 }

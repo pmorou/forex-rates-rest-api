@@ -180,18 +180,11 @@ public class ExchangeRatesServiceImplTest {
     }
 
     private CurrencyRate createCurrencyRate(CurrencyDefinition currencyDefinition, BigDecimal exchangeRate, LocalDate date) {
-	CurrencyRate currencyRate = new CurrencyRate();
-	currencyRate.setExchangeRate(exchangeRate);
-	currencyRate.setCurrency(currencyDefinition);
-	currencyRate.setDate(date);
-	return currencyRate;
+	return new CurrencyRate(exchangeRate, date, currencyDefinition);
     }
 
     private CurrencyDefinition createCurrencyDefinition(String codeName, int precision) {
-	CurrencyDefinition currencyDefinition = new CurrencyDefinition();
-	currencyDefinition.setCodeName(codeName);
-	currencyDefinition.setPrecision(precision);
-	return currencyDefinition;
+	return new CurrencyDefinition(codeName, precision);
     }
 
     private Rates createRates(String... currencyValuePairs) {

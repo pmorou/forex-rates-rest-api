@@ -44,10 +44,7 @@ public class AvailableCurrenciesServiceImplTest {
     }
 
     private CurrencyDefinition createCurrencyDefinition(String codeName, int precision) {
-	CurrencyDefinition currencyDefinition = new CurrencyDefinition();
-	currencyDefinition.setCodeName(codeName);
-	currencyDefinition.setPrecision(precision);
-	return currencyDefinition;
+	return new CurrencyDefinition(codeName, precision);
     }
 
 }
