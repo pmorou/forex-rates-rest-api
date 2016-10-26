@@ -31,10 +31,10 @@ public class ExchangeRatesServiceImplTest {
     private final CurrencyDefinition USD_DEFINITION = createCurrencyDefinition("USD", 4);
     private final CurrencyDefinition PLN_DEFINITION = createCurrencyDefinition("PLN", 4);
     private final CurrencyDefinition EUR_DEFINITION = createCurrencyDefinition("EUR", 4);
-    private final CurrencyRate USD_RATE = createCurrencyRate(USD_DEFINITION, new BigDecimal("1.4902"), DATE_2001_01_01);
-    private final CurrencyRate PLN_RATE = createCurrencyRate(PLN_DEFINITION, new BigDecimal("1.1002"), DATE_2001_01_01);
-    private final CurrencyRate USD_RATE_NEXT_DAY = createCurrencyRate(USD_DEFINITION, new BigDecimal("1.4815"), DATE_2001_01_02);
-    private final CurrencyRate PLN_RATE_NEXT_DAY = createCurrencyRate(PLN_DEFINITION, new BigDecimal("1.1000"), DATE_2001_01_02);
+    private final CurrencyRate USD_RATE = createCurrencyRate(USD_DEFINITION, new BigDecimal("1.4902000"), DATE_2001_01_01);
+    private final CurrencyRate PLN_RATE = createCurrencyRate(PLN_DEFINITION, new BigDecimal("1.1002000"), DATE_2001_01_01);
+    private final CurrencyRate USD_RATE_NEXT_DAY = createCurrencyRate(USD_DEFINITION, new BigDecimal("1.4815000"), DATE_2001_01_02);
+    private final CurrencyRate PLN_RATE_NEXT_DAY = createCurrencyRate(PLN_DEFINITION, new BigDecimal("1.1000000"), DATE_2001_01_02);
 
     private @Mock CurrencyRateService currencyRateService;
     private @Mock CurrencyDefinitionService currencyDefinitionService;
