@@ -1,11 +1,13 @@
 package forex.rates.api.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.time.LocalDate;
 import java.util.Map;
 
 @Data
+@AllArgsConstructor
 public class ExchangeRates {
 
     private LocalDate startDate;

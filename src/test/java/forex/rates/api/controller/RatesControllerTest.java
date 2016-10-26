@@ -82,12 +82,7 @@ public class RatesControllerTest {
 	    ratesByDate.put(date, rate);
 	    date = date.plusDays(1);
 	}
-	ExchangeRates exchangeRates = new ExchangeRates();
-	exchangeRates.setRatesByDate(ratesByDate);
-	exchangeRates.setBase(base);
-	exchangeRates.setStartDate(startDate);
-	exchangeRates.setEndDate(endDate);
-	return exchangeRates;
+	return new ExchangeRates(startDate, endDate, base, ratesByDate, false);
     }
 
 }

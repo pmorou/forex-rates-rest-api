@@ -68,12 +68,7 @@ public class ExchangeRatesServiceImpl implements ExchangeRatesService {
 	    ratesByDate.put(date, rates);
 	}
 
-	ExchangeRates result = new ExchangeRates();
-	result.setStartDate(request.getStartDate());
-	result.setEndDate(request.getEndDate());
-	result.setBase(request.getBase());
-	result.setRatesByDate(ratesByDate);
-	return result;
+	return new ExchangeRates(request.getStartDate(), request.getEndDate(), request.getBase(), ratesByDate, false);
     }
 
     private boolean isNotDataSetsBaseCurrency(ExchangeRatesRequest request) {
