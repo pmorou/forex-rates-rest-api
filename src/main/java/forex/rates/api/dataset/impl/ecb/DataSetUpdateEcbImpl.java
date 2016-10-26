@@ -20,7 +20,13 @@ import javax.xml.parsers.SAXParserFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.IntStream;
+
+import static java.util.stream.Collectors.toMap;
 
 @Profile("european-central-bank")
 @Component
@@ -92,12 +98,9 @@ public class DataSetUpdateEcbImpl implements DataSetUpdate {
     }
 
     private Map<String, String> mapAttributes(Attributes attributes) {
-	int numberOfAttributes = attributes.getLength();
-	Map<String, String> attributesMap = new HashMap<>(numberOfAttributes);
-	for (int i = 0; i < numberOfAttributes; i++) {
-	    attributesMap.put(attributes.getLocalName(i), attributes.getValue(i));
-	}
-	return attributesMap;
+	return IntStream.range(0, attributes.getLength())
+		.boxed()
+		.collect(toMap(attributes::getLocalName, attributes::getValue));
     }
 
     private InputStream getInputStream() throws IOException {

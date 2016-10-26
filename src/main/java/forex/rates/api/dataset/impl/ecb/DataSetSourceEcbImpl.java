@@ -13,9 +13,11 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.stream.IntStream;
+
+import static java.util.stream.Collectors.toMap;
 
 @Profile("european-central-bank")
 @Component
@@ -75,12 +77,9 @@ public class DataSetSourceEcbImpl implements DataSetSource {
     }
 
     private Map<String, String> mapAttributes(Attributes attributes) {
-        int numberOfAttributes = attributes.getLength();
-        Map<String, String> attributesMap = new HashMap<>(numberOfAttributes);
-        for (int i = 0; i < numberOfAttributes; i++) {
-            attributesMap.put(attributes.getLocalName(i), attributes.getValue(i));
-        }
-        return attributesMap;
+        return IntStream.range(0, attributes.getLength())
+                .boxed()
+                .collect(toMap(attributes::getLocalName, attributes::getValue));
     }
 
 }
