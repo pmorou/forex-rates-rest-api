@@ -1,6 +1,6 @@
 package forex.rates.api.dataset.impl.ecb;
 
-import forex.rates.api.configuration.DataSetContext;
+import forex.rates.api.dataset.DataSetContext;
 import forex.rates.api.dataset.DataSetUpdate;
 import forex.rates.api.dataset.ExtractedCurrencyRate;
 import forex.rates.api.http.client.HttpClient;

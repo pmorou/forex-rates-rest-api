@@ -1,4 +1,4 @@
-package forex.rates.api.configuration;
+package forex.rates.api.dataset;
 
 public interface DataSetContext {
 

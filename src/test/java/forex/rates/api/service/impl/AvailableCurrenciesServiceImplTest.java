@@ -1,6 +1,6 @@
 package forex.rates.api.service.impl;
 
-import forex.rates.api.configuration.DataSetContext;
+import forex.rates.api.dataset.DataSetContext;
 import forex.rates.api.model.entity.CurrencyDefinition;
 import forex.rates.api.service.CurrencyDefinitionService;
 import org.junit.Before;

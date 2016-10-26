@@ -1,6 +1,6 @@
 package forex.rates.api.dataset.impl;
 
-import forex.rates.api.configuration.DataSetContext;
+import forex.rates.api.dataset.DataSetContext;
 import forex.rates.api.dataset.DataSetSourceLocalCopy;
 import forex.rates.api.http.client.HttpClient;
 import forex.rates.api.service.DateTimeProviderService;

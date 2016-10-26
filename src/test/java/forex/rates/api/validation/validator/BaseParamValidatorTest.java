@@ -1,6 +1,6 @@
 package forex.rates.api.validation.validator;
 
-import forex.rates.api.configuration.DataSetContext;
+import forex.rates.api.dataset.DataSetContext;
 import forex.rates.api.service.AvailableCurrenciesService;
 import forex.rates.api.validation.annotation.Base;
 import junitparams.JUnitParamsRunner;

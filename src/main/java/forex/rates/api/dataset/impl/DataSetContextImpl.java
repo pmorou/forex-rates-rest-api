@@ -1,5 +1,6 @@
-package forex.rates.api.configuration;
+package forex.rates.api.dataset.impl;
 
+import forex.rates.api.dataset.DataSetContext;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

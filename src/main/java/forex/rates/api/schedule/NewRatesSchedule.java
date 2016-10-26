@@ -1,6 +1,6 @@
 package forex.rates.api.schedule;
 
-import forex.rates.api.configuration.DataSetContext;
+import forex.rates.api.dataset.DataSetContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.TaskScheduler;
