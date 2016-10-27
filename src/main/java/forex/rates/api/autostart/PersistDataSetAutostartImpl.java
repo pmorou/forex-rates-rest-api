@@ -12,16 +12,16 @@ import javax.annotation.PostConstruct;
 
 @Component
 @Slf4j
-public class AutostartImpl implements Autostart {
+public class PersistDataSetAutostartImpl implements Autostart {
 
-    private final String OPERATION_SUMMARY_MSG = "Operation took {} milliseconds for total of {} items.";
+    private final String OPERATION_SUMMARY_MSG = "Operation took {} milliseconds for total of {} items";
 
     private final DataSetSource dataSetSource;
     private final CurrencyDefinitionService currencyDefinitionService;
     private final CurrencyRateService currencyRateService;
 
     @Autowired
-    public AutostartImpl(DataSetSource dataSetSource, CurrencyDefinitionService currencyDefinitionService, CurrencyRateService currencyRateService) {
+    public PersistDataSetAutostartImpl(DataSetSource dataSetSource, CurrencyDefinitionService currencyDefinitionService, CurrencyRateService currencyRateService) {
         this.dataSetSource = dataSetSource;
         this.currencyDefinitionService = currencyDefinitionService;
         this.currencyRateService = currencyRateService;
