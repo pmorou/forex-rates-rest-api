@@ -2,7 +2,6 @@ package forex.rates.api.autostart;
 
 import forex.rates.api.dataset.CompleteDataSet;
 import forex.rates.api.dataset.DataSetSource;
-import forex.rates.api.schedule.NewRatesSchedule;
 import forex.rates.api.service.CurrencyDefinitionService;
 import forex.rates.api.service.CurrencyRateService;
 import lombok.extern.slf4j.Slf4j;
@@ -20,21 +19,18 @@ public class AutostartImpl implements Autostart {
     private final DataSetSource dataSetSource;
     private final CurrencyDefinitionService currencyDefinitionService;
     private final CurrencyRateService currencyRateService;
-    private final NewRatesSchedule newRatesSchedule;
 
     @Autowired
-    public AutostartImpl(DataSetSource dataSetSource, CurrencyDefinitionService currencyDefinitionService, CurrencyRateService currencyRateService, NewRatesSchedule newRatesSchedule) {
+    public AutostartImpl(DataSetSource dataSetSource, CurrencyDefinitionService currencyDefinitionService, CurrencyRateService currencyRateService) {
         this.dataSetSource = dataSetSource;
         this.currencyDefinitionService = currencyDefinitionService;
         this.currencyRateService = currencyRateService;
-        this.newRatesSchedule = newRatesSchedule;
     }
 
     @Override
     @PostConstruct
     public void start() {
         persistDataSet();
-        scheduleRatesUpdate();
     }
 
     private void persistDataSet() {
@@ -53,10 +49,6 @@ public class AutostartImpl implements Autostart {
 
     private long getElapsedTime(long start) {
         return System.currentTimeMillis() - start;
-    }
-
-    private void scheduleRatesUpdate() {
-        newRatesSchedule.scheduleUpdate();
     }
 
 }
