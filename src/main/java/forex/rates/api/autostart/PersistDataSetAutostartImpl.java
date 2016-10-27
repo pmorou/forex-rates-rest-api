@@ -1,6 +1,7 @@
 package forex.rates.api.autostart;
 
 import forex.rates.api.dataset.CompleteDataSet;
+import forex.rates.api.dataset.DataSetContext;
 import forex.rates.api.dataset.DataSetSource;
 import forex.rates.api.service.CurrencyDefinitionService;
 import forex.rates.api.service.CurrencyRateService;
@@ -16,12 +17,14 @@ public class PersistDataSetAutostartImpl implements Autostart {
 
     private final String OPERATION_SUMMARY_MSG = "Operation took {} milliseconds for total of {} items";
 
+    private final DataSetContext dataSetContext;
     private final DataSetSource dataSetSource;
     private final CurrencyDefinitionService currencyDefinitionService;
     private final CurrencyRateService currencyRateService;
 
     @Autowired
-    public PersistDataSetAutostartImpl(DataSetSource dataSetSource, CurrencyDefinitionService currencyDefinitionService, CurrencyRateService currencyRateService) {
+    public PersistDataSetAutostartImpl(DataSetContext dataSetContext, DataSetSource dataSetSource, CurrencyDefinitionService currencyDefinitionService, CurrencyRateService currencyRateService) {
+        this.dataSetContext = dataSetContext;
         this.dataSetSource = dataSetSource;
         this.currencyDefinitionService = currencyDefinitionService;
         this.currencyRateService = currencyRateService;
@@ -30,7 +33,9 @@ public class PersistDataSetAutostartImpl implements Autostart {
     @Override
     @PostConstruct
     public void start() {
-        persistDataSet();
+        if (dataSetContext.isSourcePersistEnabled()) {
+            persistDataSet();
+        }
     }
 
     private void persistDataSet() {
