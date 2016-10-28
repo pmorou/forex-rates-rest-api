@@ -33,4 +33,7 @@ public class DataSetContextImpl implements DataSetContext {
     @Value("${dataSet.schedule.newRates.cronPatternTrigger}")
     private String scheduleNewRatesCronPatternTrigger;
 
+    @Value("#{new Boolean(${dataSet.source.persist.enabled})}")
+    private boolean sourcePersistEnabled;
+
 }

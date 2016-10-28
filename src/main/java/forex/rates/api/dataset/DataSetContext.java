@@ -18,4 +18,6 @@ public interface DataSetContext {
 
     String getScheduleNewRatesCronPatternTrigger();
 
+    boolean isSourcePersistEnabled();
+
 }
