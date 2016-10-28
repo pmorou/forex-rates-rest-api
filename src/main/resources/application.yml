@@ -3,6 +3,8 @@ dataSet:
     localCopy:
       path: src/main/resources/temp
       prefix: dataSetSource
+    persist:
+      enabled: false
 ---
 spring:
   profiles: european-central-bank
