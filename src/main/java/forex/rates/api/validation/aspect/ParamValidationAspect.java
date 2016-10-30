@@ -10,7 +10,11 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 
 import java.lang.annotation.Annotation;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Aspect
 @Component
@@ -53,22 +57,13 @@ public class ParamValidationAspect {
 
     @Around("anyControllerMethod()")
     public Object around(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
-	List<Parameter> parameters = collectParameters(proceedingJoinPoint);
-	List<Object> newArgs = new ArrayList<>();
-
-	for (Parameter parameter : parameters) {
-	    Class<?> type = parameter.getType();
-	    Annotation[] annotations = parameter.getAnnotations();
-	    Optional<?> optionalValue = parameter.getValue();
-
-	    Object value = paramValidators.stream()
-		    .filter(pV -> pV.supports(type, annotations))
-		    .findFirst()
-		    .map(pV -> pV.validate(optionalValue))
-		    .orElse(null);
-	    newArgs.add(value);
-	}
-	Object[] newArgsArray = newArgs.toArray();
+	Object[] newArgsArray = collectParameters(proceedingJoinPoint).stream()
+		.map(p -> getValidValueOrElseNull(
+			p.getType(),
+			p.getAnnotations(),
+			p.getValue()))
+		.collect(Collectors.toList())
+		.toArray();
 
 	log.info("Passing request to handler: {}, parameters after validation: {}",
 		proceedingJoinPoint.getSignature().getName(), Arrays.deepToString(newArgsArray));
@@ -85,17 +80,20 @@ public class ParamValidationAspect {
 	log.info("Passing request to handler: {}, parameters before validation: {}",
 		proceedingJoinPoint.getSignature().getName(), Arrays.deepToString(parameterValues));
 
-	List<Parameter> parameters = new ArrayList<>();
-	for (int i = 0; i < parameterValues.length; i++) {
-	    parameters.add(
-		    new Parameter(
-			    parameterTypes[i],
-			    parameterAnnotations[i],
-			    parameterValues[i]
-		    )
-	    );
-	}
-	return Collections.unmodifiableList(parameters);
+	return IntStream.range(0, parameterValues.length)
+		.mapToObj(i -> new Parameter(
+			parameterTypes[i],
+			parameterAnnotations[i],
+			parameterValues[i]))
+		.collect(Collectors.toList());
+    }
+
+    private Object getValidValueOrElseNull(Class<?> parameterType, Annotation[] parameterAnnotations, Optional<?> optionalParameterValue) {
+	return paramValidators.stream()
+		.filter(pV -> pV.supports(parameterType, parameterAnnotations))
+		.findFirst()
+		.map(pV -> pV.validate(optionalParameterValue))
+		.orElse(null);
     }
 
 }
