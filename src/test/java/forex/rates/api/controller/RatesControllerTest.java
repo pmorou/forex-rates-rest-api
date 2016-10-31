@@ -16,9 +16,10 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.IntStream;
 
+import static java.util.stream.Collectors.toMap;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -73,16 +74,17 @@ public class RatesControllerTest {
     }
 
     private ExchangeRates createExchangeRates(String base, LocalDate startDate, LocalDate endDate, String... currencies) {
-	Map<LocalDate, Rates> ratesByDate = new HashMap<>();
-	long daysNumber = startDate.until(endDate, ChronoUnit.DAYS);
-	LocalDate date = startDate;
-	for (int i = 0; i <= daysNumber; i++) {
-	    Rates rate = new Rates();
-	    Arrays.stream(currencies).forEach(c -> rate.addRate(c, new BigDecimal("1.0001")));
-	    ratesByDate.put(date, rate);
-	    date = date.plusDays(1);
-	}
+	final long daysNumber = startDate.until(endDate, ChronoUnit.DAYS);
+	Map<LocalDate, Rates> ratesByDate = IntStream.rangeClosed(0, (int) daysNumber).boxed()
+		.collect(toMap(i -> startDate.plusDays(i), i -> createRates(currencies)));
 	return new ExchangeRates(startDate, endDate, base, ratesByDate, false);
+    }
+
+    private Rates createRates(String[] currencies) {
+	return Arrays.stream(currencies).collect(Rates::new,
+		(rates, currency) -> rates.addRate(currency, new BigDecimal("1.0001")),
+		(rates1, rates2) -> rates2.getRates().entrySet().stream()
+			    .forEach(entry -> rates1.addRate(entry.getKey(), entry.getValue())));
     }
 
 }

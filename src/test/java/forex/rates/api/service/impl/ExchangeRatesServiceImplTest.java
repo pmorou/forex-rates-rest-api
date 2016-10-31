@@ -16,11 +16,10 @@ import org.mockito.MockitoAnnotations;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Iterator;
+import java.util.*;
 
 import static java.util.Arrays.asList;
+import static java.util.Collections.singletonMap;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
@@ -63,7 +62,8 @@ public class ExchangeRatesServiceImplTest {
 	assertThat(result.getBase()).isEqualTo("EUR");
 	assertThat(result.getStartDate()).isEqualTo(DATE_2001_01_01);
 	assertThat(result.getEndDate()).isEqualTo(DATE_2001_01_01);
-	assertThat(result.getRatesByDate().get(DATE_2001_01_01)).isEqualTo(createRates("USD", "1.4902"));
+	Map<String, BigDecimal> expectedCurrencyNameValuePair = singletonMap("USD", new BigDecimal("1.4902"));
+	assertThat(result.getRatesByDate().get(DATE_2001_01_01)).isEqualTo(createRates(expectedCurrencyNameValuePair));
     }
 
     @Test
@@ -81,7 +81,8 @@ public class ExchangeRatesServiceImplTest {
 	assertThat(result.getBase()).isEqualTo("USD");
 	assertThat(result.getStartDate()).isEqualTo(DATE_2001_01_01);
 	assertThat(result.getEndDate()).isEqualTo(DATE_2001_01_01);
-	assertThat(result.getRatesByDate().get(DATE_2001_01_01)).isEqualTo(createRates("EUR", "0.6711"));
+	Map<String, BigDecimal> expectedCurrencyNameValuePair = singletonMap("EUR", new BigDecimal("0.6711"));
+	assertThat(result.getRatesByDate().get(DATE_2001_01_01)).isEqualTo(createRates(expectedCurrencyNameValuePair));
     }
 
     @Test
@@ -99,7 +100,8 @@ public class ExchangeRatesServiceImplTest {
 	assertThat(result.getBase()).isEqualTo("PLN");
 	assertThat(result.getStartDate()).isEqualTo(DATE_2001_01_01);
 	assertThat(result.getEndDate()).isEqualTo(DATE_2001_01_01);
-	assertThat(result.getRatesByDate().get(DATE_2001_01_01)).isEqualTo(createRates("USD", "1.3544"));
+	Map<String, BigDecimal> expectedCurrencyNameValuePair = singletonMap("USD", new BigDecimal("1.3544"));
+	assertThat(result.getRatesByDate().get(DATE_2001_01_01)).isEqualTo(createRates(expectedCurrencyNameValuePair));
     }
 
     @Test
@@ -116,7 +118,11 @@ public class ExchangeRatesServiceImplTest {
 	assertThat(result.getBase()).isEqualTo("EUR");
 	assertThat(result.getStartDate()).isEqualTo(DATE_2001_01_01);
 	assertThat(result.getEndDate()).isEqualTo(DATE_2001_01_01);
-	assertThat(result.getRatesByDate().get(DATE_2001_01_01)).isEqualTo(createRates("USD", "1.4902", "PLN", "1.1002"));
+	Map<String, BigDecimal> expectedCurrencyNameValuePairs = new HashMap() {{
+	    put("USD", new BigDecimal("1.4902"));
+	    put("PLN", new BigDecimal("1.1002"));
+	}};
+	assertThat(result.getRatesByDate().get(DATE_2001_01_01)).isEqualTo(createRates(expectedCurrencyNameValuePairs));
     }
 
     @Test
@@ -134,7 +140,11 @@ public class ExchangeRatesServiceImplTest {
 	assertThat(result.getBase()).isEqualTo("PLN");
 	assertThat(result.getStartDate()).isEqualTo(DATE_2001_01_01);
 	assertThat(result.getEndDate()).isEqualTo(DATE_2001_01_01);
-	assertThat(result.getRatesByDate().get(DATE_2001_01_01)).isEqualTo(createRates("EUR", "0.9089", "USD", "1.3544"));
+	Map<String, BigDecimal> expectedCurrencyNameValuePairs = new HashMap() {{
+	    put("EUR", new BigDecimal("0.9089"));
+	    put("USD", new BigDecimal("1.3544"));
+	}};
+	assertThat(result.getRatesByDate().get(DATE_2001_01_01)).isEqualTo(createRates(expectedCurrencyNameValuePairs));
     }
 
     @Test
@@ -151,8 +161,10 @@ public class ExchangeRatesServiceImplTest {
 	assertThat(result.getBase()).isEqualTo("EUR");
 	assertThat(result.getStartDate()).isEqualTo(DATE_2001_01_01);
 	assertThat(result.getEndDate()).isEqualTo(DATE_2001_01_02);
-	assertThat(result.getRatesByDate().get(DATE_2001_01_01)).isEqualTo(createRates("USD", "1.4902"));
-	assertThat(result.getRatesByDate().get(DATE_2001_01_02)).isEqualTo(createRates("USD", "1.4815"));
+	Map<String, BigDecimal> expectedCurrencyNameValuePairFirstDay = singletonMap("USD", new BigDecimal("1.4902"));
+	Map<String, BigDecimal> expectedCurrencyNameValuePairSecondDay = singletonMap("USD", new BigDecimal("1.4815"));
+	assertThat(result.getRatesByDate().get(DATE_2001_01_01)).isEqualTo(createRates(expectedCurrencyNameValuePairFirstDay));
+	assertThat(result.getRatesByDate().get(DATE_2001_01_02)).isEqualTo(createRates(expectedCurrencyNameValuePairSecondDay));
 
     }
 
@@ -174,8 +186,10 @@ public class ExchangeRatesServiceImplTest {
 	assertThat(result.getStartDate()).isEqualTo(DATE_2001_01_01);
 	assertThat(result.getEndDate()).isEqualTo(DATE_2001_01_02);
 	assertThat(result.getRatesByDate()).hasSize(2);
-	assertThat(result.getRatesByDate().get(DATE_2001_01_01)).isEqualTo(createRates("USD", "1.3544"));
-	assertThat(result.getRatesByDate().get(DATE_2001_01_02)).isEqualTo(createRates("USD", "1.3468"));
+	Map<String, BigDecimal> expectedCurrencyNameValuePairFirstDay = singletonMap("USD", new BigDecimal("1.3544"));
+	Map<String, BigDecimal> expectedCurrencyNameValuePairSecondDay = singletonMap("USD", new BigDecimal("1.3468"));
+	assertThat(result.getRatesByDate().get(DATE_2001_01_01)).isEqualTo(createRates(expectedCurrencyNameValuePairFirstDay));
+	assertThat(result.getRatesByDate().get(DATE_2001_01_02)).isEqualTo(createRates(expectedCurrencyNameValuePairSecondDay));
 
     }
 
@@ -187,13 +201,11 @@ public class ExchangeRatesServiceImplTest {
 	return new CurrencyDefinition(codeName, precision);
     }
 
-    private Rates createRates(String... currencyValuePairs) {
-	Rates expectedRates = new Rates();
-	Iterator<String> iterator = Arrays.stream(currencyValuePairs).iterator();
-	while (iterator.hasNext()) {
-	    expectedRates.addRate(iterator.next(), new BigDecimal(iterator.next()));
-	}
-	return expectedRates;
+    private Rates createRates(Map<String, BigDecimal> currencyValuePairs) {
+	return currencyValuePairs.entrySet().stream().collect(Rates::new,
+		(rates, entry) -> rates.addRate(entry.getKey(), entry.getValue()),
+		(rates1, rates2) -> rates2.getRates().entrySet().stream()
+			.forEach(entry -> rates1.addRate(entry.getKey(), entry.getValue())));
     }
 
 }
