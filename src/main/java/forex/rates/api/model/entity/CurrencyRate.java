@@ -3,6 +3,7 @@ package forex.rates.api.model.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -19,13 +20,16 @@ public class CurrencyRate {
     private Long id;
 
     @NonNull
+    @NotNull
     @Column(precision = 15, scale = 7)
     private BigDecimal exchangeRate;
 
     @NonNull
+    @NotNull
     private LocalDate date;
 
     @NonNull
+    @NotNull
     @OneToOne
     @JoinColumn(name = "currencies_id")
     private CurrencyDefinition currency;

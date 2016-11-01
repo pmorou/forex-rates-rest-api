@@ -3,6 +3,7 @@ package forex.rates.api.model.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Data
 @EqualsAndHashCode(exclude = "id")
@@ -17,9 +18,11 @@ public class CurrencyDefinition {
     private Long id;
 
     @NonNull
+    @NotNull
     private String codeName;
 
     @NonNull
+    @NotNull
     private Integer precision;
 
 }
