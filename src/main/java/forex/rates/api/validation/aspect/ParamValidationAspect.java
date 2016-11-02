@@ -21,7 +21,7 @@ import java.util.stream.IntStream;
 @Slf4j
 public class ParamValidationAspect {
 
-    private List<ParamValidator> paramValidators;
+    private final List<ParamValidator> paramValidators;
 
     public ParamValidationAspect(List<ParamValidator> paramValidators) {
 	this.paramValidators = paramValidators;
