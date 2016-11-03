@@ -9,7 +9,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
 @Configuration
 @EnableAsync
-@Import(SwaggerConfig.class)
+@Import({ SwaggerConfig.class, MetricsConfig.class })
 public class AppConfig {
 
     @Bean
