@@ -43,7 +43,7 @@ public class AvailableCurrenciesServiceImplTest {
 	assertThat(actualAvailableCurrencies).containsOnly("USD", "PLN", "EUR");
     }
 
-    private CurrencyDefinition createCurrencyDefinition(String codeName, int precision) {
+    private CurrencyDefinition createCurrencyDefinition(String codeName, Integer precision) {
 	return new CurrencyDefinition(codeName, precision);
     }
 

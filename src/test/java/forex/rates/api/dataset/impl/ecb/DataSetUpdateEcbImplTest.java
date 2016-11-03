@@ -77,7 +77,7 @@ public class DataSetUpdateEcbImplTest {
 	return Collections.singletonMap(date, rate).entrySet().iterator().next();
     }
 
-    private CurrencyDefinition createCurrencyDefinition(String codeName, int precision) {
+    private CurrencyDefinition createCurrencyDefinition(String codeName, Integer precision) {
 	return new CurrencyDefinition(codeName, precision);
     }
 

@@ -197,7 +197,7 @@ public class ExchangeRatesServiceImplTest {
 	return new CurrencyRate(exchangeRate, date, currencyDefinition);
     }
 
-    private CurrencyDefinition createCurrencyDefinition(String codeName, int precision) {
+    private CurrencyDefinition createCurrencyDefinition(String codeName, Integer precision) {
 	return new CurrencyDefinition(codeName, precision);
     }
 

@@ -67,7 +67,7 @@ public class ExtractedCurrencyRateEcbImplTest {
 		new ExtractedCurrencyRateEcbImpl().getCurrencyRate(currencyDefinition, entry);
     }
 
-    private CurrencyDefinition createCurrencyDefinition(String codeName, int precision) {
+    private CurrencyDefinition createCurrencyDefinition(String codeName, Integer precision) {
 	return new CurrencyDefinition(codeName, precision);
     }
 

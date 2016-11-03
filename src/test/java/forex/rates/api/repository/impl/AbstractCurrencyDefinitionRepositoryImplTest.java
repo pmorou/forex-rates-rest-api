@@ -99,7 +99,7 @@ public abstract class AbstractCurrencyDefinitionRepositoryImplTest {
 	assertThat(result).isEmpty();
     }
 
-    private CurrencyDefinition createCurrencyDefinition(long id, String codeName, int precision) {
+    private CurrencyDefinition createCurrencyDefinition(Long id, String codeName, Integer precision) {
 	CurrencyDefinition currencyDefinition = new CurrencyDefinition(codeName, precision);
 	currencyDefinition.setId(id);
 	return currencyDefinition;

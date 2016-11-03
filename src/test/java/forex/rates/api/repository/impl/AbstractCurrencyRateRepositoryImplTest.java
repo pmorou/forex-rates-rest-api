@@ -96,7 +96,7 @@ public abstract class AbstractCurrencyRateRepositoryImplTest {
 	assertThat(jpyRate2001_01_02.getId()).isNotNull();
     }
 
-    private CurrencyDefinition createCurrencyDefinition(long id, String codeName, int precision) {
+    private CurrencyDefinition createCurrencyDefinition(Long id, String codeName, Integer precision) {
 	CurrencyDefinition currencyDefinition = new CurrencyDefinition(codeName, precision);
 	currencyDefinition.setId(id);
 	return currencyDefinition;
