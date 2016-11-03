@@ -4,9 +4,10 @@ import lombok.Data;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Data
 public class ExchangeRatesRequest {
@@ -31,11 +32,9 @@ public class ExchangeRatesRequest {
 
     public List<LocalDate> getDateRange() {
         long daysNumber = startDate.until(endDate, ChronoUnit.DAYS);
-        List<LocalDate> range = new ArrayList<>((int) daysNumber);
-        for (int i = 0; i <= daysNumber; i++) {
-            range.add(startDate.plusDays(i));
-        }
-        return range;
+        return IntStream.rangeClosed(0, Math.toIntExact(daysNumber))
+                .mapToObj(startDate::plusDays)
+                .collect(Collectors.toList());
     }
 
 }
