@@ -57,9 +57,21 @@ public class CurrencyDefinitionRepositoryJpaImpl implements CurrencyDefinitionRe
 
     @Override
     public List<CurrencyDefinition> save(Iterable<CurrencyDefinition> currencyDefinitions) {
-	List<CurrencyDefinition> managedInstances = new ArrayList<>();
-	currencyDefinitions.forEach(cd -> managedInstances.add(save(cd)));
-	return managedInstances;
+	List<CurrencyDefinition> detachedInstances = new LinkedList<>();
+	int i = 0;
+	int batchSize = 100;
+	for (CurrencyDefinition currencyDefinition : currencyDefinitions) {
+	    detachedInstances.add(save(currencyDefinition));
+	    if (++i % batchSize == 0) {
+		flushAndClear();
+	    }
+	}
+	return detachedInstances;
+    }
+
+    private void flushAndClear() {
+	entityManager.flush();
+	entityManager.clear();
     }
 
 }

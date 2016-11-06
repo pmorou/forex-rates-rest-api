@@ -55,9 +55,21 @@ public class CurrencyRateRepositoryJpaImpl implements CurrencyRateRepository {
 
     @Override
     public List<CurrencyRate> save(Iterable<CurrencyRate> currencyRates) {
-	List<CurrencyRate> managedInstances = new ArrayList<>();
-	currencyRates.forEach(cr -> managedInstances.add(save(cr)));
-	return managedInstances;
+	List<CurrencyRate> detachedInstances = new LinkedList<>();
+	int i = 0;
+	int batchSize = 100;
+	for (CurrencyRate currencyRate : currencyRates) {
+	    detachedInstances.add(save(currencyRate));
+	    if (++i % batchSize == 0) {
+		flushAndClear();
+	    }
+	}
+	return detachedInstances;
+    }
+
+    private void flushAndClear() {
+	entityManager.flush();
+	entityManager.clear();
     }
 
 }
