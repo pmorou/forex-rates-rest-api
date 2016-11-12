@@ -27,14 +27,14 @@ public class AvailableCurrenciesServiceImplTest {
     @Before
     public void before() throws Exception {
 	MockitoAnnotations.initMocks(this);
-	availableCurrenciesService = new AvailableCurrenciesServiceImpl(currencyDefinitionService, dataSetContext);
     }
 
     @Test
-    public void shouldReturnListOfUsdAndPln() throws Exception {
+    public void shouldReturnListOfUsdPlnEur() throws Exception {
 	// Given
 	when(currencyDefinitionService.getAll()).thenReturn(Arrays.asList(USD_DEFINITION, PLN_DEFINITION));
 	when(dataSetContext.getBaseCurrency()).thenReturn("EUR");
+	availableCurrenciesService = new AvailableCurrenciesServiceImpl(currencyDefinitionService, dataSetContext);
 
 	// When
 	List<String> actualAvailableCurrencies = availableCurrenciesService.getCodeList();

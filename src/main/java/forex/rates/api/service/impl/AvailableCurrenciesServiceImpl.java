@@ -5,6 +5,7 @@ import forex.rates.api.service.AvailableCurrenciesService;
 import forex.rates.api.service.CurrencyDefinitionService;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,22 +15,28 @@ public class AvailableCurrenciesServiceImpl implements AvailableCurrenciesServic
     private final CurrencyDefinitionService currencyDefinitionService;
     private final DataSetContext dataSetContext;
 
+    private List<String> availableCurrencyCodeNames;
+
     public AvailableCurrenciesServiceImpl(CurrencyDefinitionService currencyDefinitionService, DataSetContext dataSetContext) {
 	this.currencyDefinitionService = currencyDefinitionService;
 	this.dataSetContext = dataSetContext;
+	cacheAvailableCurrencyCodeNames();
+    }
+
+    private void cacheAvailableCurrencyCodeNames() {
+	availableCurrencyCodeNames = getAvailableCurrencyCodeNames();
+	availableCurrencyCodeNames.add(dataSetContext.getBaseCurrency());
+    }
+
+    private List<String> getAvailableCurrencyCodeNames() {
+	return currencyDefinitionService.getAll().stream()
+		    .map(cD -> cD.getCodeName())
+		    .collect(Collectors.toList());
     }
 
     @Override
     public List<String> getCodeList() {
-	List<String> availableCurrencies = getAvailableCurrenciesCodeNames();
-	availableCurrencies.add(dataSetContext.getBaseCurrency());
-	return availableCurrencies;
-    }
-
-    private List<String> getAvailableCurrenciesCodeNames() {
-	return currencyDefinitionService.getAll().stream()
-		    .map(cD -> cD.getCodeName())
-		    .collect(Collectors.toList());
+	return Collections.unmodifiableList(availableCurrencyCodeNames);
     }
 
 }
