@@ -2,10 +2,12 @@ package forex.rates.api.model.request;
 
 import lombok.Data;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -34,7 +36,13 @@ public class ExchangeRatesRequest {
         long daysNumber = startDate.until(endDate, ChronoUnit.DAYS);
         return IntStream.rangeClosed(0, Math.toIntExact(daysNumber))
                 .mapToObj(startDate::plusDays)
+                .filter(skipSaturdaysAndSundays())
                 .collect(Collectors.toList());
+    }
+
+    private Predicate<LocalDate> skipSaturdaysAndSundays() {
+        return d -> !d.getDayOfWeek().equals(DayOfWeek.SATURDAY) &&
+                !d.getDayOfWeek().equals(DayOfWeek.SUNDAY);
     }
 
 }
