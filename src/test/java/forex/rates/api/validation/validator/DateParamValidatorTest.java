@@ -12,6 +12,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import java.lang.annotation.Annotation;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.Optional;
 
@@ -95,8 +96,12 @@ public class DateParamValidatorTest {
 
     public Object[] parametersForShouldBeValidAndReturnUpperCase() {
 	return new Object[]{
-		new Object[]{TODAY.minusDays(1).toString(), TODAY.minusDays(1).toString()},
-		new Object[]{TODAY.toString(), TODAY.toString()}
+		new Object[]{TODAY.toString(), TODAY.toString()},
+		new Object[]{getDateInThePastAsString(DayOfWeek.MONDAY), getDateInThePastAsString(DayOfWeek.MONDAY)},
+		new Object[]{getDateInThePastAsString(DayOfWeek.TUESDAY), getDateInThePastAsString(DayOfWeek.TUESDAY)},
+		new Object[]{getDateInThePastAsString(DayOfWeek.WEDNESDAY), getDateInThePastAsString(DayOfWeek.WEDNESDAY)},
+		new Object[]{getDateInThePastAsString(DayOfWeek.THURSDAY), getDateInThePastAsString(DayOfWeek.THURSDAY)},
+		new Object[]{getDateInThePastAsString(DayOfWeek.FRIDAY), getDateInThePastAsString(DayOfWeek.FRIDAY)}
 	};
     }
 
@@ -126,8 +131,14 @@ public class DateParamValidatorTest {
 	return new Object[]{
 		new Object[]{""},
 		new Object[]{"01-01-2001"},
-		new Object[]{TODAY.plusDays(1).toString()}
+		new Object[]{TODAY.plusDays(1).toString()},
+		new Object[]{getDateInThePastAsString(DayOfWeek.SATURDAY)},
+		new Object[]{getDateInThePastAsString(DayOfWeek.SUNDAY)}
 	};
+    }
+
+    private static String getDateInThePastAsString(DayOfWeek day) {
+	return TODAY.minusWeeks(1).plusDays(day.getValue() - 1).toString();
     }
 
 }
