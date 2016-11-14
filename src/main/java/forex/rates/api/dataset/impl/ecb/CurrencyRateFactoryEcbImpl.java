@@ -1,6 +1,6 @@
 package forex.rates.api.dataset.impl.ecb;
 
-import forex.rates.api.dataset.ExtractedCurrencyRate;
+import forex.rates.api.dataset.CurrencyRateFactory;
 import forex.rates.api.model.entity.CurrencyDefinition;
 import forex.rates.api.model.entity.CurrencyRate;
 import org.springframework.context.annotation.Profile;
@@ -13,7 +13,7 @@ import java.util.Map;
 
 @Profile("european-central-bank")
 @Component
-public class ExtractedCurrencyRateEcbImpl implements ExtractedCurrencyRate {
+public class CurrencyRateFactoryEcbImpl implements CurrencyRateFactory {
 
     @Override
     public CurrencyRate getCurrencyRate(CurrencyDefinition currencyDefinition, Map.Entry<String, String> rate) {

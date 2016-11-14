@@ -5,7 +5,7 @@ import forex.rates.api.model.entity.CurrencyRate;
 
 import java.util.Map;
 
-public interface ExtractedCurrencyRate {
+public interface CurrencyRateFactory {
 
     CurrencyRate getCurrencyRate(CurrencyDefinition currencyDefinition, Map.Entry<String, String> rate);
 

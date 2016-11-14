@@ -1,8 +1,8 @@
 package forex.rates.api.dataset.impl;
 
 import forex.rates.api.dataset.DataSetEntry;
-import forex.rates.api.dataset.ExtractedCurrencyDefinition;
-import forex.rates.api.dataset.ExtractedCurrencyRate;
+import forex.rates.api.dataset.CurrencyDefinitionFactory;
+import forex.rates.api.dataset.CurrencyRateFactory;
 import forex.rates.api.model.entity.CurrencyDefinition;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
@@ -25,15 +25,15 @@ import static org.mockito.Mockito.when;
 @RunWith(JUnitParamsRunner.class)
 public class DataSetEntryImplTest {
 
-    private @Mock ExtractedCurrencyRate extractedCurrencyRate;
-    private @Mock ExtractedCurrencyDefinition extractedCurrencyDefinition;
+    private @Mock CurrencyRateFactory currencyRateFactory;
+    private @Mock CurrencyDefinitionFactory currencyDefinitionFactory;
 
     private DataSetEntry dataSetEntry;
 
     @Before
     public void before() throws Exception {
 	MockitoAnnotations.initMocks(this);
-	dataSetEntry = new DataSetEntryImpl(extractedCurrencyRate, extractedCurrencyDefinition);
+	dataSetEntry = new DataSetEntryImpl(currencyRateFactory, currencyDefinitionFactory);
     }
 
     @Test
@@ -62,8 +62,8 @@ public class DataSetEntryImplTest {
 	dataSetEntry.saveCurrency();
 
 	// Then
-	verify(extractedCurrencyDefinition).getCurrencyDefinition(Collections.singletonMap("UNIT", "JPY"));
-	verify(extractedCurrencyRate).getCurrencyRate(null, createEntry("2001-01-01", "120.32"));
+	verify(currencyDefinitionFactory).getCurrencyDefinition(Collections.singletonMap("UNIT", "JPY"));
+	verify(currencyRateFactory).getCurrencyRate(null, createEntry("2001-01-01", "120.32"));
     }
 
     @Test
@@ -71,8 +71,8 @@ public class DataSetEntryImplTest {
 	// Given
 	dataSetEntry.newCurrency();
 	dataSetEntry.addRate("throws", "IAE");
-	when(extractedCurrencyDefinition.getCurrencyDefinition(any())).thenReturn(createCurrencyDefinition("JPY"));
-	when(extractedCurrencyRate.getCurrencyRate(any(), eq(createEntry("throws", "IAE")))).thenThrow(IllegalArgumentException.class);
+	when(currencyDefinitionFactory.getCurrencyDefinition(any())).thenReturn(createCurrencyDefinition("JPY"));
+	when(currencyRateFactory.getCurrencyRate(any(), eq(createEntry("throws", "IAE")))).thenThrow(IllegalArgumentException.class);
 
 	// When
 	dataSetEntry.saveCurrency();

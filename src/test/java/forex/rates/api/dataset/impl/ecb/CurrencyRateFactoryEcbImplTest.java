@@ -11,7 +11,7 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ExtractedCurrencyRateEcbImplTest {
+public class CurrencyRateFactoryEcbImplTest {
 
     @Test
     public void shouldReturnRatesForUsd() throws Exception {
@@ -21,7 +21,7 @@ public class ExtractedCurrencyRateEcbImplTest {
 
 	// When
 	CurrencyRate currencyRate =
-		new ExtractedCurrencyRateEcbImpl().getCurrencyRate(currencyDefinition, entry);
+		new CurrencyRateFactoryEcbImpl().getCurrencyRate(currencyDefinition, entry);
 
 	// Then
 	assertThat(currencyRate.getDate()).isEqualTo(LocalDate.of(2001, 1, 1));
@@ -37,7 +37,7 @@ public class ExtractedCurrencyRateEcbImplTest {
 
 	// When
 	CurrencyRate currencyRate =
-		new ExtractedCurrencyRateEcbImpl().getCurrencyRate(currencyDefinition, entry);
+		new CurrencyRateFactoryEcbImpl().getCurrencyRate(currencyDefinition, entry);
 
 	// Then
 	assertThat(currencyRate.getDate()).isEqualTo(LocalDate.of(2001, 1, 2));
@@ -53,7 +53,7 @@ public class ExtractedCurrencyRateEcbImplTest {
 
 	// When
 	CurrencyRate currencyRate =
-		new ExtractedCurrencyRateEcbImpl().getCurrencyRate(currencyDefinition, entry);
+		new CurrencyRateFactoryEcbImpl().getCurrencyRate(currencyDefinition, entry);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -64,7 +64,7 @@ public class ExtractedCurrencyRateEcbImplTest {
 
 	// When
 	CurrencyRate currencyRate =
-		new ExtractedCurrencyRateEcbImpl().getCurrencyRate(currencyDefinition, entry);
+		new CurrencyRateFactoryEcbImpl().getCurrencyRate(currencyDefinition, entry);
     }
 
     private CurrencyDefinition createCurrencyDefinition(String codeName, Integer precision) {

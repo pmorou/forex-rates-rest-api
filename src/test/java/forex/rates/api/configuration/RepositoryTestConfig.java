@@ -2,10 +2,9 @@ package forex.rates.api.configuration;
 
 import forex.rates.api.dataset.DataSetSource;
 import forex.rates.api.dataset.DataSetUpdate;
-import forex.rates.api.dataset.ExtractedCurrencyDefinition;
-import forex.rates.api.dataset.ExtractedCurrencyRate;
+import forex.rates.api.dataset.CurrencyDefinitionFactory;
+import forex.rates.api.dataset.CurrencyRateFactory;
 import forex.rates.api.schedule.NewRatesSchedule;
-import lombok.extern.slf4j.Slf4j;
 import org.mockito.Mockito;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -41,14 +40,14 @@ public class RepositoryTestConfig {
 
     @Bean
     @Primary
-    public ExtractedCurrencyDefinition extractedCurrencyDefinition() {
-	return Mockito.mock(ExtractedCurrencyDefinition.class);
+    public CurrencyDefinitionFactory currencyDefinitionFactory() {
+	return Mockito.mock(CurrencyDefinitionFactory.class);
     }
 
     @Bean
     @Primary
-    public ExtractedCurrencyRate extractedCurrencyRate() {
-	return Mockito.mock(ExtractedCurrencyRate.class);
+    public CurrencyRateFactory currencyRateFactory() {
+	return Mockito.mock(CurrencyRateFactory.class);
     }
 
     @Bean

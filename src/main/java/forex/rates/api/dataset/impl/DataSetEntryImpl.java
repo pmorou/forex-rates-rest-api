@@ -2,8 +2,8 @@ package forex.rates.api.dataset.impl;
 
 import forex.rates.api.dataset.CompleteDataSet;
 import forex.rates.api.dataset.DataSetEntry;
-import forex.rates.api.dataset.ExtractedCurrencyDefinition;
-import forex.rates.api.dataset.ExtractedCurrencyRate;
+import forex.rates.api.dataset.CurrencyDefinitionFactory;
+import forex.rates.api.dataset.CurrencyRateFactory;
 import forex.rates.api.model.entity.CurrencyDefinition;
 import forex.rates.api.model.entity.CurrencyRate;
 import lombok.extern.slf4j.Slf4j;
@@ -19,8 +19,8 @@ import java.util.Map;
 @Component
 public class DataSetEntryImpl implements DataSetEntry, CompleteDataSet {
 
-    private final ExtractedCurrencyRate extractedCurrencyRate;
-    private final ExtractedCurrencyDefinition extractedCurrencyDefinition;
+    private final CurrencyRateFactory currencyRateFactory;
+    private final CurrencyDefinitionFactory currencyDefinitionFactory;
 
     private List<CurrencyDefinition> currencyDefinitions;
     private List<CurrencyRate> currencyRates;
@@ -28,9 +28,9 @@ public class DataSetEntryImpl implements DataSetEntry, CompleteDataSet {
     private Map<String, String> tempRatesHolder;
 
     @Autowired
-    public DataSetEntryImpl(ExtractedCurrencyRate extractedCurrencyRate, ExtractedCurrencyDefinition extractedCurrencyDefinition) {
-	this.extractedCurrencyRate = extractedCurrencyRate;
-	this.extractedCurrencyDefinition = extractedCurrencyDefinition;
+    public DataSetEntryImpl(CurrencyRateFactory currencyRateFactory, CurrencyDefinitionFactory currencyDefinitionFactory) {
+	this.currencyRateFactory = currencyRateFactory;
+	this.currencyDefinitionFactory = currencyDefinitionFactory;
 	this.currencyDefinitions = new ArrayList<>();
 	this.currencyRates = new ArrayList<>();
     }
@@ -57,12 +57,12 @@ public class DataSetEntryImpl implements DataSetEntry, CompleteDataSet {
     }
 
     private void convertToEntities() {
-	CurrencyDefinition currencyDefinition = extractedCurrencyDefinition.getCurrencyDefinition(tempAttributesHolder);
+	CurrencyDefinition currencyDefinition = currencyDefinitionFactory.getCurrencyDefinition(tempAttributesHolder);
 	currencyDefinitions.add(currencyDefinition);
 
 	for (Map.Entry<String, String> rate : tempRatesHolder.entrySet()) {
 	    try {
-		CurrencyRate currencyRate = extractedCurrencyRate.getCurrencyRate(currencyDefinition, rate);
+		CurrencyRate currencyRate = currencyRateFactory.getCurrencyRate(currencyDefinition, rate);
 		currencyRates.add(currencyRate);
 	    } catch (IllegalArgumentException e) {
 		log.warn("Invalid date or exchange rate (currency: {}, date: {}, exchange rate: {})",

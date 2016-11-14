@@ -8,7 +8,7 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ExtractedCurrencyDefinitionEcbImplTest {
+public class CurrencyDefinitionFactoryEcbImplTest {
 
     @Test
     public void shouldReturnUsdWithPrecisionUpTo4Digits() throws Exception {
@@ -19,7 +19,7 @@ public class ExtractedCurrencyDefinitionEcbImplTest {
 
 	// When
 	CurrencyDefinition currencyDefinition =
-		new ExtractedCurrencyDefinitionEcbImpl().getCurrencyDefinition(attributes);
+		new CurrencyDefinitionFactoryEcbImpl().getCurrencyDefinition(attributes);
 
 	// Then
 	assertThat(currencyDefinition.getCodeName()).isEqualTo("USD");
@@ -35,7 +35,7 @@ public class ExtractedCurrencyDefinitionEcbImplTest {
 
 	// When
 	CurrencyDefinition currencyDefinition =
-		new ExtractedCurrencyDefinitionEcbImpl().getCurrencyDefinition(attributes);
+		new CurrencyDefinitionFactoryEcbImpl().getCurrencyDefinition(attributes);
 
 	// Then
 	assertThat(currencyDefinition.getCodeName()).isEqualTo("JPY");

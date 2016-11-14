@@ -2,7 +2,7 @@ package forex.rates.api.dataset.impl.ecb;
 
 import forex.rates.api.dataset.DataSetContext;
 import forex.rates.api.dataset.DataSetUpdate;
-import forex.rates.api.dataset.ExtractedCurrencyRate;
+import forex.rates.api.dataset.CurrencyRateFactory;
 import forex.rates.api.http.client.HttpClient;
 import forex.rates.api.model.entity.CurrencyDefinition;
 import forex.rates.api.model.entity.CurrencyRate;
@@ -35,15 +35,15 @@ public class DataSetUpdateEcbImpl implements DataSetUpdate {
 
     private final HttpClient httpClient;
     private final DataSetContext dataSetContext;
-    private final ExtractedCurrencyRate extractedCurrencyRate;
+    private final CurrencyRateFactory currencyRateFactory;
     private final CurrencyDefinitionService currencyDefinitionService;
     private final DateTimeProviderService dateTimeProviderService;
 
-    public DataSetUpdateEcbImpl(HttpClient httpClient, DataSetContext dataSetContext, ExtractedCurrencyRate extractedCurrencyRate,
+    public DataSetUpdateEcbImpl(HttpClient httpClient, DataSetContext dataSetContext, CurrencyRateFactory currencyRateFactory,
 				CurrencyDefinitionService currencyDefinitionService, DateTimeProviderService dateTimeProviderService) {
 	this.httpClient = httpClient;
 	this.dataSetContext = dataSetContext;
-	this.extractedCurrencyRate = extractedCurrencyRate;
+	this.currencyRateFactory = currencyRateFactory;
 	this.currencyDefinitionService = currencyDefinitionService;
 	this.dateTimeProviderService = dateTimeProviderService;
     }
@@ -67,7 +67,7 @@ public class DataSetUpdateEcbImpl implements DataSetUpdate {
 			if (currency != null) {
 			    CurrencyDefinition currencyDefinition = currencyDefinitionService.getOneByCodeName(currency);
 			    Map.Entry<String, String> entry = createEntry(attributesMap, ratesDate);
-			    CurrencyRate currencyRate = extractedCurrencyRate.getCurrencyRate(currencyDefinition, entry);
+			    CurrencyRate currencyRate = currencyRateFactory.getCurrencyRate(currencyDefinition, entry);
 			    currencyRates.add(currencyRate);
 			}
 		    }
