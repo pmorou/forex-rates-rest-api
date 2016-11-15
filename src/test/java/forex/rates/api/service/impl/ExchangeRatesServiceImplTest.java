@@ -19,6 +19,7 @@ import java.time.LocalDate;
 import java.util.*;
 
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonMap;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -82,6 +83,78 @@ public class ExchangeRatesServiceImplTest {
 	assertThat(result.getStartDate()).isEqualTo(DATE_2001_01_01);
 	assertThat(result.getEndDate()).isEqualTo(DATE_2001_01_01);
 	Map<String, BigDecimal> expectedCurrencyNameValuePair = singletonMap("EUR", new BigDecimal("0.6711"));
+	assertThat(result.getRatesByDate().get(DATE_2001_01_01)).isEqualTo(createRates(expectedCurrencyNameValuePair));
+    }
+
+    @Test
+    public void shouldReturnRatesForUsdWithoutEurWithBaseEur() throws Exception {
+	// Given
+	when(currencyRateService.getAllByDateAndCurrencyIn(DATE_2001_01_01, asList(USD_DEFINITION))).thenReturn(asList(USD_RATE));
+	when(currencyDefinitionService.getAllByCodeNameIn(asList("USD"))).thenReturn(asList(USD_DEFINITION));
+
+	// When
+	ExchangeRates result = service.perform(new ExchangeRatesRequest("EUR", "2001-01-01", new String[]{"EUR", "USD"}));
+
+	// Then
+	assertThat(result.getBase()).isEqualTo("EUR");
+	assertThat(result.getStartDate()).isEqualTo(DATE_2001_01_01);
+	assertThat(result.getEndDate()).isEqualTo(DATE_2001_01_01);
+	Map<String, BigDecimal> expectedCurrencyNameValuePair = singletonMap("USD", new BigDecimal("1.4902"));
+	assertThat(result.getRatesByDate().get(DATE_2001_01_01)).isEqualTo(createRates(expectedCurrencyNameValuePair));
+    }
+
+    @Test
+    public void shouldReturnRatesForEurWithoutUsdWithBaseUsd() throws Exception {
+	// Given
+	when(currencyDefinitionService.getOneByCodeName("USD")).thenReturn(USD_DEFINITION);
+	when(currencyRateService.getOneByDateAndCurrency(DATE_2001_01_01, USD_DEFINITION)).thenReturn(USD_RATE);
+	when(currencyDefinitionService.getAllByCodeNameIn(asList("USD"))).thenReturn(asList(USD_DEFINITION));
+	when(currencyRateService.getAllByDateAndCurrencyIn(DATE_2001_01_01, asList(USD_DEFINITION))).thenReturn(asList(USD_RATE));
+
+	// When
+	ExchangeRates result = service.perform(new ExchangeRatesRequest("USD", "2001-01-01", new String[]{"EUR", "USD"}));
+
+	// Then
+	assertThat(result.getBase()).isEqualTo("USD");
+	assertThat(result.getStartDate()).isEqualTo(DATE_2001_01_01);
+	assertThat(result.getEndDate()).isEqualTo(DATE_2001_01_01);
+	Map<String, BigDecimal> expectedCurrencyNameValuePair = singletonMap("EUR", new BigDecimal("0.6711"));
+	assertThat(result.getRatesByDate().get(DATE_2001_01_01)).isEqualTo(createRates(expectedCurrencyNameValuePair));
+    }
+
+    @Test
+    public void shouldReturnEmptyRatesWithBaseEur() throws Exception {
+	// Given
+	when(currencyRateService.getAllByDateAndCurrencyIn(DATE_2001_01_01, emptyList())).thenReturn(emptyList());
+	when(currencyDefinitionService.getAllByCodeNameIn(asList("EUR"))).thenReturn(asList(EUR_DEFINITION));
+
+	// When
+	ExchangeRates result = service.perform(new ExchangeRatesRequest("EUR", "2001-01-01", new String[]{"EUR"}));
+
+	// Then
+	assertThat(result.getBase()).isEqualTo("EUR");
+	assertThat(result.getStartDate()).isEqualTo(DATE_2001_01_01);
+	assertThat(result.getEndDate()).isEqualTo(DATE_2001_01_01);
+	Map<String, BigDecimal> expectedCurrencyNameValuePair = Collections.emptyMap();
+	assertThat(result.getRatesByDate().get(DATE_2001_01_01)).isEqualTo(createRates(expectedCurrencyNameValuePair));
+    }
+
+    @Test
+    public void shouldReturnEmptyRatesWithBaseUsd() throws Exception {
+	// Given
+	when(currencyDefinitionService.getOneByCodeName("USD")).thenReturn(USD_DEFINITION);
+	when(currencyRateService.getOneByDateAndCurrency(DATE_2001_01_01, USD_DEFINITION)).thenReturn(USD_RATE);
+	when(currencyDefinitionService.getAllByCodeNameIn(emptyList())).thenReturn(emptyList());
+	when(currencyRateService.getAllByDateAndCurrencyIn(DATE_2001_01_01, emptyList())).thenReturn(emptyList());
+
+	// When
+	ExchangeRates result = service.perform(new ExchangeRatesRequest("USD", "2001-01-01", new String[]{"USD"}));
+
+	// Then
+	assertThat(result.getBase()).isEqualTo("USD");
+	assertThat(result.getStartDate()).isEqualTo(DATE_2001_01_01);
+	assertThat(result.getEndDate()).isEqualTo(DATE_2001_01_01);
+	Map<String, BigDecimal> expectedCurrencyNameValuePair = Collections.emptyMap();
 	assertThat(result.getRatesByDate().get(DATE_2001_01_01)).isEqualTo(createRates(expectedCurrencyNameValuePair));
     }
 
@@ -190,7 +263,6 @@ public class ExchangeRatesServiceImplTest {
 	Map<String, BigDecimal> expectedCurrencyNameValuePairSecondDay = singletonMap("USD", new BigDecimal("1.3468"));
 	assertThat(result.getRatesByDate().get(DATE_2001_01_01)).isEqualTo(createRates(expectedCurrencyNameValuePairFirstDay));
 	assertThat(result.getRatesByDate().get(DATE_2001_01_02)).isEqualTo(createRates(expectedCurrencyNameValuePairSecondDay));
-
     }
 
     private CurrencyRate createCurrencyRate(CurrencyDefinition currencyDefinition, BigDecimal exchangeRate, LocalDate date) {

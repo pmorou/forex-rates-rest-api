@@ -37,11 +37,13 @@ public class ExchangeRatesServiceImpl implements ExchangeRatesService {
     public ExchangeRates perform(ExchangeRatesRequest request) {
 	Map<LocalDate, Rates> ratesByDate = new HashMap<>();
 	List<String> requestedCurrencies = new ArrayList<>(request.getCurrencies());
-	String baseCurrency = dataSetContext.getBaseCurrency();
+	String dataSetBaseCurrency = dataSetContext.getBaseCurrency();
+	String requestedBaseCurrency = request.getBase();
 
 	// Remove data set's reference currency (if exists) as there is no such value in db.
 	// If TRUE is returned, rate for this currency should be calculated out of actual base requested by user.
-	boolean baseCurrencyRemoved = requestedCurrencies.remove(baseCurrency);
+	boolean baseCurrencyRemoved = requestedCurrencies.remove(dataSetBaseCurrency);
+	boolean removeExcessiveCurrency = requestedCurrencies.remove(requestedBaseCurrency);
 	BigDecimal baseExchangeRate = BigDecimal.ONE;
 	List<CurrencyDefinition> currencyDefinitions = currencyDefinitionService.getAllByCodeNameIn(requestedCurrencies);
 
