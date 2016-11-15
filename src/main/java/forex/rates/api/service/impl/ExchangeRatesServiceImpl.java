@@ -23,24 +23,25 @@ import java.util.Map;
 @Service
 public class ExchangeRatesServiceImpl implements ExchangeRatesService {
 
-    private final String BASE_CURRENCY;
     private final CurrencyRateService currencyRateService;
     private final CurrencyDefinitionService currencyDefinitionService;
+    private final DataSetContext dataSetContext;
 
     public ExchangeRatesServiceImpl(CurrencyRateService currencyRateService, CurrencyDefinitionService currencyDefinitionService, DataSetContext dataSetContext) {
 	this.currencyRateService = currencyRateService;
 	this.currencyDefinitionService = currencyDefinitionService;
-	this.BASE_CURRENCY = dataSetContext.getBaseCurrency();
+	this.dataSetContext = dataSetContext;
     }
 
     @Override
     public ExchangeRates perform(ExchangeRatesRequest request) {
 	Map<LocalDate, Rates> ratesByDate = new HashMap<>();
 	List<String> requestedCurrencies = new ArrayList<>(request.getCurrencies());
+	String baseCurrency = dataSetContext.getBaseCurrency();
 
 	// Remove data set's reference currency (if exists) as there is no such value in db.
 	// If TRUE is returned, rate for this currency should be calculated out of actual base requested by user.
-	boolean baseCurrencyRemoved = requestedCurrencies.remove(BASE_CURRENCY);
+	boolean baseCurrencyRemoved = requestedCurrencies.remove(baseCurrency);
 	BigDecimal baseExchangeRate = BigDecimal.ONE;
 	List<CurrencyDefinition> currencyDefinitions = currencyDefinitionService.getAllByCodeNameIn(requestedCurrencies);
 
@@ -54,7 +55,7 @@ public class ExchangeRatesServiceImpl implements ExchangeRatesService {
 		baseExchangeRate = inverse(baseCurrencyRate.getExchangeRate(), baseCurrencyRate.getCurrency().getPrecision());
 
 		if (baseCurrencyRemoved) {
-		    rates.addRate(BASE_CURRENCY, baseExchangeRate);
+		    rates.addRate(baseCurrency, baseExchangeRate);
 		}
 	    }
 
@@ -72,7 +73,7 @@ public class ExchangeRatesServiceImpl implements ExchangeRatesService {
     }
 
     private boolean isNotDataSetsBaseCurrency(ExchangeRatesRequest request) {
-	return !request.getBase().equals(BASE_CURRENCY);
+	return !request.getBase().equals(dataSetContext.getBaseCurrency());
     }
 
     private BigDecimal multiply(BigDecimal first, BigDecimal second, int precision) {
