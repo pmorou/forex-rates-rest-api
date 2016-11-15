@@ -41,8 +41,12 @@ public class ExchangeRatesRequest {
     }
 
     private Predicate<LocalDate> skipSaturdaysAndSundays() {
-        return d -> !d.getDayOfWeek().equals(DayOfWeek.SATURDAY) &&
-                !d.getDayOfWeek().equals(DayOfWeek.SUNDAY);
+        return date -> isDayOfWeekEquals(date, DayOfWeek.SATURDAY) &&
+                isDayOfWeekEquals(date, DayOfWeek.SUNDAY);
+    }
+
+    private boolean isDayOfWeekEquals(LocalDate date, DayOfWeek dayOfWeek) {
+        return !date.getDayOfWeek().equals(dayOfWeek);
     }
 
 }
