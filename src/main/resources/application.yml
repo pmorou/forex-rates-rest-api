@@ -4,7 +4,7 @@ dataSet:
       path: src/main/resources/temp
       prefix: dataSetSource
     persist:
-      enabled: false
+      enabled: true
 ---
 spring:
   profiles: european-central-bank
