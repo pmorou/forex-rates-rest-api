@@ -27,7 +27,7 @@ public class ExchangeTransactionTest {
 
 	// Then
 	assertThat(result.getAmount()).isEqualTo(10);
-	assertThat(result.getDate()).isEqualTo(DATE_2001_01_01);
+	assertThat(result.getStartDate()).isEqualTo(DATE_2001_01_01);
 	assertThat(result.getFrom()).isEqualTo("USD");
 	assertThat(result.getTo()).isNotNull();
 	Map<LocalDate, Transaction> transactionsByDate = result.getTo();
@@ -55,7 +55,7 @@ public class ExchangeTransactionTest {
 
 	// Then
 	assertThat(result.getAmount()).isEqualTo(2);
-	assertThat(result.getDate()).isEqualTo(DATE_2001_01_01);
+	assertThat(result.getStartDate()).isEqualTo(DATE_2001_01_01);
 	assertThat(result.getFrom()).isEqualTo("USD");
 	assertThat(result.getTo()).isNotNull();
 	Map<LocalDate, Transaction> transactionsByDate = result.getTo();

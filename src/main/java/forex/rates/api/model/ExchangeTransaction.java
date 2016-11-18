@@ -20,7 +20,7 @@ public class ExchangeTransaction {
 	return exchangeRates.getBase();
     }
 
-    public LocalDate getDate() {
+    public LocalDate getStartDate() {
 	return exchangeRates.getStartDate();
     }
 

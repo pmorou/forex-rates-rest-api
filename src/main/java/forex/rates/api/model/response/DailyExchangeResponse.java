@@ -17,11 +17,11 @@ public class DailyExchangeResponse {
     private final Map<String, BigDecimal> to;
 
     public DailyExchangeResponse(ExchangeTransaction exchangeTransaction) {
-	this.date = exchangeTransaction.getDate().toString();
+	this.date = exchangeTransaction.getStartDate().toString();
 	this.amount = exchangeTransaction.getAmount();
 	this.from = exchangeTransaction.getFrom();
 	this.to = exchangeTransaction.getTo()
-		.get(exchangeTransaction.getDate())
+		.get(exchangeTransaction.getStartDate())
 		.getTo();
     }
 
