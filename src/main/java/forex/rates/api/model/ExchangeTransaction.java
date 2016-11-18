@@ -24,21 +24,17 @@ public class ExchangeTransaction {
 	return exchangeRates.getStartDate();
     }
 
-    public Map<String, BigDecimal> getTo() {
-	Map<String, BigDecimal> result = new LinkedHashMap<>();
-
-	Map<LocalDate, Rates> ratesByDate = exchangeRates.getRatesByDate();
-
-	for (Map.Entry<LocalDate, Rates> entry : ratesByDate.entrySet()) {
-	    LocalDate date = entry.getKey();
-	    Rates rates = entry.getValue();
-
-	    for (Map.Entry<String, BigDecimal> entry1 : rates.getRates().entrySet()) {
-		result.put(entry1.getKey(), multiplyWithAmount(entry1.getValue()));
+    public Map<LocalDate, Transaction> getTo() {
+	Map<LocalDate, Transaction> transactionsByDate = new LinkedHashMap<>();
+	for (Map.Entry<LocalDate, Rates> ratesByDate : exchangeRates.getRatesByDate().entrySet()) {
+	    Rates dailyRates = ratesByDate.getValue();
+	    Transaction transaction = new Transaction();
+	    for (Map.Entry<String, BigDecimal> currencyRatePair : dailyRates.getRates().entrySet()) {
+		transaction.addAmount(currencyRatePair.getKey(), multiplyWithAmount(currencyRatePair.getValue()));
 	    }
+	    transactionsByDate.put(ratesByDate.getKey(), transaction);
 	}
-
-	return result;
+	return transactionsByDate;
     }
 
     private BigDecimal multiplyWithAmount(BigDecimal rate) {

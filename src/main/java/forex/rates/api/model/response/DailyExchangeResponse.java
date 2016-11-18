@@ -20,7 +20,9 @@ public class DailyExchangeResponse {
 	this.date = exchangeTransaction.getDate().toString();
 	this.amount = exchangeTransaction.getAmount();
 	this.from = exchangeTransaction.getFrom();
-	this.to = exchangeTransaction.getTo();
+	this.to = exchangeTransaction.getTo()
+		.get(exchangeTransaction.getDate())
+		.getTo();
     }
 
 }

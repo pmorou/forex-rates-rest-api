@@ -30,9 +30,10 @@ public class ExchangeTransactionTest {
 	assertThat(result.getDate()).isEqualTo(DATE_2001_01_01);
 	assertThat(result.getFrom()).isEqualTo("USD");
 	assertThat(result.getTo()).isNotNull();
-	Map<String, BigDecimal> exchangeResult = result.getTo();
-	assertThat(exchangeResult.get("EUR")).isEqualTo(new BigDecimal("15.0"));
-	assertThat(exchangeResult.get("JPY")).isEqualTo(new BigDecimal("10.0"));
+	Map<LocalDate, Transaction> transactionsByDate = result.getTo();
+	Map<String, BigDecimal> singleDayResult = transactionsByDate.get(DATE_2001_01_01).getTo();
+	assertThat(singleDayResult.get("EUR")).isEqualTo(new BigDecimal("15.0"));
+	assertThat(singleDayResult.get("JPY")).isEqualTo(new BigDecimal("10.0"));
     }
 
     private ExchangeRates createExchangeRates(LocalDate startDate, String baseCurrency, HashMap<String, BigDecimal>... currencyRatePairs) {
