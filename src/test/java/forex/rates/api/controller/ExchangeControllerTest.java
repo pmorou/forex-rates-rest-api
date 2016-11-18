@@ -8,11 +8,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static java.util.Collections.singletonMap;
@@ -48,6 +51,30 @@ public class ExchangeControllerTest {
 		.andExpect(content().json("{'amount':10}"))
 		.andExpect(content().json("{'from':'USD'}"))
 		.andExpect(content().json("{'to':{'JPY':10}}"));
+    }
+
+    @Test
+    public void shouldReturnUsdToJpySeriesExchangeResponse() throws Exception {
+	Map<LocalDate, Rates> ratesByDate = new HashMap<LocalDate, Rates>() {{
+	    put(DATE, createRates(singletonMap("JPY", new BigDecimal("1"))));
+	    put(DATE.plusDays(1), createRates(singletonMap("JPY", new BigDecimal("2"))));
+	}};
+	ExchangeRates jpyExchangeRates = new ExchangeRates(DATE, DATE.plusDays(1), "USD", ratesByDate, false);
+	ExchangeRatesRequest exchangeRatesRequest = new ExchangeRatesRequest(
+		"USD", DATE.toString(), DATE.plusDays(1).toString(), new String[]{"JPY"});
+	when(exchangeRatesService.perform(exchangeRatesRequest)).thenReturn(jpyExchangeRates);
+
+	mockMvc.perform(get("/exchange/series?startDate=2001-01-01&endDate=2001-01-02&amount=10&from=USD&to=JPY")
+			.accept(MediaType.APPLICATION_JSON_VALUE))
+		.andExpect(status().isOk())
+		.andExpect(content().json("{'startDate':2001-01-01}"))
+		.andExpect(content().json("{'endDate':2001-01-02}"))
+		.andExpect(content().json("{'amount':10}"))
+		.andExpect(content().json("{'from':'USD'}"))
+		.andExpect(content().json("{'to':" +
+			"{'2001-01-01':{'JPY':10}" +
+			",'2001-01-02':{'JPY':20}" +
+			"}}"));
     }
 
     private Rates createRates(Map<String, BigDecimal> currencyValuePairs) {
