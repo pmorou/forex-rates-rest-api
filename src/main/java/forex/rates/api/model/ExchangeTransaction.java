@@ -24,6 +24,10 @@ public class ExchangeTransaction {
 	return exchangeRates.getStartDate();
     }
 
+    public LocalDate getEndDate() {
+	return exchangeRates.getEndDate();
+    }
+
     public Map<LocalDate, Transaction> getTo() {
 	Map<LocalDate, Transaction> transactionsByDate = new LinkedHashMap<>();
 	for (Map.Entry<LocalDate, Rates> ratesByDate : exchangeRates.getRatesByDate().entrySet()) {
