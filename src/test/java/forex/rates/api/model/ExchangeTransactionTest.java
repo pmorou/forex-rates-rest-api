@@ -36,6 +36,37 @@ public class ExchangeTransactionTest {
 	assertThat(singleDayResult.get("JPY")).isEqualTo(new BigDecimal("10.0"));
     }
 
+    @Test
+    public void shouldReturnExchangeTransactionWith3UsdAnd2JpyFirstDayAnd6UsdAnd4JpySecondDay() throws Exception {
+	// Given
+	HashMap<String, BigDecimal> currencyRatePairsDayFirst = new HashMap<String, BigDecimal>() {{
+	    put("EUR", new BigDecimal("1.5"));
+	    put("JPY", new BigDecimal("1.0"));
+	}};
+	HashMap<String, BigDecimal> currencyRatePairsDaySecond = new HashMap<String, BigDecimal>() {{
+	    put("EUR", new BigDecimal("3.0"));
+	    put("JPY", new BigDecimal("2.0"));
+	}};
+	ExchangeRates exchangeRates = createExchangeRates(DATE_2001_01_01, "USD", currencyRatePairsDayFirst,
+		currencyRatePairsDaySecond);
+
+	// When
+	ExchangeTransaction result = new ExchangeTransaction(exchangeRates, 2);
+
+	// Then
+	assertThat(result.getAmount()).isEqualTo(2);
+	assertThat(result.getDate()).isEqualTo(DATE_2001_01_01);
+	assertThat(result.getFrom()).isEqualTo("USD");
+	assertThat(result.getTo()).isNotNull();
+	Map<LocalDate, Transaction> transactionsByDate = result.getTo();
+	Map<String, BigDecimal> firstDayResult = transactionsByDate.get(DATE_2001_01_01).getTo();
+	assertThat(firstDayResult.get("EUR")).isEqualTo(new BigDecimal("3.0"));
+	assertThat(firstDayResult.get("JPY")).isEqualTo(new BigDecimal("2.0"));
+	Map<String, BigDecimal> secondDayResult = transactionsByDate.get(DATE_2001_01_01.plusDays(1)).getTo();
+	assertThat(secondDayResult.get("EUR")).isEqualTo(new BigDecimal("6.0"));
+	assertThat(secondDayResult.get("JPY")).isEqualTo(new BigDecimal("4.0"));
+    }
+
     private ExchangeRates createExchangeRates(LocalDate startDate, String baseCurrency, HashMap<String, BigDecimal>... currencyRatePairs) {
 	HashMap<LocalDate, Rates> dateRatesPairs = new HashMap<>();
 	int i = 0;
