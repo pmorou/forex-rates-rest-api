@@ -110,3 +110,39 @@ Example response:
 }
 ```
 
+---
+
+### GET /exchange/series
+
+Parameter | Description | Example | Required
+--- | --- | --- | ---
+`from` | Currency from which amount is exchanged | `USD` | no
+`to` | Requested currencies separated by comma | `EUR, GBP` | no
+`amount` | Amount of currency for exchange, non negative with dot as decimal point | `100` | no
+`startDate` | The date in YYYY-MM-DD format specifying starting point (inclusive) | `2016-08-29` | yes
+`endDate` | The date in YYYY-MM-DD format specifying starting point (inclusive) | `2016-08-30` | yes
+
+Example request:
+```javascript
+GET /exchange/series?from=USD&to=EUR,GBP&amount=100&startDate=2016-08-29&endDate=2016-08-30
+```
+
+Example response:
+```javascript
+{
+    "startDate": "2016-08-29",
+    "endDate": "2016-08-30",
+    "amount": 100,
+    "from": "USD",
+    "to": {
+        "2016-08-29": {
+            "EUR": 89.53,
+            "GBP": 76.52
+        },
+        "2016-08-30": {
+            "EUR": 92.84,
+            "GBP": 78.17
+        }
+    }
+}
+```
