@@ -80,3 +80,33 @@ Example response:
     }
 }
 ```
+
+---
+
+### GET /exchange/daily
+
+Parameter | Description | Example | Required
+--- | --- | --- | ---
+`from` | Currency from which amount is exchanged | `USD` | no
+`to` | Requested currencies separated by comma | `EUR, GBP` | no
+`amount` | Amount of currency for exchange, non negative with dot as decimal point | `100` | no
+`date` | The date in YYYY-MM-DD format | `2016-08-30` | no
+
+Example request:
+```javascript
+GET /exchange/daily?from=USD&to=EUR,GBP&amount=100&date=2016-08-30
+```
+
+Example response:
+```javascript
+{
+    "date": "2016-08-30",
+    "amount": 100,
+    "from": "USD",
+    "to": {
+        "EUR": 92.84,
+        "GBP": 78.17
+    }
+}
+```
+
