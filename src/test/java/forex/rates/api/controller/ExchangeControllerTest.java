@@ -41,7 +41,7 @@ public class ExchangeControllerTest {
     @Test
     public void shouldReturnUsdToJpyDailyExchangeResponse() throws Exception {
 	Rates jpyRates = createRates(singletonMap("JPY", new BigDecimal("1")));
-	ExchangeRates jpyExchangeRates = new ExchangeRates(DATE, DATE, "USD", singletonMap(DATE, jpyRates), false);
+	ExchangeRates jpyExchangeRates = new ExchangeRates(DATE, DATE, "USD", singletonMap(DATE, jpyRates));
 	ExchangeRatesRequest exchangeRatesRequest = new ExchangeRatesRequest("USD", DATE.toString(), new String[]{"JPY"});
 	when(exchangeRatesService.perform(exchangeRatesRequest)).thenReturn(jpyExchangeRates);
 
@@ -59,7 +59,7 @@ public class ExchangeControllerTest {
 	    put(DATE, createRates(singletonMap("JPY", new BigDecimal("1"))));
 	    put(DATE.plusDays(1), createRates(singletonMap("JPY", new BigDecimal("2"))));
 	}};
-	ExchangeRates jpyExchangeRates = new ExchangeRates(DATE, DATE.plusDays(1), "USD", ratesByDate, false);
+	ExchangeRates jpyExchangeRates = new ExchangeRates(DATE, DATE.plusDays(1), "USD", ratesByDate);
 	ExchangeRatesRequest exchangeRatesRequest = new ExchangeRatesRequest(
 		"USD", DATE.toString(), DATE.plusDays(1).toString(), new String[]{"JPY"});
 	when(exchangeRatesService.perform(exchangeRatesRequest)).thenReturn(jpyExchangeRates);

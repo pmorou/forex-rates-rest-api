@@ -14,6 +14,5 @@ public class ExchangeRates {
     private LocalDate endDate;
     private String base;
     private Map<LocalDate, Rates> ratesByDate;
-    private boolean empty;
 
 }

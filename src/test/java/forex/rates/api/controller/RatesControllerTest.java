@@ -77,7 +77,7 @@ public class RatesControllerTest {
 	final long daysNumber = startDate.until(endDate, ChronoUnit.DAYS);
 	Map<LocalDate, Rates> ratesByDate = IntStream.rangeClosed(0, (int) daysNumber).boxed()
 		.collect(toMap(i -> startDate.plusDays(i), i -> createRates(currencies)));
-	return new ExchangeRates(startDate, endDate, base, ratesByDate, false);
+	return new ExchangeRates(startDate, endDate, base, ratesByDate);
     }
 
     private Rates createRates(String[] currencies) {

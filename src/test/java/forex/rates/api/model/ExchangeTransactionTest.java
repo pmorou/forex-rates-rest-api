@@ -1,5 +1,9 @@
 package forex.rates.api.model;
 
+import forex.rates.api.model.exchange.ExchangeRates;
+import forex.rates.api.model.exchange.ExchangeTransaction;
+import forex.rates.api.model.exchange.Rates;
+import forex.rates.api.model.exchange.Transaction;
 import org.junit.Test;
 
 import java.math.BigDecimal;
@@ -79,8 +83,7 @@ public class ExchangeTransactionTest {
 		startDate,
 		startDate.plusDays(i),
 		baseCurrency,
-		dateRatesPairs,
-		false);
+		dateRatesPairs);
     }
 
     private Rates createRates(Map<String, BigDecimal> currencyValuePairs) {
