@@ -1,7 +1,7 @@
 package forex.rates.api.controller;
 
-import forex.rates.api.model.ExchangeRates;
-import forex.rates.api.model.ExchangeTransaction;
+import forex.rates.api.model.exchange.ExchangeRates;
+import forex.rates.api.model.exchange.ExchangeTransaction;
 import forex.rates.api.model.request.ExchangeRatesRequest;
 import forex.rates.api.model.response.DailyExchangeResponse;
 import forex.rates.api.model.response.SeriesExchangeResponse;

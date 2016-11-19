@@ -1,7 +1,7 @@
 package forex.rates.api.controller;
 
-import forex.rates.api.model.ExchangeRates;
-import forex.rates.api.model.Rates;
+import forex.rates.api.model.exchange.ExchangeRates;
+import forex.rates.api.model.exchange.Rates;
 import forex.rates.api.model.request.ExchangeRatesRequest;
 import forex.rates.api.service.ExchangeRatesService;
 import org.junit.Before;
@@ -15,7 +15,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static java.util.Collections.singletonMap;

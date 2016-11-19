@@ -1,4 +1,4 @@
-package forex.rates.api.model;
+package forex.rates.api.model.exchange;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

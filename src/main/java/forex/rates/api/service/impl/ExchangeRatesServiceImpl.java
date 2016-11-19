@@ -1,8 +1,8 @@
 package forex.rates.api.service.impl;
 
 import forex.rates.api.dataset.DataSetContext;
-import forex.rates.api.model.ExchangeRates;
-import forex.rates.api.model.Rates;
+import forex.rates.api.model.exchange.ExchangeRates;
+import forex.rates.api.model.exchange.Rates;
 import forex.rates.api.model.entity.CurrencyDefinition;
 import forex.rates.api.model.entity.CurrencyRate;
 import forex.rates.api.model.request.ExchangeRatesRequest;

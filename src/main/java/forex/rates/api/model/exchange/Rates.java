@@ -1,4 +1,4 @@
-package forex.rates.api.model;
+package forex.rates.api.model.exchange;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import lombok.Data;
@@ -9,13 +9,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Data
-public class Transaction {
+public class Rates {
 
     @Getter(onMethod = @__(@JsonAnyGetter))
-    private final Map<String, BigDecimal> to = new HashMap<>();
+    private final Map<String, BigDecimal> rates = new HashMap<>();
 
-    public void addAmount(String currency, BigDecimal amount) {
-	to.put(currency, amount);
+    public void addRate(String currency, BigDecimal rate) {
+	rates.put(currency, rate);
     }
 
 }

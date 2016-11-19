@@ -1,8 +1,8 @@
 package forex.rates.api.model.response;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import forex.rates.api.model.ExchangeTransaction;
-import forex.rates.api.model.Transaction;
+import forex.rates.api.model.exchange.ExchangeTransaction;
+import forex.rates.api.model.exchange.Transaction;
 import lombok.Data;
 
 import java.time.LocalDate;

@@ -1,9 +1,5 @@
-package forex.rates.api.model;
+package forex.rates.api.model.exchange;
 
-import forex.rates.api.model.exchange.ExchangeRates;
-import forex.rates.api.model.exchange.ExchangeTransaction;
-import forex.rates.api.model.exchange.Rates;
-import forex.rates.api.model.exchange.Transaction;
 import org.junit.Test;
 
 import java.math.BigDecimal;
