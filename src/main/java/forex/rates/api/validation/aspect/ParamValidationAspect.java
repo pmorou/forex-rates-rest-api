@@ -93,7 +93,11 @@ public class ParamValidationAspect {
 		.filter(pV -> pV.supports(parameterType, parameterAnnotations))
 		.findFirst()
 		.map(pV -> pV.validate(optionalParameterValue))
-		.orElse(null);
+		.orElse(returnValue(optionalParameterValue));
+    }
+
+    private Object returnValue(Optional<?> optionalParameterValue) {
+	return optionalParameterValue.orElse(null);
     }
 
 }
