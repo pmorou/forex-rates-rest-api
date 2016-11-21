@@ -12,7 +12,7 @@ import java.util.Map;
 public class DailyExchangeResponse {
 
     private final String date;
-    private final int amount;
+    private final BigDecimal amount;
     private final String from;
     private final Map<String, BigDecimal> to;
 

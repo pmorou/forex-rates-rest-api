@@ -23,10 +23,10 @@ public class ExchangeTransactionTest {
 	ExchangeRates exchangeRates = createExchangeRates(DATE_2001_01_01, "USD", currencyRatePairs);
 
 	// When
-	ExchangeTransaction result = new ExchangeTransaction(exchangeRates, 10);
+	ExchangeTransaction result = new ExchangeTransaction(exchangeRates, new BigDecimal(10));
 
 	// Then
-	assertThat(result.getAmount()).isEqualTo(10);
+	assertThat(result.getAmount()).isEqualTo(new BigDecimal("10"));
 	assertThat(result.getStartDate()).isEqualTo(DATE_2001_01_01);
 	assertThat(result.getFrom()).isEqualTo("USD");
 	assertThat(result.getTo()).isNotNull();
@@ -51,10 +51,10 @@ public class ExchangeTransactionTest {
 		currencyRatePairsDaySecond);
 
 	// When
-	ExchangeTransaction result = new ExchangeTransaction(exchangeRates, 2);
+	ExchangeTransaction result = new ExchangeTransaction(exchangeRates, new BigDecimal(2));
 
 	// Then
-	assertThat(result.getAmount()).isEqualTo(2);
+	assertThat(result.getAmount()).isEqualTo(new BigDecimal("2"));
 	assertThat(result.getStartDate()).isEqualTo(DATE_2001_01_01);
 	assertThat(result.getFrom()).isEqualTo("USD");
 	assertThat(result.getTo()).isNotNull();

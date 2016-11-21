@@ -5,6 +5,7 @@ import forex.rates.api.model.exchange.ExchangeTransaction;
 import forex.rates.api.model.exchange.Transaction;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Map;
 
@@ -14,7 +15,7 @@ public class SeriesExchangeResponse {
 
     private final String startDate;
     private final String endDate;
-    private final int amount;
+    private final BigDecimal amount;
     private final String from;
     private final Map<LocalDate, Transaction> to;
 

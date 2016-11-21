@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
+
 @RestController
 @RequestMapping("exchange")
 public class ExchangeController {
@@ -34,9 +36,7 @@ public class ExchangeController {
 	    @Currencies String[] to
     ) {
 	ExchangeRatesRequest exchangeRatesRequest = new ExchangeRatesRequest(from, date, to);
-	ExchangeRates exchangeRates = exchangeRatesService.perform(exchangeRatesRequest);
-	int parsedAmount = Integer.parseInt(amount);
-	ExchangeTransaction exchangeTransaction = new ExchangeTransaction(exchangeRates, parsedAmount);
+	ExchangeTransaction exchangeTransaction = createExchangeTransaction(amount, exchangeRatesRequest);
 	return new DailyExchangeResponse(exchangeTransaction);
     }
 
@@ -49,10 +49,13 @@ public class ExchangeController {
 	    @Currencies String[] to
     ) {
 	ExchangeRatesRequest exchangeRatesRequest = new ExchangeRatesRequest(from, startDate, endDate, to);
-	ExchangeRates exchangeRates = exchangeRatesService.perform(exchangeRatesRequest);
-	int parsedAmount = Integer.parseInt(amount);
-	ExchangeTransaction exchangeTransaction = new ExchangeTransaction(exchangeRates, parsedAmount);
+	ExchangeTransaction exchangeTransaction = createExchangeTransaction(amount, exchangeRatesRequest);
 	return new SeriesExchangeResponse(exchangeTransaction);
+    }
+
+    private ExchangeTransaction createExchangeTransaction(String amount, ExchangeRatesRequest exchangeRatesRequest) {
+	ExchangeRates exchangeRates = exchangeRatesService.perform(exchangeRatesRequest);
+	return new ExchangeTransaction(exchangeRates, new BigDecimal(amount));
     }
 
 }

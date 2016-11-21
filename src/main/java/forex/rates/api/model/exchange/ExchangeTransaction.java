@@ -14,7 +14,7 @@ public class ExchangeTransaction {
 
     @Getter(AccessLevel.PRIVATE)
     private final ExchangeRates exchangeRates;
-    private final int amount;
+    private final BigDecimal amount;
 
     public String getFrom() {
 	return exchangeRates.getBase();
@@ -42,7 +42,7 @@ public class ExchangeTransaction {
     }
 
     private BigDecimal multiplyWithAmount(BigDecimal rate) {
-	return rate.multiply(new BigDecimal(this.amount));
+	return rate.multiply(this.amount);
     }
 
 }
