@@ -6,6 +6,7 @@ import forex.rates.api.model.request.ExchangeRatesRequest;
 import forex.rates.api.model.response.DailyExchangeResponse;
 import forex.rates.api.model.response.SeriesExchangeResponse;
 import forex.rates.api.service.ExchangeRatesService;
+import forex.rates.api.validation.annotation.Amount;
 import forex.rates.api.validation.annotation.Base;
 import forex.rates.api.validation.annotation.Currencies;
 import forex.rates.api.validation.annotation.Date;
@@ -31,7 +32,7 @@ public class ExchangeController {
     @GetMapping("daily")
     public DailyExchangeResponse dailyExchangeResponse(
 	    @Date String date,
-	    String amount,
+	    @Amount String amount,
 	    @Base String from,
 	    @Currencies String[] to
     ) {
@@ -44,7 +45,7 @@ public class ExchangeController {
     public SeriesExchangeResponse seriesExchangeResponse(
 	    @Date @RequestParam String startDate,
 	    @Date @RequestParam String endDate,
-	    String amount,
+	    @Amount String amount,
 	    @Base String from,
 	    @Currencies String[] to
     ) {
