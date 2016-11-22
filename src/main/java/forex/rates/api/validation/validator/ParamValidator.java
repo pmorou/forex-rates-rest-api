@@ -1,5 +1,7 @@
 package forex.rates.api.validation.validator;
 
+import forex.rates.api.exception.IllegalParameterException;
+
 import java.lang.annotation.Annotation;
 import java.util.Optional;
 
@@ -26,7 +28,7 @@ public interface ParamValidator<T> {
      * {@link #supports(Class, Annotation...)} method return {@code true}.
      * @param object the object that is to be validated
      * @return validated object
-     * @throws IllegalArgumentException when validation fails
+     * @throws IllegalParameterException when validation fails
      */
     T validate(Optional<T> object);
 

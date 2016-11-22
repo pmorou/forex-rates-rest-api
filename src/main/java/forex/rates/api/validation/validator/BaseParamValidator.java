@@ -1,6 +1,7 @@
 package forex.rates.api.validation.validator;
 
 import forex.rates.api.dataset.DataSetContext;
+import forex.rates.api.exception.IllegalParameterException;
 import forex.rates.api.service.AvailableCurrenciesService;
 import forex.rates.api.validation.annotation.Base;
 import org.springframework.stereotype.Component;
@@ -44,19 +45,19 @@ public class BaseParamValidator implements ParamValidator<String> {
 		.orElse(getDefaultValue());
     }
 
+    private String getDefaultValue() {
+	return dataSetContext.getBaseCurrency();
+    }
+
     private boolean isValidOrElseThrow(String currency) {
 	if (isNotInAvailableCurrencies(currency)) {
-	    throw new IllegalArgumentException(message + currency);
+	    throw new IllegalParameterException(message + currency);
 	}
 	return true;
     }
 
     private boolean isNotInAvailableCurrencies(String currency) {
 	return !availableCurrenciesService.getCodeList().contains(currency);
-    }
-
-    private String getDefaultValue() {
-	return dataSetContext.getBaseCurrency();
     }
 
 }

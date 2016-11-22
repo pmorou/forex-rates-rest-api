@@ -1,5 +1,6 @@
 package forex.rates.api.validation.validator;
 
+import forex.rates.api.exception.IllegalParameterException;
 import forex.rates.api.service.AvailableCurrenciesService;
 import forex.rates.api.validation.annotation.Currencies;
 import junitparams.JUnitParamsRunner;
@@ -124,7 +125,7 @@ public class CurrenciesParamValidatorTest {
 	assertThat(result).isEqualTo(AVAILABLE_CURRENCIES.toArray());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = IllegalParameterException.class)
     @Parameters
     public void shouldNotBeValidAndThrowException(String[] given) throws Exception {
 	// Given

@@ -1,5 +1,6 @@
 package forex.rates.api.validation.validator;
 
+import forex.rates.api.exception.IllegalParameterException;
 import forex.rates.api.service.DateTimeProviderService;
 import forex.rates.api.validation.annotation.Date;
 import org.springframework.stereotype.Component;
@@ -45,14 +46,18 @@ public class DateParamValidator implements ParamValidator<String> {
 		.orElse(getDefaultValue());
     }
 
+    private String getDefaultValue() {
+	return dateTimeProviderService.getTodaysDateAsString();
+    }
+
     private boolean isValidOrElseThrow(String date) {
 	try {
 	    LocalDate parsedDate = LocalDate.parse(date);
 	    if (isFromFuture(parsedDate) || isUnsupportedDay(parsedDate)) {
-		throwIllegalArgumentException(date);
+		throwIllegalParameterException(date);
 	    }
 	} catch (DateTimeParseException e) {
-	    throwIllegalArgumentException(date);
+	    throwIllegalParameterException(date);
 	}
 	return true;
     }
@@ -66,12 +71,8 @@ public class DateParamValidator implements ParamValidator<String> {
 	return UNSUPPORTED_DAYS.contains(dayOfWeek);
     }
 
-    private boolean throwIllegalArgumentException(String date) {
-	throw new IllegalArgumentException(message + date);
-    }
-
-    private String getDefaultValue() {
-	return dateTimeProviderService.getTodaysDateAsString();
+    private void throwIllegalParameterException(String date) {
+	throw new IllegalParameterException(message + date);
     }
 
 }

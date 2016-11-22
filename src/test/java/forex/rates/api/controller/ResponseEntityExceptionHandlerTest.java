@@ -1,5 +1,6 @@
 package forex.rates.api.controller;
 
+import forex.rates.api.exception.IllegalParameterException;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.http.MediaType;
@@ -18,9 +19,9 @@ public class ResponseEntityExceptionHandlerTest {
 
     @RestController
     private class DummyController {
-	@GetMapping("throwIllegalArgumentException")
-	void throwIllegalArgumentException() {
-	    throw new IllegalArgumentException("Some description");
+	@GetMapping("throwIllegalParameterException")
+	void throwIllegalParameterException() {
+	    throw new IllegalParameterException("Some description");
 	}
 
 	@GetMapping("throwException")
@@ -37,8 +38,8 @@ public class ResponseEntityExceptionHandlerTest {
     }
 
     @Test
-    public void shouldHandleIllegalArgumentExceptionAndReturnCustomJsonResponse() throws Exception {
-	mockMvc.perform(get("/throwIllegalArgumentException")
+    public void shouldHandleIllegalParameterExceptionAndReturnCustomJsonResponse() throws Exception {
+	mockMvc.perform(get("/throwIllegalParameterException")
 			.accept(MediaType.APPLICATION_JSON_VALUE))
 		.andExpect(status().isBadRequest())
 		.andExpect(content().json("{'error':true}"))

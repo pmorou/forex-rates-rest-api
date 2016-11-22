@@ -1,5 +1,6 @@
 package forex.rates.api.validation.validator;
 
+import forex.rates.api.exception.IllegalParameterException;
 import forex.rates.api.service.AvailableCurrenciesService;
 import forex.rates.api.validation.annotation.Currencies;
 import org.springframework.stereotype.Component;
@@ -42,6 +43,11 @@ public class CurrenciesParamValidator implements ParamValidator<String[]> {
 		.orElse(getDefaultValue());
     }
 
+    private String[] getDefaultValue() {
+	return availableCurrenciesService.getCodeList().stream()
+		.toArray(String[]::new);
+    }
+
     private Function<String[], String[]> elementsToUpperCase() {
 	return list -> Arrays.stream(list)
 		.map(String::toUpperCase)
@@ -49,11 +55,10 @@ public class CurrenciesParamValidator implements ParamValidator<String[]> {
     }
 
     private boolean isValidOrElseThrow(String[] currencies) {
-	for (String currency : currencies) {
-	    if (isNotInAvailableCurrencies(currency)) {
-		throw new IllegalArgumentException(message + currency);
-	    }
-	}
+	Arrays.stream(currencies)
+		.filter(this::isNotInAvailableCurrencies)
+		.findFirst()
+		.ifPresent(this::throwIllegalParameterException);
 	return true;
     }
 
@@ -61,9 +66,8 @@ public class CurrenciesParamValidator implements ParamValidator<String[]> {
 	return !availableCurrenciesService.getCodeList().contains(currency);
     }
 
-    private String[] getDefaultValue() {
-	return availableCurrenciesService.getCodeList().stream()
-		.toArray(String[]::new);
+    private void throwIllegalParameterException(String currency) {
+	throw new IllegalParameterException(currency + message);
     }
 
 }

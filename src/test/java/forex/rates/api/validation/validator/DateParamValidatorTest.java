@@ -1,5 +1,6 @@
 package forex.rates.api.validation.validator;
 
+import forex.rates.api.exception.IllegalParameterException;
 import forex.rates.api.service.DateTimeProviderService;
 import forex.rates.api.validation.annotation.Date;
 import junitparams.JUnitParamsRunner;
@@ -117,7 +118,7 @@ public class DateParamValidatorTest {
 	assertThat(result).isEqualTo(TODAY.toString());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = IllegalParameterException.class)
     @Parameters
     public void shouldNotBeValidAndThrowException(String given) throws Exception {
 	// Given

@@ -1,5 +1,6 @@
 package forex.rates.api.validation.validator;
 
+import forex.rates.api.exception.IllegalParameterException;
 import forex.rates.api.validation.annotation.Amount;
 import org.springframework.stereotype.Component;
 
@@ -34,13 +35,17 @@ public class AmountParamValidator implements ParamValidator<String> {
 		.orElse(getDefaultValue());
     }
 
+    private String getDefaultValue() {
+	return "1";
+    }
+
     private boolean isValidOrElseThrow(String amount) {
 	try {
 	    if (isNotGreaterThanZero(amount)) {
-		throw new IllegalArgumentException();
+		throwIllegalParameterException(amount);
 	    }
-	} catch (IllegalArgumentException e) {
-	    throw new IllegalArgumentException(message + amount);
+	} catch (NumberFormatException e) {
+	    throwIllegalParameterException(amount);
 	}
 	return true;
     }
@@ -49,8 +54,8 @@ public class AmountParamValidator implements ParamValidator<String> {
 	return new BigDecimal(amount).compareTo(BigDecimal.ZERO) < 1;
     }
 
-    private String getDefaultValue() {
-	return "1";
+    private void throwIllegalParameterException(String amount) {
+	throw new IllegalParameterException(message + amount);
     }
 
 }

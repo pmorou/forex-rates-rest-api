@@ -1,6 +1,7 @@
 package forex.rates.api.validation.validator;
 
 import forex.rates.api.dataset.DataSetContext;
+import forex.rates.api.exception.IllegalParameterException;
 import forex.rates.api.service.AvailableCurrenciesService;
 import forex.rates.api.validation.annotation.Base;
 import junitparams.JUnitParamsRunner;
@@ -115,7 +116,7 @@ public class BaseParamValidatorTest {
 	assertThat(result).isEqualTo("USD");
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = IllegalParameterException.class)
     @Parameters
     public void shouldNotBeValidAndThrowException(String given) throws Exception {
 	// Given
