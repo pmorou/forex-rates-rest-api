@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.Getter;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -42,7 +44,7 @@ public class ExchangeTransaction {
     }
 
     private BigDecimal multiplyWithAmount(BigDecimal rate) {
-	return rate.multiply(this.amount);
+	return rate.multiply(this.amount, new MathContext(3, RoundingMode.HALF_UP));
     }
 
 }

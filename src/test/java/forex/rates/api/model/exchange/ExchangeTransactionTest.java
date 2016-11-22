@@ -17,8 +17,8 @@ public class ExchangeTransactionTest {
     public void shouldReturnExchangeTransactionWith15UsdAnd10Jpy() throws Exception {
 	// Given
 	HashMap<String, BigDecimal> currencyRatePairs = new HashMap<String, BigDecimal>() {{
-	    put("EUR", new BigDecimal("1.5"));
-	    put("JPY", new BigDecimal("1.0"));
+	    put("EUR", new BigDecimal("0.1234"));
+	    put("JPY", new BigDecimal("2.3456"));
 	}};
 	ExchangeRates exchangeRates = createExchangeRates(DATE_2001_01_01, "USD", currencyRatePairs);
 
@@ -32,8 +32,8 @@ public class ExchangeTransactionTest {
 	assertThat(result.getTo()).isNotNull();
 	Map<LocalDate, Transaction> transactionsByDate = result.getTo();
 	Map<String, BigDecimal> singleDayResult = transactionsByDate.get(DATE_2001_01_01).getTo();
-	assertThat(singleDayResult.get("EUR")).isEqualTo(new BigDecimal("15.0"));
-	assertThat(singleDayResult.get("JPY")).isEqualTo(new BigDecimal("10.0"));
+	assertThat(singleDayResult.get("EUR")).isEqualTo(new BigDecimal("1.23"));
+	assertThat(singleDayResult.get("JPY")).isEqualTo(new BigDecimal("23.5"));
     }
 
     @Test
