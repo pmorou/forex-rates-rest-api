@@ -1,8 +1,8 @@
 package forex.rates.api.model.response;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import forex.rates.api.model.exchange.ExchangeTransaction;
-import forex.rates.api.model.exchange.Transaction;
+import forex.rates.api.model.exchange.ExchangeTransactions;
+import forex.rates.api.model.exchange.Transactions;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -17,14 +17,14 @@ public class SeriesExchangeResponse {
     private final String endDate;
     private final BigDecimal amount;
     private final String from;
-    private final Map<LocalDate, Transaction> to;
+    private final Map<LocalDate, Transactions> to;
 
-    public SeriesExchangeResponse(ExchangeTransaction exchangeTransaction) {
-	this.startDate = exchangeTransaction.getStartDate().toString();
-	this.endDate = exchangeTransaction.getEndDate().toString();
-	this.amount = exchangeTransaction.getAmount();
-	this.from = exchangeTransaction.getFrom();
-	this.to = exchangeTransaction.getTo();
+    public SeriesExchangeResponse(ExchangeTransactions exchangeTransactions) {
+	this.startDate = exchangeTransactions.getStartDate().toString();
+	this.endDate = exchangeTransactions.getEndDate().toString();
+	this.amount = exchangeTransactions.getAmount();
+	this.from = exchangeTransactions.getFrom();
+	this.to = exchangeTransactions.getTo();
     }
 
 }

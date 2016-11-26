@@ -1,7 +1,7 @@
 package forex.rates.api.controller;
 
 import forex.rates.api.model.exchange.ExchangeRates;
-import forex.rates.api.model.exchange.ExchangeTransaction;
+import forex.rates.api.model.exchange.ExchangeTransactions;
 import forex.rates.api.model.request.ExchangeRatesRequest;
 import forex.rates.api.model.response.DailyExchangeResponse;
 import forex.rates.api.model.response.SeriesExchangeResponse;
@@ -37,8 +37,8 @@ public class ExchangeController {
 	    @Currencies String[] to
     ) {
 	ExchangeRatesRequest exchangeRatesRequest = new ExchangeRatesRequest(from, date, to);
-	ExchangeTransaction exchangeTransaction = createExchangeTransaction(amount, exchangeRatesRequest);
-	return new DailyExchangeResponse(exchangeTransaction);
+	ExchangeTransactions exchangeTransactions = createExchangeTransactions(amount, exchangeRatesRequest);
+	return new DailyExchangeResponse(exchangeTransactions);
     }
 
     @GetMapping("series")
@@ -50,13 +50,13 @@ public class ExchangeController {
 	    @Currencies String[] to
     ) {
 	ExchangeRatesRequest exchangeRatesRequest = new ExchangeRatesRequest(from, startDate, endDate, to);
-	ExchangeTransaction exchangeTransaction = createExchangeTransaction(amount, exchangeRatesRequest);
-	return new SeriesExchangeResponse(exchangeTransaction);
+	ExchangeTransactions exchangeTransactions = createExchangeTransactions(amount, exchangeRatesRequest);
+	return new SeriesExchangeResponse(exchangeTransactions);
     }
 
-    private ExchangeTransaction createExchangeTransaction(String amount, ExchangeRatesRequest exchangeRatesRequest) {
+    private ExchangeTransactions createExchangeTransactions(String amount, ExchangeRatesRequest exchangeRatesRequest) {
 	ExchangeRates exchangeRates = exchangeRatesService.perform(exchangeRatesRequest);
-	return new ExchangeTransaction(exchangeRates, new BigDecimal(amount));
+	return new ExchangeTransactions(exchangeRates, new BigDecimal(amount));
     }
 
 }

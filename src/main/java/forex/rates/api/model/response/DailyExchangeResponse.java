@@ -1,7 +1,7 @@
 package forex.rates.api.model.response;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import forex.rates.api.model.exchange.ExchangeTransaction;
+import forex.rates.api.model.exchange.ExchangeTransactions;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -16,12 +16,12 @@ public class DailyExchangeResponse {
     private final String from;
     private final Map<String, BigDecimal> to;
 
-    public DailyExchangeResponse(ExchangeTransaction exchangeTransaction) {
-	this.date = exchangeTransaction.getStartDate().toString();
-	this.amount = exchangeTransaction.getAmount();
-	this.from = exchangeTransaction.getFrom();
-	this.to = exchangeTransaction.getTo()
-		.get(exchangeTransaction.getStartDate())
+    public DailyExchangeResponse(ExchangeTransactions exchangeTransactions) {
+	this.date = exchangeTransactions.getStartDate().toString();
+	this.amount = exchangeTransactions.getAmount();
+	this.from = exchangeTransactions.getFrom();
+	this.to = exchangeTransactions.getTo()
+		.get(exchangeTransactions.getStartDate())
 		.getTo();
     }
 

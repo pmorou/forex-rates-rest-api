@@ -12,7 +12,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Data
-public class ExchangeTransaction {
+public class ExchangeTransactions {
 
     @Getter(AccessLevel.PRIVATE)
     private final ExchangeRates exchangeRates;
@@ -30,15 +30,15 @@ public class ExchangeTransaction {
 	return exchangeRates.getEndDate();
     }
 
-    public Map<LocalDate, Transaction> getTo() {
-	Map<LocalDate, Transaction> transactionsByDate = new LinkedHashMap<>();
+    public Map<LocalDate, Transactions> getTo() {
+	Map<LocalDate, Transactions> transactionsByDate = new LinkedHashMap<>();
 	for (Map.Entry<LocalDate, Rates> ratesByDate : exchangeRates.getRatesByDate().entrySet()) {
 	    Rates dailyRates = ratesByDate.getValue();
-	    Transaction transaction = new Transaction();
+	    Transactions transactions = new Transactions();
 	    for (Map.Entry<String, BigDecimal> currencyRatePair : dailyRates.getRates().entrySet()) {
-		transaction.addAmount(currencyRatePair.getKey(), multiplyWithAmount(currencyRatePair.getValue()));
+		transactions.addAmount(currencyRatePair.getKey(), multiplyWithAmount(currencyRatePair.getValue()));
 	    }
-	    transactionsByDate.put(ratesByDate.getKey(), transaction);
+	    transactionsByDate.put(ratesByDate.getKey(), transactions);
 	}
 	return transactionsByDate;
     }

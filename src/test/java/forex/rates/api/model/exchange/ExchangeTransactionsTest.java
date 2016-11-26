@@ -9,7 +9,7 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ExchangeTransactionTest {
+public class ExchangeTransactionsTest {
 
     public static final LocalDate DATE_2001_01_01 = LocalDate.of(2001, 1, 1);
 
@@ -23,14 +23,14 @@ public class ExchangeTransactionTest {
 	ExchangeRates exchangeRates = createExchangeRates(DATE_2001_01_01, "USD", currencyRatePairs);
 
 	// When
-	ExchangeTransaction result = new ExchangeTransaction(exchangeRates, new BigDecimal(10));
+	ExchangeTransactions result = new ExchangeTransactions(exchangeRates, new BigDecimal(10));
 
 	// Then
 	assertThat(result.getAmount()).isEqualTo(new BigDecimal("10"));
 	assertThat(result.getStartDate()).isEqualTo(DATE_2001_01_01);
 	assertThat(result.getFrom()).isEqualTo("USD");
 	assertThat(result.getTo()).isNotNull();
-	Map<LocalDate, Transaction> transactionsByDate = result.getTo();
+	Map<LocalDate, Transactions> transactionsByDate = result.getTo();
 	Map<String, BigDecimal> singleDayResult = transactionsByDate.get(DATE_2001_01_01).getTo();
 	assertThat(singleDayResult.get("EUR")).isEqualTo(new BigDecimal("1.23"));
 	assertThat(singleDayResult.get("JPY")).isEqualTo(new BigDecimal("23.5"));
@@ -51,14 +51,14 @@ public class ExchangeTransactionTest {
 		currencyRatePairsDaySecond);
 
 	// When
-	ExchangeTransaction result = new ExchangeTransaction(exchangeRates, new BigDecimal(2));
+	ExchangeTransactions result = new ExchangeTransactions(exchangeRates, new BigDecimal(2));
 
 	// Then
 	assertThat(result.getAmount()).isEqualTo(new BigDecimal("2"));
 	assertThat(result.getStartDate()).isEqualTo(DATE_2001_01_01);
 	assertThat(result.getFrom()).isEqualTo("USD");
 	assertThat(result.getTo()).isNotNull();
-	Map<LocalDate, Transaction> transactionsByDate = result.getTo();
+	Map<LocalDate, Transactions> transactionsByDate = result.getTo();
 	Map<String, BigDecimal> firstDayResult = transactionsByDate.get(DATE_2001_01_01).getTo();
 	assertThat(firstDayResult.get("EUR")).isEqualTo(new BigDecimal("3.0"));
 	assertThat(firstDayResult.get("JPY")).isEqualTo(new BigDecimal("2.0"));
