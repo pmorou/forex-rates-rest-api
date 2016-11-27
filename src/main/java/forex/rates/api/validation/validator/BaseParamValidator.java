@@ -3,7 +3,7 @@ package forex.rates.api.validation.validator;
 import forex.rates.api.dataset.DataSetContext;
 import forex.rates.api.exception.IllegalParameterException;
 import forex.rates.api.service.AvailableCurrenciesService;
-import forex.rates.api.validation.annotation.Base;
+import forex.rates.api.validation.annotation.ValidBase;
 import org.springframework.stereotype.Component;
 
 import java.lang.annotation.Annotation;
@@ -33,7 +33,7 @@ public class BaseParamValidator implements ParamValidator<String> {
 	if (String.class.isAssignableFrom(parameterType)) {
 	    return Arrays.stream(annotations)
 		    .map(Annotation::annotationType)
-		    .anyMatch(Base.class::equals);
+		    .anyMatch(ValidBase.class::equals);
 	}
 	return false;
     }

@@ -5,9 +5,9 @@ import forex.rates.api.model.exchange.ExchangeRates;
 import forex.rates.api.model.request.ExchangeRatesRequest;
 import forex.rates.api.model.response.SeriesRatesResponse;
 import forex.rates.api.service.ExchangeRatesService;
-import forex.rates.api.validation.annotation.Base;
-import forex.rates.api.validation.annotation.Currencies;
-import forex.rates.api.validation.annotation.Date;
+import forex.rates.api.validation.annotation.ValidBase;
+import forex.rates.api.validation.annotation.ValidCurrencies;
+import forex.rates.api.validation.annotation.ValidDate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,9 +25,9 @@ public class RatesController {
 
     @GetMapping("daily")
     public DailyRatesResponse getDailyRates(
-	    @Currencies String[] currencies,
-	    @Base String base,
-	    @Date String date
+	    @ValidCurrencies String[] currencies,
+	    @ValidBase String base,
+	    @ValidDate String date
     ) throws Exception {
 	ExchangeRates exchangeRates = exchangeRatesService.perform(new ExchangeRatesRequest(base, date, currencies));
 	return new DailyRatesResponse(exchangeRates);
@@ -35,10 +35,10 @@ public class RatesController {
 
     @GetMapping("series")
     public SeriesRatesResponse getSeriesRates(
-	    @Currencies String[] currencies,
-	    @Base String base,
-	    @Date @RequestParam String startDate,
-	    @Date @RequestParam String endDate
+	    @ValidCurrencies String[] currencies,
+	    @ValidBase String base,
+	    @ValidDate @RequestParam String startDate,
+	    @ValidDate @RequestParam String endDate
     ) throws Exception {
 	ExchangeRates exchangeRates = exchangeRatesService.perform(new ExchangeRatesRequest(base, startDate, endDate, currencies));
 	return new SeriesRatesResponse(exchangeRates);

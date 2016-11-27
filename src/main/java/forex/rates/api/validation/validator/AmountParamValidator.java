@@ -1,7 +1,7 @@
 package forex.rates.api.validation.validator;
 
 import forex.rates.api.exception.IllegalParameterException;
-import forex.rates.api.validation.annotation.Amount;
+import forex.rates.api.validation.annotation.ValidAmount;
 import org.springframework.stereotype.Component;
 
 import java.lang.annotation.Annotation;
@@ -24,7 +24,7 @@ public class AmountParamValidator implements ParamValidator<String> {
 	if (String.class.isAssignableFrom(parameterType)) {
 	    return Arrays.stream(annotations)
 		    .map(Annotation::annotationType)
-		    .anyMatch(Amount.class::equals);
+		    .anyMatch(ValidAmount.class::equals);
 	}
 	return false;
     }

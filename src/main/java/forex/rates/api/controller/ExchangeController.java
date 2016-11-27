@@ -6,10 +6,10 @@ import forex.rates.api.model.request.ExchangeRatesRequest;
 import forex.rates.api.model.response.DailyExchangeResponse;
 import forex.rates.api.model.response.SeriesExchangeResponse;
 import forex.rates.api.service.ExchangeRatesService;
-import forex.rates.api.validation.annotation.Amount;
-import forex.rates.api.validation.annotation.Base;
-import forex.rates.api.validation.annotation.Currencies;
-import forex.rates.api.validation.annotation.Date;
+import forex.rates.api.validation.annotation.ValidAmount;
+import forex.rates.api.validation.annotation.ValidBase;
+import forex.rates.api.validation.annotation.ValidCurrencies;
+import forex.rates.api.validation.annotation.ValidDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,10 +31,10 @@ public class ExchangeController {
 
     @GetMapping("daily")
     public DailyExchangeResponse dailyExchangeResponse(
-	    @Date String date,
-	    @Amount String amount,
-	    @Base String from,
-	    @Currencies String[] to
+	    @ValidDate String date,
+	    @ValidAmount String amount,
+	    @ValidBase String from,
+	    @ValidCurrencies String[] to
     ) {
 	ExchangeRatesRequest exchangeRatesRequest = new ExchangeRatesRequest(from, date, to);
 	ExchangeTransactions exchangeTransactions = createExchangeTransactions(amount, exchangeRatesRequest);
@@ -43,11 +43,11 @@ public class ExchangeController {
 
     @GetMapping("series")
     public SeriesExchangeResponse seriesExchangeResponse(
-	    @Date @RequestParam String startDate,
-	    @Date @RequestParam String endDate,
-	    @Amount String amount,
-	    @Base String from,
-	    @Currencies String[] to
+	    @ValidDate @RequestParam String startDate,
+	    @ValidDate @RequestParam String endDate,
+	    @ValidAmount String amount,
+	    @ValidBase String from,
+	    @ValidCurrencies String[] to
     ) {
 	ExchangeRatesRequest exchangeRatesRequest = new ExchangeRatesRequest(from, startDate, endDate, to);
 	ExchangeTransactions exchangeTransactions = createExchangeTransactions(amount, exchangeRatesRequest);

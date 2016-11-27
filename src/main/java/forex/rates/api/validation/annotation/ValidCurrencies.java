@@ -10,6 +10,6 @@ import java.lang.annotation.*;
 @Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface Currencies {
+public @interface ValidCurrencies {
 
 }

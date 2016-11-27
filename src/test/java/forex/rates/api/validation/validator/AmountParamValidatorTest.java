@@ -3,19 +3,16 @@ package forex.rates.api.validation.validator;
 import forex.rates.api.dataset.DataSetContext;
 import forex.rates.api.exception.IllegalParameterException;
 import forex.rates.api.service.AvailableCurrenciesService;
-import forex.rates.api.validation.annotation.Amount;
+import forex.rates.api.validation.annotation.ValidAmount;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import java.lang.annotation.Annotation;
-import java.time.DayOfWeek;
-import java.time.LocalDate;
 import java.util.Optional;
 
 import static java.util.Optional.of;
@@ -28,7 +25,7 @@ import static org.junit.Assert.assertTrue;
 public class AmountParamValidatorTest {
 
     private static final Annotation INVALID_ANNOTATION = () -> InvalidAnnotation.class;
-    private static final Annotation VALID_ANNOTATION = () -> Amount.class;
+    private static final Annotation VALID_ANNOTATION = () -> ValidAmount.class;
     private static final Class<?> INVALID_PARAMETER_TYPE = Integer.class;
     private static final Class<?> VALID_PARAMETER_TYPE = String.class;
 

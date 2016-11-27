@@ -2,7 +2,7 @@ package forex.rates.api.validation.validator;
 
 import forex.rates.api.exception.IllegalParameterException;
 import forex.rates.api.service.DateTimeProviderService;
-import forex.rates.api.validation.annotation.Date;
+import forex.rates.api.validation.annotation.ValidDate;
 import org.springframework.stereotype.Component;
 
 import java.lang.annotation.Annotation;
@@ -35,7 +35,7 @@ public class DateParamValidator implements ParamValidator<String> {
 	if (String.class.isAssignableFrom(parameterType)) {
 	    return Arrays.stream(annotations)
 		    .map(Annotation::annotationType)
-		    .anyMatch(Date.class::equals);
+		    .anyMatch(ValidDate.class::equals);
 	}
 	return false;
     }

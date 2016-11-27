@@ -3,7 +3,7 @@ package forex.rates.api.validation.validator;
 import forex.rates.api.dataset.DataSetContext;
 import forex.rates.api.exception.IllegalParameterException;
 import forex.rates.api.service.AvailableCurrenciesService;
-import forex.rates.api.validation.annotation.Base;
+import forex.rates.api.validation.annotation.ValidBase;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
 import org.junit.Before;
@@ -28,7 +28,7 @@ import static org.junit.Assert.assertTrue;
 public class BaseParamValidatorTest {
 
     private static final Annotation INVALID_ANNOTATION = () -> InvalidAnnotation.class;
-    private static final Annotation VALID_ANNOTATION = () -> Base.class;
+    private static final Annotation VALID_ANNOTATION = () -> ValidBase.class;
     private static final Class<?> INVALID_PARAMETER_TYPE = Integer.class;
     private static final Class<?> VALID_PARAMETER_TYPE = String.class;
     private static final List<String> AVAILABLE_CURRENCIES = Arrays.asList("USD", "EUR", "JPY");
