@@ -29,10 +29,11 @@ public class DateParamValidatorTest {
     private static final LocalDate TODAY = LocalDate.of(2001, 1, 1);
     private static final Annotation INVALID_ANNOTATION = () -> InvalidAnnotation.class;
     private static final Annotation VALID_ANNOTATION = () -> ValidDate.class;
-    private static final Class<?> INVALID_PARAMETER_TYPE = Integer.class;
+    private static final Class<?> INVALID_PARAMETER_TYPE = InvalidParameterType.class;
     private static final Class<?> VALID_PARAMETER_TYPE = String.class;
 
     private @interface InvalidAnnotation {}
+    private class InvalidParameterType {}
 
     private @Mock DateTimeProviderService dateTimeProviderService;
 

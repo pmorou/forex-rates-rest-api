@@ -26,10 +26,11 @@ public class AmountParamValidatorTest {
 
     private static final Annotation INVALID_ANNOTATION = () -> InvalidAnnotation.class;
     private static final Annotation VALID_ANNOTATION = () -> ValidAmount.class;
-    private static final Class<?> INVALID_PARAMETER_TYPE = Integer.class;
+    private static final Class<?> INVALID_PARAMETER_TYPE = InvalidParameterType.class;
     private static final Class<?> VALID_PARAMETER_TYPE = String.class;
 
     private @interface InvalidAnnotation {}
+    private class InvalidParameterType {}
 
     private @Mock AvailableCurrenciesService availableCurrenciesService;
     private @Mock DataSetContext dataSetContext;
