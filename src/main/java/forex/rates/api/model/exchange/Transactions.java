@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Data
-public class Transactions {
+public class Transactions implements AddableContainer<Transactions> {
 
     @Getter(onMethod = @__(@JsonAnyGetter))
     private final Map<String, BigDecimal> to = new HashMap<>();
