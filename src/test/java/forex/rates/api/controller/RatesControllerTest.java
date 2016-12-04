@@ -17,7 +17,7 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.Map;
-import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toMap;
 import static org.mockito.Mockito.when;
@@ -74,8 +74,9 @@ public class RatesControllerTest {
     }
 
     private ExchangeRates createExchangeRates(String base, LocalDate startDate, LocalDate endDate, String... currencies) {
-	final long daysNumber = startDate.until(endDate, ChronoUnit.DAYS);
-	Map<LocalDate, Rates> ratesByDate = IntStream.rangeClosed(0, (int) daysNumber).boxed()
+	final long daysNumber = startDate.until(endDate, ChronoUnit.DAYS) + 1;
+	Map<LocalDate, Rates> ratesByDate = Stream.iterate(0, i -> i + 1)
+		.limit(daysNumber)
 		.collect(toMap(i -> startDate.plusDays(i), i -> createRates(currencies)));
 	return new ExchangeRates(startDate, endDate, base, ratesByDate);
     }
