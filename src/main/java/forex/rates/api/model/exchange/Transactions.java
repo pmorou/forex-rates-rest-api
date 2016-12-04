@@ -18,4 +18,8 @@ public class Transactions {
 	to.put(currency, amount);
     }
 
+    public void add(Transactions transactions) {
+	to.putAll(transactions.getTo());
+    }
+
 }
