@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -72,9 +73,7 @@ public class CurrencyRateFactoryEcbImplTest {
     }
 
     private Map.Entry<String, String> createRateEntry(String date, String rate) {
-	Map<String, String> rates = new HashMap<>(1);
-	rates.put(date, rate);
-	return rates.entrySet().iterator().next();
+	return Collections.singletonMap(date, rate).entrySet().iterator().next();
     }
 
 }
