@@ -36,7 +36,7 @@ public class ExchangeTransactions {
 	    Rates dailyRates = ratesByDate.getValue();
 	    Transactions transactions = new Transactions();
 	    for (Map.Entry<String, BigDecimal> currencyRatePair : dailyRates.getRates().entrySet()) {
-		transactions.addAmount(currencyRatePair.getKey(), multiplyWithAmount(currencyRatePair.getValue()));
+		transactions.add(currencyRatePair.getKey(), multiplyWithAmount(currencyRatePair.getValue()));
 	    }
 	    transactionsByDate.put(ratesByDate.getKey(), transactions);
 	}

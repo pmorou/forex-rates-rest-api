@@ -14,7 +14,7 @@ public class Transactions {
     @Getter(onMethod = @__(@JsonAnyGetter))
     private final Map<String, BigDecimal> to = new HashMap<>();
 
-    public void addAmount(String currency, BigDecimal amount) {
+    public void add(String currency, BigDecimal amount) {
 	to.put(currency, amount);
     }
 
