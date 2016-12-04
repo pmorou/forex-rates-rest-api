@@ -17,7 +17,7 @@ public class ScheduleUpdateAutostartImpl implements Autostart {
     @Override
     @PostConstruct
     public void start() {
-	newRatesSchedule.scheduleUpdate();
+	newRatesSchedule.scheduleUpdateAsync();
     }
 
 }

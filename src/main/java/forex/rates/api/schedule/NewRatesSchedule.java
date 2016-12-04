@@ -28,7 +28,7 @@ public class NewRatesSchedule {
     }
 
     @Async
-    public void scheduleUpdate() {
+    public void scheduleUpdateAsync() {
 	TimeZone timeZone = TimeZone.getTimeZone(dataSetContext.getScheduleNewRatesTimeZone());
 	String cronPattern = dataSetContext.getScheduleNewRatesCronPatternTrigger();
 	ScheduledFuture<?> schedule = scheduler.schedule(newDailyRatesTask, new CronTrigger(cronPattern, timeZone));
