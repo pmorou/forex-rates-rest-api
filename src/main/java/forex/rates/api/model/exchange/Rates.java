@@ -14,7 +14,7 @@ public class Rates {
     @Getter(onMethod = @__(@JsonAnyGetter))
     private final Map<String, BigDecimal> rates = new HashMap<>();
 
-    public void addRate(String currency, BigDecimal rate) {
+    public void add(String currency, BigDecimal rate) {
 	rates.put(currency, rate);
     }
 

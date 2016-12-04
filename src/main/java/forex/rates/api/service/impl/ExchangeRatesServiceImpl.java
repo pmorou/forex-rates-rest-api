@@ -57,7 +57,7 @@ public class ExchangeRatesServiceImpl implements ExchangeRatesService {
 		baseExchangeRate = inverse(baseCurrencyRate.getExchangeRate(), baseCurrencyRate.getCurrency().getPrecision());
 
 		if (baseCurrencyRemoved) {
-		    rates.addRate(baseCurrency, baseExchangeRate);
+		    rates.add(dataSetBaseCurrency, baseExchangeRate);
 		}
 	    }
 
@@ -65,7 +65,7 @@ public class ExchangeRatesServiceImpl implements ExchangeRatesService {
 		CurrencyDefinition currencyDefinition = currencyRate.getCurrency();
 		BigDecimal exchangeRate = currencyRate.getExchangeRate();
 		exchangeRate = multiply(exchangeRate, baseExchangeRate, currencyDefinition.getPrecision());
-		rates.addRate(currencyDefinition.getCodeName(), exchangeRate);
+		rates.add(currencyDefinition.getCodeName(), exchangeRate);
 	    }
 
 	    ratesByDate.put(date, rates);
