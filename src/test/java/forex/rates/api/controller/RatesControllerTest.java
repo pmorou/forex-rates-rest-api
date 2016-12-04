@@ -84,8 +84,8 @@ public class RatesControllerTest {
     private Rates createRates(String[] currencies) {
 	return Arrays.stream(currencies).collect(Rates::new,
 		(rates, currency) -> rates.add(currency, new BigDecimal("1.0001")),
-		(rates1, rates2) -> rates2.getRates().entrySet().stream()
-			    .forEach(entry -> rates1.add(entry.getKey(), entry.getValue())));
+		Rates::add
+	);
     }
 
 }

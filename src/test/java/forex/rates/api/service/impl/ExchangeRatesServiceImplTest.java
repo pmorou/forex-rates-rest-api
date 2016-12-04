@@ -274,8 +274,7 @@ public class ExchangeRatesServiceImplTest {
     private Rates createRates(Map<String, BigDecimal> currencyValuePairs) {
 	return currencyValuePairs.entrySet().stream().collect(Rates::new,
 		(rates, entry) -> rates.add(entry.getKey(), entry.getValue()),
-		(rates1, rates2) -> rates2.getRates().entrySet().stream()
-			.forEach(entry -> rates1.add(entry.getKey(), entry.getValue())));
+		Rates::add);
     }
 
 }

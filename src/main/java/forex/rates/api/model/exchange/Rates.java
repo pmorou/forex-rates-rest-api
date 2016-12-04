@@ -18,4 +18,8 @@ public class Rates {
 	rates.put(currency, rate);
     }
 
+    public void add(Rates rates) {
+	this.rates.putAll(rates.getRates());
+    }
+
 }
