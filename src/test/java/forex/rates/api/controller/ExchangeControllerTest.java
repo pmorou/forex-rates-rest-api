@@ -1,5 +1,6 @@
 package forex.rates.api.controller;
 
+import forex.rates.api.model.exchange.collector.AddableContainerCollector;
 import forex.rates.api.model.exchange.ExchangeRates;
 import forex.rates.api.model.exchange.Rates;
 import forex.rates.api.model.request.ExchangeRatesRequest;
@@ -77,9 +78,7 @@ public class ExchangeControllerTest {
     }
 
     private Rates createRates(Map<String, BigDecimal> currencyValuePairs) {
-	return currencyValuePairs.entrySet().stream().collect(Rates::new,
-		(rates, entry) -> rates.add(entry.getKey(), entry.getValue()),
-		Rates::add);
+	return currencyValuePairs.entrySet().stream().collect(new AddableContainerCollector<>(Rates::new));
     }
 
 }

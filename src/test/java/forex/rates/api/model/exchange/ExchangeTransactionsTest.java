@@ -1,5 +1,6 @@
 package forex.rates.api.model.exchange;
 
+import forex.rates.api.model.exchange.collector.AddableContainerCollector;
 import org.junit.Test;
 
 import java.math.BigDecimal;
@@ -83,9 +84,7 @@ public class ExchangeTransactionsTest {
     }
 
     private Rates createRates(Map<String, BigDecimal> currencyValuePairs) {
-	return currencyValuePairs.entrySet().stream().collect(Rates::new,
-		(rates, entry) -> rates.add(entry.getKey(), entry.getValue()),
-		Rates::addAll);
+	return currencyValuePairs.entrySet().stream().collect(new AddableContainerCollector<>(Rates::new));
     }
 
 }

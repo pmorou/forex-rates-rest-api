@@ -1,6 +1,7 @@
 package forex.rates.api.service.impl;
 
 import forex.rates.api.dataset.DataSetContext;
+import forex.rates.api.model.exchange.collector.AddableContainerCollector;
 import forex.rates.api.model.exchange.ExchangeRates;
 import forex.rates.api.model.exchange.Rates;
 import forex.rates.api.model.entity.CurrencyDefinition;
@@ -272,9 +273,7 @@ public class ExchangeRatesServiceImplTest {
     }
 
     private Rates createRates(Map<String, BigDecimal> currencyValuePairs) {
-	return currencyValuePairs.entrySet().stream().collect(Rates::new,
-		(rates, entry) -> rates.add(entry.getKey(), entry.getValue()),
-		Rates::add);
+	return currencyValuePairs.entrySet().stream().collect(new AddableContainerCollector<>(Rates::new));
     }
 
 }

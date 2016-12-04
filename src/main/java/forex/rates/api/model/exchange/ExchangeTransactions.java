@@ -1,5 +1,6 @@
 package forex.rates.api.model.exchange;
 
+import forex.rates.api.model.exchange.collector.AddableContainerCollector;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
@@ -49,9 +50,12 @@ public class ExchangeTransactions {
 
     private Transactions toTransactions(Rates dailyRates) {
 	return dailyRates.getRates().entrySet().stream()
-		.collect(Transactions::new,
-			accumulator(),
-			combiner());
+		.collect(new AddableContainerCollector<Transactions>(Transactions::new) {
+		    @Override
+		    public BiConsumer<Transactions, Map.Entry<String, BigDecimal>> accumulator() {
+			return this.accumulator();
+		    }
+		});
     }
 
     private BiConsumer<Transactions, Map.Entry<String, BigDecimal>> accumulator() {
@@ -60,10 +64,6 @@ public class ExchangeTransactions {
 
     private BigDecimal multiplyWithAmount(BigDecimal rate) {
 	return rate.multiply(this.amount, new MathContext(3, RoundingMode.HALF_UP));
-    }
-
-    private BiConsumer<Transactions, Transactions> combiner() {
-	return (t1, t2) -> t1.add(t2);
     }
 
 }
