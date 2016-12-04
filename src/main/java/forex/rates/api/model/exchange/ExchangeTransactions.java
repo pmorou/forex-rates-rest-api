@@ -8,8 +8,10 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 import java.time.LocalDate;
-import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Data
 public class ExchangeTransactions {
@@ -31,20 +33,37 @@ public class ExchangeTransactions {
     }
 
     public Map<LocalDate, Transactions> getTo() {
-	Map<LocalDate, Transactions> transactionsByDate = new LinkedHashMap<>();
-	for (Map.Entry<LocalDate, Rates> ratesByDate : exchangeRates.getRatesByDate().entrySet()) {
-	    Rates dailyRates = ratesByDate.getValue();
-	    Transactions transactions = new Transactions();
-	    for (Map.Entry<String, BigDecimal> currencyRatePair : dailyRates.getRates().entrySet()) {
-		transactions.add(currencyRatePair.getKey(), multiplyWithAmount(currencyRatePair.getValue()));
-	    }
-	    transactionsByDate.put(ratesByDate.getKey(), transactions);
-	}
-	return transactionsByDate;
+	return exchangeRates.getRatesByDate().entrySet().stream()
+		.collect(Collectors.toMap(
+			getLocalDate(), getTransactions())
+		);
+    }
+
+    private Function<Map.Entry<LocalDate, Rates>, LocalDate> getLocalDate() {
+	return e -> e.getKey();
+    }
+
+    private Function<Map.Entry<LocalDate, Rates>, Transactions> getTransactions() {
+	return e -> toTransactions(e.getValue());
+    }
+
+    private Transactions toTransactions(Rates dailyRates) {
+	return dailyRates.getRates().entrySet().stream()
+		.collect(Transactions::new,
+			accumulator(),
+			combiner());
+    }
+
+    private BiConsumer<Transactions, Map.Entry<String, BigDecimal>> accumulator() {
+	return (t, e) -> t.add(e.getKey(), multiplyWithAmount(e.getValue()));
     }
 
     private BigDecimal multiplyWithAmount(BigDecimal rate) {
 	return rate.multiply(this.amount, new MathContext(3, RoundingMode.HALF_UP));
+    }
+
+    private BiConsumer<Transactions, Transactions> combiner() {
+	return (t1, t2) -> t1.add(t2);
     }
 
 }
