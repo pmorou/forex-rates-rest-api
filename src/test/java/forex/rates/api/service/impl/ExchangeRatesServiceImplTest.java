@@ -52,7 +52,6 @@ public class ExchangeRatesServiceImplTest {
     @Test
     public void shouldReturnRatesForUsdWithBaseEur() throws Exception {
 	// Given
-	when(currencyDefinitionService.getOneByCodeName("EUR")).thenReturn(EUR_DEFINITION);
 	when(currencyRateService.getAllByDateAndCurrencyIn(DATE_2001_01_01, asList(USD_DEFINITION))).thenReturn(asList(USD_RATE));
 	when(currencyDefinitionService.getAllByCodeNameIn(asList("USD"))).thenReturn(asList(USD_DEFINITION));
 
@@ -180,7 +179,6 @@ public class ExchangeRatesServiceImplTest {
     @Test
     public void shouldReturnRatesForUsdAndPlnWithBaseEur() throws Exception {
 	// Given
-	when(currencyDefinitionService.getOneByCodeName("EUR")).thenReturn(EUR_DEFINITION);
 	when(currencyDefinitionService.getAllByCodeNameIn(asList("USD", "PLN"))).thenReturn(asList(USD_DEFINITION, PLN_DEFINITION));
 	when(currencyRateService.getAllByDateAndCurrencyIn(DATE_2001_01_01, asList(USD_DEFINITION, PLN_DEFINITION))).thenReturn(asList(USD_RATE, PLN_RATE));
 
